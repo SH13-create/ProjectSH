@@ -16,6 +16,8 @@ type Props = TextProps & {
   color?: string;
   center?: boolean;
   weight?: TextStyle['fontWeight'];
+  /** Force le sens d'écriture (utile pour les compteurs « 7 / 10 » en mode RTL). */
+  dir?: 'ltr' | 'rtl';
 };
 
 const VARIANT_STYLE: Record<Variant, TextStyle> = {
@@ -26,7 +28,7 @@ const VARIANT_STYLE: Record<Variant, TextStyle> = {
   caption: { fontSize: fontSize.sm, fontWeight: '500' },
 };
 
-export function AppText({ variant = 'body', color, center, weight, style, ...rest }: Props) {
+export function AppText({ variant = 'body', color, center, weight, dir, style, ...rest }: Props) {
   const { colors } = useTheme();
   const { isRTL } = useLocale();
 
@@ -37,7 +39,7 @@ export function AppText({ variant = 'body', color, center, weight, style, ...res
         VARIANT_STYLE[variant],
         {
           color: color ?? colors.text,
-          writingDirection: isRTL ? 'rtl' : 'ltr',
+          writingDirection: dir ?? (isRTL ? 'rtl' : 'ltr'),
           textAlign: center ? 'center' : isRTL ? 'right' : 'left',
         },
         weight ? { fontWeight: weight } : null,

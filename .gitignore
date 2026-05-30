@@ -39,3 +39,6 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Captures d'écran de prévisualisation (non versionnées)
+shots/

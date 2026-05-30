@@ -61,7 +61,7 @@ export default function Quiz() {
     <Screen scroll>
       {/* En-tête : progression + compteur */}
       <View style={styles.header}>
-        <AppText variant="caption" weight="700" color={colors.textMuted}>
+        <AppText variant="caption" weight="700" color={colors.textMuted} dir="ltr">
           {format(t.quiz.progress, { current: index + 1, total })}
         </AppText>
         <ProgressBar progress={(index + 1) / total} />
@@ -161,6 +161,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   list: { gap: spacing.sm },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', gap: spacing.md },
+  // 2 colonnes : largeur ~48% + space-between. On n'utilise que rowGap pour
+  // l'espacement vertical (un `gap` horizontal casserait la mise en page 2 col).
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: spacing.md },
   nav: { flexDirection: 'row', gap: spacing.md, marginTop: spacing.lg },
 });
