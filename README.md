@@ -22,8 +22,39 @@ différenciation par rapport aux apps de compatibilité génériques (cf. benchm
 Co–Star, The Pattern, EvaTarot…).
 
 Pour changer le nom : voir [`app.json`](./app.json) (`name`, `slug`) et les clés
-`common.appName` / `common.seerName` dans les fichiers de langue. L'avatar de la
-voyante est un SVG éditable : [`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx).
+`common.appName` / `common.seerName` dans les fichiers de langue.
+
+### 👵 L'avatar (vieille femme amazighe)
+
+Moulat Niya est représentée comme une **vieille femme marocaine amazighe**
+(rides, **tatouages amazighs** : siyala du menton, marque du front, symboles sur
+les joues, foulard traditionnel, boule de cristal). Par défaut c'est une
+**illustration vectorielle** (SVG) : [`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx).
+
+**Pour une vraie PHOTO réaliste générée par IA** (cet environnement n'a pas
+d'outil de génération d'images) :
+1. Génère l'image (Midjourney, DALL·E, Firefly…). Prompt suggéré :
+   > *« Portrait photoréaliste d'une vieille femme marocaine amazighe, tatouages
+   > faciaux berbères traditionnels (menton et front), foulard coloré, bijoux en
+   > argent, tenant une boule de cristal lumineuse, éclairage doux et mystique,
+   > fond sombre, haute qualité »*
+2. Enregistre le fichier sous **`assets/seer.png`** (carré, ~512×512).
+3. Dans [`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx), mets `USE_PHOTO = true`.
+
+L'app utilisera alors la photo partout (accueil, lecture, résultats).
+
+### ❓ Deux parcours de quiz **volontairement différents**
+
+- **Mode individuel** (centré sur **toi & ton avenir**) : prénom, date + heure de
+  naissance, genre, statut, style amoureux, **passé amoureux**, ce que tu
+  cherches, **ta plus grande peur**, **ton souhait de l'année**, + questions fun.
+- **Mode couple** (centré sur la **relation**) : 2 prénoms + dates, **depuis quand
+  ensemble**, langage de l'amour, gestion des disputes, **ce que tu admires**,
+  **votre plus grand défi**, projet commun, + élément / saison / lieu de rêve.
+
+La **lecture finale** est composée à partir des réponses
+([`src/utils/reading.ts`](./src/utils/reading.ts)) : plusieurs « aspects »
+personnalisés, introduits par une parole de Moulat Niya.
 
 ---
 
