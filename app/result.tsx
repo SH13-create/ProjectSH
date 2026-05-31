@@ -29,22 +29,26 @@ import { useQuiz } from '@/context/QuizContext';
 import { radius, spacing } from '@/theme';
 import type { CoupleResult, SoloResult } from '@/utils/compatibility';
 import { ZodiacBadge } from '@/components/ZodiacBadge';
+import { SeerAvatar } from '@/components/SeerAvatar';
 import { format } from '@/locales';
 import { buildShareText } from '@/utils/resultText';
 import { shareResult } from '@/utils/share';
 import { addHistory } from '@/utils/storage';
+import { buildCoupleReading, buildSoloReading, type Aspect } from '@/utils/reading';
+import type { Answers } from '@/utils/questions';
 
 export default function ResultScreen() {
   const { t } = useLocale();
   const { colors } = useTheme();
-  const { getResult, reset } = useQuiz();
+  const { getResult, reset, answers } = useQuiz();
   const router = useRouter();
 
   // Référence sur la carte de résultat, capturée en image lors du partage.
   const shotRef = useRef<View>(null);
 
-  // On calcule le résultat une seule fois à l'ouverture de l'écran.
+  // On calcule le résultat + on fige les réponses une seule fois à l'ouverture.
   const result = useMemo(() => getResult(), []);
+  const frozenAnswers = useMemo<Answers>(() => ({ ...answers }), []);
 
   // On fête les grands scores (couple, palier ≥ 3).
   const celebrate = result.mode === 'couple' && result.bandIndex >= 3;
@@ -76,9 +80,9 @@ export default function ResultScreen() {
           style={{ backgroundColor: colors.background, borderRadius: radius.lg }}
         >
           {result.mode === 'couple' ? (
-            <CoupleView result={result} />
+            <CoupleView result={result} answers={frozenAnswers} />
           ) : (
-            <SoloView result={result} />
+            <SoloView result={result} answers={frozenAnswers} />
           )}
         </View>
 
@@ -123,6 +127,36 @@ function bandColor(bandIndex: number, colors: ReturnType<typeof useTheme>['color
   return colors.primary;
 }
 
+/** Carte d'un « aspect » de la lecture (titre + icône + paragraphe). */
+function AspectCard({ aspect, delay = 0 }: { aspect: Aspect; delay?: number }) {
+  const { colors } = useTheme();
+  return (
+    <Animated.View entering={FadeInUp.delay(delay)}>
+      <Card>
+        <AppText variant="subtitle" weight="800" color={colors.secondary}>
+          {aspect.icon} {aspect.label}
+        </AppText>
+        <AppText variant="body" style={{ marginTop: spacing.xs }}>
+          {aspect.text}
+        </AppText>
+      </Card>
+    </Animated.View>
+  );
+}
+
+/** Bandeau « parole » de Moulat Niya (avatar + intro à la 1re personne). */
+function SeerIntro({ text }: { text: string }) {
+  const { colors } = useTheme();
+  return (
+    <Card alt style={{ flexDirection: 'row', gap: spacing.md, alignItems: 'center' }}>
+      <SeerAvatar size={64} />
+      <AppText variant="body" weight="600" style={{ flex: 1 }} color={colors.text}>
+        {text}
+      </AppText>
+    </Card>
+  );
+}
+
 function SignBadge({ sign, name }: { sign: SoloResult['sign']; name: string }) {
   const { colors } = useTheme();
   const { t } = useLocale();
@@ -143,11 +177,12 @@ function SignBadge({ sign, name }: { sign: SoloResult['sign']; name: string }) {
 }
 
 // ---------------------------------------------------------------- Mode couple
-function CoupleView({ result }: { result: CoupleResult }) {
+function CoupleView({ result, answers }: { result: CoupleResult; answers: Answers }) {
   const { t } = useLocale();
   const { colors } = useTheme();
   const band = t.bands[result.bandIndex];
   const color = bandColor(result.bandIndex, colors);
+  const reading = buildCoupleReading(result, answers, t);
 
   return (
     <View style={{ gap: spacing.md }}>
@@ -168,19 +203,16 @@ function CoupleView({ result }: { result: CoupleResult }) {
         <SignBadge sign={result.sign2} name={result.name2} />
       </View>
 
+      {/* Parole de Moulat Niya */}
+      <Animated.View entering={FadeInUp.delay(100)}>
+        <SeerIntro text={reading.intro} />
+      </Animated.View>
+
+      {/* Résumé du palier + chimie des éléments */}
       <Animated.View entering={FadeInUp.delay(150)}>
         <Card>
           <AppText variant="body">{band.paragraph}</AppText>
           <AppText variant="body" style={{ marginTop: spacing.sm }} color={colors.textMuted}>
-            {t.elementChemistry[result.chemistry]}
-          </AppText>
-        </Card>
-      </Animated.View>
-
-      {/* Interprétation propre à la PAIRE de signes (façon d'aimer de chacun). */}
-      <Animated.View entering={FadeInUp.delay(220)}>
-        <Card alt>
-          <AppText variant="body">
             {format(t.coupleNarrative, {
               a: t.coupleStyle[result.sign1],
               b: t.coupleStyle[result.sign2],
@@ -189,6 +221,12 @@ function CoupleView({ result }: { result: CoupleResult }) {
         </Card>
       </Animated.View>
 
+      {/* Aspects détaillés et personnalisés (forces, communication, défi, futur) */}
+      {reading.aspects.map((a, i) => (
+        <AspectCard key={a.label} aspect={a} delay={200 + i * 70} />
+      ))}
+
+      {/* Conseil de Moulat Niya */}
       <Card alt>
         <AppText variant="subtitle" weight="800" color={colors.primary}>
           💡 {t.result.adviceLabel}
@@ -202,21 +240,10 @@ function CoupleView({ result }: { result: CoupleResult }) {
 }
 
 // ------------------------------------------------------------ Mode individuel
-function SoloView({ result }: { result: SoloResult }) {
+function SoloView({ result, answers }: { result: SoloResult; answers: Answers }) {
   const { t } = useLocale();
   const { colors } = useTheme();
-  const solo = t.solo[result.sign];
-
-  const Row = ({ icon, label, text }: { icon: string; label: string; text: string }) => (
-    <Card>
-      <AppText variant="subtitle" weight="800" color={colors.secondary}>
-        {icon} {label}
-      </AppText>
-      <AppText variant="body" style={{ marginTop: spacing.xs }}>
-        {text}
-      </AppText>
-    </Card>
-  );
+  const reading = buildSoloReading(result, answers, t);
 
   return (
     <View style={{ gap: spacing.md }}>
@@ -235,15 +262,19 @@ function SoloView({ result }: { result: SoloResult }) {
         </Card>
       </Animated.View>
 
+      {/* Parole de Moulat Niya */}
+      <Animated.View entering={FadeInUp.delay(80)}>
+        <SeerIntro text={reading.intro} />
+      </Animated.View>
+
       <AppText variant="subtitle" weight="800" style={{ marginTop: spacing.xs }}>
         🔮 {t.result.soloTitle}
       </AppText>
 
-      <Animated.View entering={FadeInUp.delay(100)} style={{ gap: spacing.md }}>
-        <Row icon="❤️" label={t.result.loveLabel} text={solo.love} />
-        <Row icon="💼" label={t.result.workLabel} text={solo.work} />
-        <Row icon="🌟" label={t.result.futureLabel} text={solo.future} />
-      </Animated.View>
+      {/* Aspects détaillés et personnalisés */}
+      {reading.aspects.map((a, i) => (
+        <AspectCard key={a.label} aspect={a} delay={120 + i * 70} />
+      ))}
     </View>
   );
 }

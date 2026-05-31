@@ -236,9 +236,96 @@ const qDreamPlace: Question = {
   ],
 };
 
+// ===== Questions SPÉCIFIQUES au mode INDIVIDUEL (sur toi & ton avenir) =====
+
+// Ton passé amoureux (nourrit la lecture du futur).
+const qLovePast: Question = {
+  key: 'lovePast',
+  type: 'single',
+  title: (s) => s.quiz.lovePast,
+  options: [
+    { value: 'never', label: (s) => s.quiz.lpNever, emoji: '🌱' },
+    { value: 'onebig', label: (s) => s.quiz.lpOneBig, emoji: '💔' },
+    { value: 'few', label: (s) => s.quiz.lpFew, emoji: '🎭' },
+    { value: 'healing', label: (s) => s.quiz.lpHealing, emoji: '🩹' },
+  ],
+};
+
+// Ta plus grande peur en amour.
+const qFear: Question = {
+  key: 'fear',
+  type: 'cards',
+  title: (s) => s.quiz.fear,
+  options: [
+    { value: 'betrayal', label: (s) => s.quiz.fearBetrayal, emoji: '🗡️' },
+    { value: 'boredom', label: (s) => s.quiz.fearBoredom, emoji: '🥱' },
+    { value: 'distance', label: (s) => s.quiz.fearDistance, emoji: '🌫️' },
+    { value: 'control', label: (s) => s.quiz.fearControl, emoji: '⛓️' },
+  ],
+};
+
+// Ce que tu veux cette année (l'angle « futur »).
+const qYearWish: Question = {
+  key: 'yearWish',
+  type: 'cards',
+  title: (s) => s.quiz.yearWish,
+  options: [
+    { value: 'theone', label: (s) => s.quiz.ywTheOne, emoji: '💘' },
+    { value: 'marriage', label: (s) => s.quiz.ywMarriage, emoji: '💍' },
+    { value: 'fun', label: (s) => s.quiz.ywFun, emoji: '🎉' },
+    { value: 'heal', label: (s) => s.quiz.ywHeal, emoji: '🌷' },
+    { value: 'reconnect', label: (s) => s.quiz.ywReconnect, emoji: '🔗' },
+  ],
+};
+
+// ===== Questions SPÉCIFIQUES au mode COUPLE (sur la relation) =====
+
+// Depuis combien de temps ensemble.
+const qHowLong: Question = {
+  key: 'howLong',
+  type: 'single',
+  title: (s) => s.quiz.howLong,
+  options: [
+    { value: 'new', label: (s) => s.quiz.hlNew, emoji: '🌱' },
+    { value: 'months', label: (s) => s.quiz.hlMonths, emoji: '🌿' },
+    { value: 'years', label: (s) => s.quiz.hlYears, emoji: '🌳' },
+    { value: 'long', label: (s) => s.quiz.hlLong, emoji: '🏛️' },
+  ],
+};
+
+// Ce que tu admires le plus chez ton/ta partenaire.
+const qAdmire: Question = {
+  key: 'admire',
+  type: 'cards',
+  title: (s) => s.quiz.admire,
+  options: [
+    { value: 'heart', label: (s) => s.quiz.adHeart, emoji: '🤍' },
+    { value: 'mind', label: (s) => s.quiz.adMind, emoji: '🧠' },
+    { value: 'humor', label: (s) => s.quiz.adHumor, emoji: '😂' },
+    { value: 'looks', label: (s) => s.quiz.adLooks, emoji: '✨' },
+    { value: 'ambition', label: (s) => s.quiz.adAmbition, emoji: '🚀' },
+  ],
+};
+
+// Le plus grand défi du couple.
+const qChallenge: Question = {
+  key: 'challenge',
+  type: 'cards',
+  title: (s) => s.quiz.challenge,
+  options: [
+    { value: 'distance', label: (s) => s.quiz.chDistance, emoji: '📍' },
+    { value: 'jealousy', label: (s) => s.quiz.chJealousy, emoji: '👀' },
+    { value: 'routine', label: (s) => s.quiz.chRoutine, emoji: '🔁' },
+    { value: 'family', label: (s) => s.quiz.chFamily, emoji: '👪' },
+    { value: 'money', label: (s) => s.quiz.chMoney, emoji: '💰' },
+  ],
+};
+
 // --- Flux par mode ---------------------------------------------------------
-// Ordre pensé pour l'engagement : on commence léger (identité), puis on creuse
-// la personnalité amoureuse, et on garde les questions « fun » pour rythmer.
+// Les deux parcours sont VOLONTAIREMENT DIFFÉRENTS :
+//  - SOLO   = centré sur TOI et ton avenir (passé amoureux, peurs, souhait…)
+//  - COUPLE = centré sur la RELATION (durée, défis, admiration, projet commun)
+// Quelques questions « fun » restent communes (élément, lieu de rêve…).
 
 const SOLO_QUESTIONS: Question[] = [
   qName,
@@ -247,16 +334,14 @@ const SOLO_QUESTIONS: Question[] = [
   qGender,
   qStatus,
   qLoveStyle,
-  qLoveLang,
+  qLovePast,
   qWantPartner,
-  qConflict,
+  qFear,
+  qYearWish,
   qElement,
   qAnimal,
   qColor,
-  qSeason,
   qDreamPlace,
-  qDate,
-  qProject,
 ];
 
 const COUPLE_QUESTIONS: Question[] = [
@@ -265,18 +350,14 @@ const COUPLE_QUESTIONS: Question[] = [
   qBirth,
   qPartnerBirth,
   qBirthTime,
-  qGender,
-  qStatus,
-  qLoveStyle,
+  qHowLong,
   qLoveLang,
-  qWantPartner,
   qConflict,
+  qAdmire,
+  qChallenge,
   qElement,
-  qAnimal,
-  qColor,
   qSeason,
   qDreamPlace,
-  qDate,
   qProject,
 ];
 

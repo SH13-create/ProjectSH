@@ -132,6 +132,45 @@ export interface Strings {
     dpMountain: string;
     dpCity: string;
     dpDesert: string;
+    // --- SOLO : passé amoureux ---
+    lovePast: string;
+    lpNever: string;
+    lpOneBig: string;
+    lpFew: string;
+    lpHealing: string;
+    // --- SOLO : peur en amour ---
+    fear: string;
+    fearBetrayal: string;
+    fearBoredom: string;
+    fearDistance: string;
+    fearControl: string;
+    // --- SOLO : souhait de l'année ---
+    yearWish: string;
+    ywTheOne: string;
+    ywMarriage: string;
+    ywFun: string;
+    ywHeal: string;
+    ywReconnect: string;
+    // --- COUPLE : durée de la relation ---
+    howLong: string;
+    hlNew: string;
+    hlMonths: string;
+    hlYears: string;
+    hlLong: string;
+    // --- COUPLE : ce que tu admires ---
+    admire: string;
+    adHeart: string;
+    adMind: string;
+    adHumor: string;
+    adLooks: string;
+    adAmbition: string;
+    // --- COUPLE : plus grand défi ---
+    challenge: string;
+    chDistance: string;
+    chJealousy: string;
+    chRoutine: string;
+    chFamily: string;
+    chMoney: string;
   };
 
   loading: {
@@ -186,5 +225,35 @@ export interface Strings {
     friendly: string;
     neutral: string;
     tense: string;
+  };
+
+  // 🔮 Lecture détaillée & personnalisée (composée à partir des réponses).
+  readings: {
+    // Titres des « aspects » affichés en cartes
+    personalityLabel: string;
+    strengthsLabel: string;
+    watchLabel: string;
+    commLabel: string;
+    futureTogetherLabel: string;
+    yearLabel: string;
+    luckyLabel: string;
+    soloIntro: string; // petite intro de Moulat Niya (solo), {name}
+    coupleIntro: string; // intro (couple), {name1} {name2}
+
+    // --- Fragments SOLO (clés = valeurs de réponse) ---
+    elementPersona: Record<Element, string>;
+    loveStyleRead: Record<string, string>; // close/free/calm/hotcold
+    lovePastRead: Record<string, string>; // never/onebig/few/healing
+    fearRead: Record<string, string>; // betrayal/boredom/distance/control
+    yearWishRead: Record<string, string>; // theone/marriage/fun/heal/reconnect
+    wantPartnerRead: Record<string, string>; // loyal/ambition/humor/warm/faith
+
+    // --- Fragments COUPLE (clés = valeurs de réponse) ---
+    howLongRead: Record<string, string>; // new/months/years/long
+    loveLangRead: Record<string, string>; // words/time/help/gifts/touch
+    conflictRead: Record<string, string>; // talk/space/quiet/fire
+    admireRead: Record<string, string>; // heart/mind/humor/looks/ambition
+    challengeRead: Record<string, string>; // distance/jealousy/routine/family/money
+    projectRead: Record<string, string>; // marriage/travel/career/study
   };
 }
