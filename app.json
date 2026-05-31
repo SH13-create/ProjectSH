@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Twafo9",
-    "slug": "twafo9",
+    "name": "Moulat Niya",
+    "slug": "moulat-niya",
     "version": "1.0.0",
-    "scheme": "twafo9",
+    "scheme": "moulatniya",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",

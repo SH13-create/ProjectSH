@@ -152,17 +152,109 @@ const qDate: Question = {
   ],
 };
 
+// --- Questions inspirées du benchmark (apps de compatibilité/astro) ---------
+
+// Heure de naissance approximative : forte personnalisation, avec une porte de
+// sortie « je sais pas » pour ne pas bloquer l'utilisateur.
+const qBirthTime: Question = {
+  key: 'birthTime',
+  type: 'single',
+  title: (s) => s.quiz.birthTime,
+  options: [
+    { value: 'morning', label: (s) => s.quiz.btMorning, emoji: '🌅' },
+    { value: 'afternoon', label: (s) => s.quiz.btAfternoon, emoji: '🌞' },
+    { value: 'evening', label: (s) => s.quiz.btEvening, emoji: '🌆' },
+    { value: 'night', label: (s) => s.quiz.btNight, emoji: '🌙' },
+    { value: 'unknown', label: (s) => s.quiz.btUnknown, emoji: '🤷' },
+  ],
+};
+
+// Style d'attachement amoureux (le prédicteur le plus fort selon le benchmark).
+const qLoveStyle: Question = {
+  key: 'loveStyle',
+  type: 'single',
+  title: (s) => s.quiz.loveStyle,
+  options: [
+    { value: 'close', label: (s) => s.quiz.lsClose, emoji: '🤗' },
+    { value: 'free', label: (s) => s.quiz.lsFree, emoji: '🕊️' },
+    { value: 'calm', label: (s) => s.quiz.lsCalm, emoji: '😌' },
+    { value: 'hotcold', label: (s) => s.quiz.lsHotCold, emoji: '🌗' },
+  ],
+};
+
+// Langage de l'amour.
+const qLoveLang: Question = {
+  key: 'loveLang',
+  type: 'cards',
+  title: (s) => s.quiz.loveLang,
+  options: [
+    { value: 'words', label: (s) => s.quiz.llWords, emoji: '💬' },
+    { value: 'time', label: (s) => s.quiz.llTime, emoji: '⏳' },
+    { value: 'help', label: (s) => s.quiz.llHelp, emoji: '🤝' },
+    { value: 'gifts', label: (s) => s.quiz.llGifts, emoji: '🎁' },
+    { value: 'touch', label: (s) => s.quiz.llTouch, emoji: '🫂' },
+  ],
+};
+
+// Ce que tu cherches chez un partenaire.
+const qWantPartner: Question = {
+  key: 'wantPartner',
+  type: 'cards',
+  title: (s) => s.quiz.wantPartner,
+  options: [
+    { value: 'loyal', label: (s) => s.quiz.wpLoyal, emoji: '🔒' },
+    { value: 'ambition', label: (s) => s.quiz.wpAmbition, emoji: '🚀' },
+    { value: 'humor', label: (s) => s.quiz.wpHumor, emoji: '😂' },
+    { value: 'warm', label: (s) => s.quiz.wpWarm, emoji: '🤍' },
+    { value: 'faith', label: (s) => s.quiz.wpFaith, emoji: '🕌' },
+  ],
+};
+
+// Façon de gérer une dispute.
+const qConflict: Question = {
+  key: 'conflict',
+  type: 'single',
+  title: (s) => s.quiz.conflict,
+  options: [
+    { value: 'talk', label: (s) => s.quiz.cfTalk, emoji: '🗣️' },
+    { value: 'space', label: (s) => s.quiz.cfSpace, emoji: '🚪' },
+    { value: 'quiet', label: (s) => s.quiz.cfQuiet, emoji: '🤐' },
+    { value: 'fire', label: (s) => s.quiz.cfFire, emoji: '🔥' },
+  ],
+};
+
+// Lieu de rêve (question projective, très fun et partageable).
+const qDreamPlace: Question = {
+  key: 'dreamPlace',
+  type: 'cards',
+  title: (s) => s.quiz.dreamPlace,
+  options: [
+    { value: 'beach', label: (s) => s.quiz.dpBeach, emoji: '🏖️' },
+    { value: 'mountain', label: (s) => s.quiz.dpMountain, emoji: '⛰️' },
+    { value: 'city', label: (s) => s.quiz.dpCity, emoji: '🌃' },
+    { value: 'desert', label: (s) => s.quiz.dpDesert, emoji: '🏜️' },
+  ],
+};
+
 // --- Flux par mode ---------------------------------------------------------
+// Ordre pensé pour l'engagement : on commence léger (identité), puis on creuse
+// la personnalité amoureuse, et on garde les questions « fun » pour rythmer.
 
 const SOLO_QUESTIONS: Question[] = [
   qName,
   qBirth,
+  qBirthTime,
   qGender,
   qStatus,
-  qColor,
+  qLoveStyle,
+  qLoveLang,
+  qWantPartner,
+  qConflict,
   qElement,
   qAnimal,
+  qColor,
   qSeason,
+  qDreamPlace,
   qDate,
   qProject,
 ];
@@ -172,12 +264,18 @@ const COUPLE_QUESTIONS: Question[] = [
   qPartnerName,
   qBirth,
   qPartnerBirth,
+  qBirthTime,
   qGender,
   qStatus,
-  qColor,
+  qLoveStyle,
+  qLoveLang,
+  qWantPartner,
+  qConflict,
   qElement,
   qAnimal,
+  qColor,
   qSeason,
+  qDreamPlace,
   qDate,
   qProject,
 ];

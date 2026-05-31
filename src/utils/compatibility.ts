@@ -100,9 +100,21 @@ export function computeCoupleResult(answers: Answers): CoupleResult {
   // Statut de la relation : un couple déjà ensemble part avec un petit plus.
   if (answers.status === 'relationship' || answers.status === 'married') score += 3;
 
-  // Variation déterministe propre au couple (mêmes prénoms+signes = même valeur).
-  const seed = hashString(`${answers.name}|${answers.partnerName}|${sign1}|${sign2}|${answers.color}`);
-  const jitter = (seed % 13) - 6; // -6 .. +6
+  // Style d'attachement : un profil « calme/sécure » stabilise la relation ;
+  // le profil « hot & cold » ajoute un peu de tension (mais reste fun).
+  if (answers.loveStyle === 'calm') score += 5;
+  else if (answers.loveStyle === 'close') score += 2;
+  else if (answers.loveStyle === 'hotcold') score -= 3;
+
+  // Façon de gérer une dispute : « on parle » est le plus sain.
+  if (answers.conflict === 'talk') score += 4;
+  else if (answers.conflict === 'quiet') score -= 2;
+
+  // Variation déterministe propre au couple (mêmes réponses = même valeur).
+  const seed = hashString(
+    `${answers.name}|${answers.partnerName}|${sign1}|${sign2}|${answers.color}|${answers.loveLang}|${answers.dreamPlace}`,
+  );
+  const jitter = (seed % 11) - 5; // -5 .. +5
   score += jitter;
 
   score = Math.max(35, Math.min(99, Math.round(score)));

@@ -15,6 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Screen } from '@/components/Screen';
 import { AppText } from '@/components/AppText';
+import { SeerAvatar } from '@/components/SeerAvatar';
 import { useLocale } from '@/context/LocaleContext';
 import { useTheme } from '@/context/ThemeContext';
 import { absoluteFill, spacing } from '@/theme';
@@ -72,7 +73,7 @@ export default function Loading() {
           })}
         </Animated.View>
         <Animated.View style={moonStyle}>
-          <AppText style={styles.moon}>🌙</AppText>
+          <SeerAvatar size={120} />
         </Animated.View>
       </View>
 
@@ -102,5 +103,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   symbol: { position: 'absolute', fontSize: 30 },
-  moon: { fontSize: 72 },
 });

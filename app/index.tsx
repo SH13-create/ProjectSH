@@ -11,6 +11,7 @@ import { AppText } from '@/components/AppText';
 import { Card } from '@/components/Card';
 import { Button } from '@/components/Button';
 import { Toggles } from '@/components/Toggles';
+import { SeerAvatar } from '@/components/SeerAvatar';
 import { useLocale } from '@/context/LocaleContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useQuiz } from '@/context/QuizContext';
@@ -33,9 +34,9 @@ export default function Home() {
       <Toggles />
 
       <Animated.View entering={FadeInDown.duration(500)} style={styles.hero}>
-        <AppText center style={styles.logo}>
-          💞🌙✨
-        </AppText>
+        <View style={styles.avatar}>
+          <SeerAvatar size={150} />
+        </View>
         <AppText variant="display" center weight="800" color={colors.primary}>
           {t.common.appName}
         </AppText>
@@ -118,7 +119,7 @@ function ModeCard({
 
 const styles = StyleSheet.create({
   hero: { marginTop: spacing.lg, marginBottom: spacing.sm },
-  logo: { fontSize: 56, textAlign: 'center' },
+  avatar: { alignItems: 'center', marginBottom: spacing.sm },
   modes: { gap: spacing.md, marginTop: spacing.sm },
   modeCard: { gap: spacing.md },
   modeRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },

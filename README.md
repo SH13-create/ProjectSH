@@ -1,28 +1,29 @@
-# 💞 Twafo9 — قارئ التوافق بالدارجة
+# 🔮 Moulat Niya — مولات النية
 
-Prototype mobile **ludique et divertissant** en **darija marocaine** qui calcule
-la **compatibilité amoureuse** entre deux personnes (mode couple) ou révèle une
-**lecture de l'avenir** pour une personne seule (mode individuel), à partir d'un
-petit quiz.
+Prototype mobile **ludique et divertissant** en **darija marocaine**, mené par
+**Moulat Niya** (مولات النية) — une **voyante / chouwafa IA** qui « lit » dans le
+fenjan et les étoiles. Elle calcule la **compatibilité amoureuse** entre deux
+personnes (mode couple) ou « révèle » l'**avenir** d'une personne seule (mode
+individuel), à partir d'un petit quiz qu'elle te pose.
 
-> ⚠️ **C'est juste pour s'amuser.** L'app ne fait aucune vraie prédiction et ne
-> donne aucun conseil sérieux. **Aucune donnée ne quitte l'appareil** : tout est
-> stocké en local.
+> ⚠️ **C'est juste pour s'amuser.** Moulat Niya est un **personnage fictif** ;
+> l'app ne fait aucune vraie prédiction ni conseil sérieux. **Aucune donnée ne
+> quitte l'appareil** : tout est stocké en local.
 
 ---
 
-## 🏷️ Le nom de l'app
+## 🏷️ Le nom & le concept
 
-Trois propositions étaient sur la table :
+**Moulat Niya** (مولات النية) = « celle qui a le don / l'intuition », clin d'œil
+à la *chouwafa* marocaine. C'est une **persona de voyante** : elle parle à la
+première personne (« كانشوف ليك... » / « Kanchouf lik... »), accueille
+l'utilisateur, pose les questions, puis « lit » le résultat — un angle de
+différenciation par rapport aux apps de compatibilité génériques (cf. benchmark
+Co–Star, The Pattern, EvaTarot…).
 
-| Nom | Idée |
-| --- | --- |
-| **Twafo9** ✅ *(retenu)* | « توافق » = compatibilité. Court, mémorable, 100% darija. |
-| Smiyti w Smiytek | « mon prénom & ton prénom », chaleureux et personnel. |
-| Hob & Nojoum | « amour & étoiles », l'angle astrologique. |
-
-Le nom retenu est **Twafo9**. Pour le changer : voir [`app.json`](./app.json)
-(`name`, `slug`) et la clé `common.appName` dans les fichiers de langue.
+Pour changer le nom : voir [`app.json`](./app.json) (`name`, `slug`) et les clés
+`common.appName` / `common.seerName` dans les fichiers de langue. L'avatar de la
+voyante est un SVG éditable : [`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx).
 
 ---
 

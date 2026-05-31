@@ -32,6 +32,7 @@ export interface Strings {
     start: string;
     appName: string;
     tagline: string;
+    seerName: string; // nom de la voyante (mascotte)
   };
 
   onboarding: {
@@ -92,6 +93,45 @@ export interface Strings {
     dateWalk: string;
     dateCinema: string;
     dateFood: string;
+    // Heure de naissance (forte personnalisation, option « je sais pas »)
+    birthTime: string;
+    btMorning: string;
+    btAfternoon: string;
+    btEvening: string;
+    btNight: string;
+    btUnknown: string;
+    // Style d'attachement amoureux
+    loveStyle: string;
+    lsClose: string;
+    lsFree: string;
+    lsCalm: string;
+    lsHotCold: string;
+    // Langage de l'amour (comment tu montres l'amour)
+    loveLang: string;
+    llWords: string;
+    llTime: string;
+    llHelp: string;
+    llGifts: string;
+    llTouch: string;
+    // Ce que tu cherches chez un partenaire
+    wantPartner: string;
+    wpLoyal: string;
+    wpAmbition: string;
+    wpHumor: string;
+    wpWarm: string;
+    wpFaith: string;
+    // Façon de gérer une dispute
+    conflict: string;
+    cfTalk: string;
+    cfSpace: string;
+    cfQuiet: string;
+    cfFire: string;
+    // Lieu de rêve (projectif, fun)
+    dreamPlace: string;
+    dpBeach: string;
+    dpMountain: string;
+    dpCity: string;
+    dpDesert: string;
   };
 
   loading: {
