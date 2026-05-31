@@ -6,7 +6,7 @@
 #   (Pages sur un repo PRIVÉ nécessite un plan Pro/Team/Enterprise ; sur un repo
 #    public, c'est gratuit.)
 #
-# URL finale :  https://sh13-create.github.io/projectsh/
+# URL finale :  https://sh13-create.github.io/ProjectSH/
 name: Deploy web preview (GitHub Pages)
 
 on:
@@ -36,7 +36,7 @@ jobs:
       # Le site est servi sous /projectsh/ → on injecte le bon chemin de base.
       - run: npx expo export --platform web
         env:
-          EXPO_BASE_URL: /projectsh/
+          EXPO_BASE_URL: /ProjectSH/
       # Empêche Jekyll d'ignorer les dossiers commençant par "_" (ex. _expo).
       - run: touch dist/.nojekyll
       - uses: actions/configure-pages@v5
