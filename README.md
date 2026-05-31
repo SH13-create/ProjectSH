@@ -92,6 +92,7 @@ Pour le téléphone, garde simplement Expo Go ouvert et scanne le QR code.
 
 ```bash
 npm run tsc          # vérification TypeScript (0 erreur attendue)
+npm test             # tests unitaires Jest (logique zodiaque + compatibilité)
 npx expo export --platform web   # build de production web dans /dist
 ```
 
@@ -106,20 +107,23 @@ ProjectSH/
 │   ├── index.tsx             # 🏠 Accueil / onboarding + choix du mode
 │   ├── quiz.tsx              # ❓ Flux de questions (1 question/écran)
 │   ├── loading.tsx           # ⏳ « جاري التحليل... » (animation suspense)
-│   └── result.tsx            # 🎉 Résultat (score couple OU lecture solo)
+│   ├── result.tsx            # 🎉 Résultat (score couple OU lecture solo)
+│   └── history.tsx           # 📜 Résultats précédents (stockés en local)
 │
 ├── src/
 │   ├── components/           # Composants réutilisables
 │   │   ├── AppText.tsx        # Texte (gère RTL + couleurs du thème)
-│   │   ├── Background...      # ZelligeBackground.tsx (motif géométrique)
+│   │   ├── ZelligeBackground  # Motif géométrique d'arrière-plan (SVG)
 │   │   ├── Button.tsx         # Bouton animé + haptique
 │   │   ├── Card.tsx           # Carte arrondie avec ombre
 │   │   ├── ChoiceCard.tsx     # Carte de choix « à taper »
+│   │   ├── Confetti.tsx       # 🎊 Confettis (célébration des grands scores)
 │   │   ├── DateField.tsx      # Sélecteur de date maison (web + mobile)
 │   │   ├── Gauge.tsx          # Jauge circulaire animée (score %)
 │   │   ├── ProgressBar.tsx    # Barre de progression du quiz
 │   │   ├── Screen.tsx         # Conteneur d'écran (safe area + fond)
-│   │   └── Toggles.tsx        # Bascules écriture & thème
+│   │   ├── Toggles.tsx        # Bascules écriture & thème
+│   │   └── ZodiacBadge.tsx    # 🪐 Médaillon vectoriel d'un signe (SVG)
 │   │
 │   ├── context/              # État global (React Context)
 │   │   ├── ThemeContext.tsx   # Mode clair / sombre
@@ -142,7 +146,8 @@ ProjectSH/
 │       ├── compatibility.ts   # 💞 Score déterministe + lecture solo
 │       ├── resultText.ts      # Texte de partage
 │       ├── share.ts           # Partage texte / image (mobile + web)
-│       └── storage.ts         # AsyncStorage (préférences locales)
+│       ├── storage.ts         # AsyncStorage (préférences + historique)
+│       └── __tests__/         # Tests Jest (zodiac, compatibilité)
 │
 ├── assets/                   # Icônes / splash
 ├── app.json                  # Config Expo (nom, thème, plugins)
@@ -216,6 +221,18 @@ Le bouton **« Partager »** ([`src/utils/share.ts`](./src/utils/share.ts)) :
   le texte** dans le presse-papiers ; en dernier recours, le partage texte natif.
 
 ---
+
+## ✨ Fonctionnalités bonus
+
+- **Illustrations vectorielles des signes** : médaillons « zellige » dessinés en
+  SVG ([`ZodiacBadge`](./src/components/ZodiacBadge.tsx)), colorés selon
+  l'élément (couleurs dans [`zodiac.ts → ELEMENT_COLOR`](./src/utils/zodiac.ts)).
+- **Historique local** : les derniers résultats sont gardés sur l'appareil
+  (écran 📜 accessible depuis l'accueil), avec possibilité de tout effacer.
+- **Confettis** 🎊 + vibration de réussite quand le score de couple est élevé.
+- **Interprétation propre à la paire** : le texte de couple combine la « façon
+  d'aimer » de chaque signe (pas seulement le palier de score).
+- **Tests unitaires** de la logique (déterminisme du score, calcul des signes).
 
 ## ⚠️ Disclaimer & vie privée
 

@@ -128,9 +128,44 @@ const qProject: Question = {
   ],
 };
 
+const qSeason: Question = {
+  key: 'season',
+  type: 'cards',
+  title: (s) => s.quiz.season,
+  options: [
+    { value: 'spring', label: (s) => s.quiz.seasonSpring, emoji: '🌸' },
+    { value: 'summer', label: (s) => s.quiz.seasonSummer, emoji: '☀️' },
+    { value: 'autumn', label: (s) => s.quiz.seasonAutumn, emoji: '🍂' },
+    { value: 'winter', label: (s) => s.quiz.seasonWinter, emoji: '❄️' },
+  ],
+};
+
+const qDate: Question = {
+  key: 'dateIdea',
+  type: 'cards',
+  title: (s) => s.quiz.date,
+  options: [
+    { value: 'cafe', label: (s) => s.quiz.dateCafe, emoji: '☕' },
+    { value: 'walk', label: (s) => s.quiz.dateWalk, emoji: '🚶' },
+    { value: 'cinema', label: (s) => s.quiz.dateCinema, emoji: '🎬' },
+    { value: 'food', label: (s) => s.quiz.dateFood, emoji: '🍽️' },
+  ],
+};
+
 // --- Flux par mode ---------------------------------------------------------
 
-const SOLO_QUESTIONS: Question[] = [qName, qBirth, qGender, qStatus, qColor, qElement, qAnimal, qProject];
+const SOLO_QUESTIONS: Question[] = [
+  qName,
+  qBirth,
+  qGender,
+  qStatus,
+  qColor,
+  qElement,
+  qAnimal,
+  qSeason,
+  qDate,
+  qProject,
+];
 
 const COUPLE_QUESTIONS: Question[] = [
   qName,
@@ -142,6 +177,8 @@ const COUPLE_QUESTIONS: Question[] = [
   qColor,
   qElement,
   qAnimal,
+  qSeason,
+  qDate,
   qProject,
 ];
 

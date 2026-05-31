@@ -82,6 +82,16 @@ export interface Strings {
     projectTravel: string;
     projectCareer: string;
     projectStudy: string;
+    season: string;
+    seasonSpring: string;
+    seasonSummer: string;
+    seasonAutumn: string;
+    seasonWinter: string;
+    date: string;
+    dateCafe: string;
+    dateWalk: string;
+    dateCinema: string;
+    dateFood: string;
   };
 
   loading: {
@@ -120,6 +130,12 @@ export interface Strings {
 
   // Lecture individuelle par signe
   solo: Record<ZodiacSign, SoloReading>;
+
+  // Façon d'aimer de chaque signe (utilisée pour composer une interprétation
+  // de couple propre à la PAIRE de signes, pas juste au palier de score).
+  coupleStyle: Record<ZodiacSign, string>;
+  // Gabarit composant les deux styles : {a} et {b} = phrases coupleStyle.
+  coupleNarrative: string;
 
   // 5 paliers de score de compatibilité (du plus faible au plus fort)
   bands: [Band, Band, Band, Band, Band];

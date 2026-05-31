@@ -5,20 +5,31 @@
  * Boutons Partager & Recommencer + disclaimer « divertissement ».
  */
 import React, { useEffect, useMemo, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import * as Haptics from 'expo-haptics';
+import Animated, {
+  Easing,
+  FadeInDown,
+  FadeInUp,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
 import { Screen } from '@/components/Screen';
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
+import { Confetti } from '@/components/Confetti';
 import { Gauge } from '@/components/Gauge';
 import { useLocale } from '@/context/LocaleContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useQuiz } from '@/context/QuizContext';
 import { radius, spacing } from '@/theme';
 import type { CoupleResult, SoloResult } from '@/utils/compatibility';
-import { getZodiacInfo } from '@/utils/zodiac';
+import { ZodiacBadge } from '@/components/ZodiacBadge';
+import { format } from '@/locales';
 import { buildShareText } from '@/utils/resultText';
 import { shareResult } from '@/utils/share';
 import { addHistory } from '@/utils/storage';
@@ -35,9 +46,15 @@ export default function ResultScreen() {
   // On calcule le résultat une seule fois à l'ouverture de l'écran.
   const result = useMemo(() => getResult(), []);
 
-  // On l'ajoute à l'historique local (une seule fois).
+  // On fête les grands scores (couple, palier ≥ 3).
+  const celebrate = result.mode === 'couple' && result.bandIndex >= 3;
+
+  // On l'ajoute à l'historique local (une seule fois) + vibration de réussite.
   useEffect(() => {
     addHistory(result);
+    if (celebrate && Platform.OS !== 'web') {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+    }
   }, []);
 
   const onShare = () => {
@@ -50,33 +67,52 @@ export default function ResultScreen() {
   };
 
   return (
-    <Screen scroll>
-      {/* Zone capturée pour le partage en image (fond opaque pour un beau rendu). */}
-      <View
-        ref={shotRef}
-        collapsable={false}
-        style={{ backgroundColor: colors.background, borderRadius: radius.lg }}
-      >
-        {result.mode === 'couple' ? (
-          <CoupleView result={result} />
-        ) : (
-          <SoloView result={result} />
-        )}
-      </View>
+    <>
+      <Screen scroll>
+        {/* Zone capturée pour le partage en image (fond opaque pour un beau rendu). */}
+        <View
+          ref={shotRef}
+          collapsable={false}
+          style={{ backgroundColor: colors.background, borderRadius: radius.lg }}
+        >
+          {result.mode === 'couple' ? (
+            <CoupleView result={result} />
+          ) : (
+            <SoloView result={result} />
+          )}
+        </View>
 
-      {/* Actions */}
-      <Animated.View entering={FadeInUp.delay(300)} style={styles.actions}>
-        <Button label={t.result.share} emoji="📤" onPress={onShare} />
-        <Button label={t.result.restart} emoji="🔄" variant="secondary" onPress={onRestart} />
-      </Animated.View>
+        {/* Actions */}
+        <Animated.View entering={FadeInUp.delay(300)} style={styles.actions}>
+          <Button label={t.result.share} emoji="📤" onPress={onShare} />
+          <Button label={t.result.restart} emoji="🔄" variant="secondary" onPress={onRestart} />
+        </Animated.View>
 
-      {/* Disclaimer */}
-      <Card alt style={{ marginTop: spacing.sm }}>
-        <AppText variant="caption" center color={colors.textMuted}>
-          ⚠️ {t.result.disclaimer}
-        </AppText>
-      </Card>
-    </Screen>
+        {/* Disclaimer */}
+        <Card alt style={{ marginTop: spacing.sm }}>
+          <AppText variant="caption" center color={colors.textMuted}>
+            ⚠️ {t.result.disclaimer}
+          </AppText>
+        </Card>
+      </Screen>
+
+      {/* Confettis par-dessus tout l'écran pour les beaux scores. */}
+      {celebrate && <Confetti />}
+    </>
+  );
+}
+
+/** Petit cœur qui bat (micro-animation décorative entre les deux signes). */
+function PulseHeart() {
+  const scale = useSharedValue(1);
+  useEffect(() => {
+    scale.value = withRepeat(withTiming(1.25, { duration: 650, easing: Easing.inOut(Easing.ease) }), -1, true);
+  }, []);
+  const style = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  return (
+    <Animated.View style={style}>
+      <AppText style={styles.heart}>💞</AppText>
+    </Animated.View>
   );
 }
 
@@ -90,10 +126,9 @@ function bandColor(bandIndex: number, colors: ReturnType<typeof useTheme>['color
 function SignBadge({ sign, name }: { sign: SoloResult['sign']; name: string }) {
   const { colors } = useTheme();
   const { t } = useLocale();
-  const info = getZodiacInfo(sign);
   return (
     <Card style={styles.badge}>
-      <AppText style={styles.badgeEmoji}>{info.emoji}</AppText>
+      <ZodiacBadge sign={sign} size={72} />
       <AppText variant="caption" color={colors.textMuted} center>
         {name}
       </AppText>
@@ -129,7 +164,7 @@ function CoupleView({ result }: { result: CoupleResult }) {
       {/* Les deux signes face à face */}
       <View style={styles.couple}>
         <SignBadge sign={result.sign1} name={result.name1} />
-        <AppText style={styles.heart}>💞</AppText>
+        <PulseHeart />
         <SignBadge sign={result.sign2} name={result.name2} />
       </View>
 
@@ -138,6 +173,18 @@ function CoupleView({ result }: { result: CoupleResult }) {
           <AppText variant="body">{band.paragraph}</AppText>
           <AppText variant="body" style={{ marginTop: spacing.sm }} color={colors.textMuted}>
             {t.elementChemistry[result.chemistry]}
+          </AppText>
+        </Card>
+      </Animated.View>
+
+      {/* Interprétation propre à la PAIRE de signes (façon d'aimer de chacun). */}
+      <Animated.View entering={FadeInUp.delay(220)}>
+        <Card alt>
+          <AppText variant="body">
+            {format(t.coupleNarrative, {
+              a: t.coupleStyle[result.sign1],
+              b: t.coupleStyle[result.sign2],
+            })}
           </AppText>
         </Card>
       </Animated.View>
@@ -158,7 +205,6 @@ function CoupleView({ result }: { result: CoupleResult }) {
 function SoloView({ result }: { result: SoloResult }) {
   const { t } = useLocale();
   const { colors } = useTheme();
-  const info = getZodiacInfo(result.sign);
   const solo = t.solo[result.sign];
 
   const Row = ({ icon, label, text }: { icon: string; label: string; text: string }) => (
@@ -176,7 +222,7 @@ function SoloView({ result }: { result: SoloResult }) {
     <View style={{ gap: spacing.md }}>
       <Animated.View entering={FadeInDown.duration(500)}>
         <Card alt style={styles.soloHead}>
-          <AppText style={styles.soloEmoji}>{info.emoji}</AppText>
+          <ZodiacBadge sign={result.sign} size={110} />
           <AppText variant="title" center weight="800" color={colors.primary}>
             {result.name}
           </AppText>
@@ -206,9 +252,7 @@ const styles = StyleSheet.create({
   gaugeWrap: { alignItems: 'center', gap: spacing.sm, marginTop: spacing.md },
   couple: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
   badge: { flex: 1, alignItems: 'center', gap: 2, paddingVertical: spacing.md },
-  badgeEmoji: { fontSize: 48 },
   heart: { fontSize: 30 },
   soloHead: { alignItems: 'center', gap: spacing.xs },
-  soloEmoji: { fontSize: 72, textAlign: 'center' },
   actions: { gap: spacing.md, marginTop: spacing.lg },
 });

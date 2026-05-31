@@ -64,6 +64,16 @@ const arabizi: Strings = {
     projectTravel: 'S-sfer',
     projectCareer: 'L-career',
     projectStudy: 'L-9raya',
+    season: 'Chmen fasl katfeddel?',
+    seasonSpring: 'R-rbi3',
+    seasonSummer: 'S-sif',
+    seasonAutumn: 'L-khrif',
+    seasonWinter: 'Ch-chta',
+    date: 'Fin t7eb tkhrej f awwel maw3id?',
+    dateCafe: 'L-9ahwa',
+    dateWalk: 'Tmechya',
+    dateCinema: 'S-sinima',
+    dateFood: 'Makla bnina',
   },
 
   loading: {
@@ -181,6 +191,22 @@ const arabizi: Strings = {
       future: 'L-a7lam dyalek 9riba twelli 7a9i9a ila tbe3tiha.',
     },
   },
+
+  coupleStyle: {
+    aries: 'kib7eb b 7amas w kibiyen mcha3ro b sor3a',
+    taurus: 'kib7eb b houdou2 w kidour 3la l-isti9rar',
+    gemini: 'kib7eb b l-klam w d-d7ek w t-taghyir',
+    cancer: 'kib7eb b 7niya w ki3ti bezzaf men 9albo',
+    leo: 'kib7eb b fakhr w bgha y7ess b annou mohim',
+    virgo: 'kib7eb b t-tafasil s-sghira w l-ihtimam',
+    libra: 'kib7eb b t-tawazoun w kikreh l-machakil',
+    scorpio: 'kib7eb b 3om9 w b koul jawar7o',
+    sagittarius: 'kib7eb b 7orria w kibghi charik moghamer',
+    capricorn: 'kib7eb b jiddiya w kifekker f l-mosta9bal',
+    aquarius: 'kib7eb b tari9a mokhtalfa w ki7taj msa7to',
+    pisces: 'kib7eb b 7olm w romansia kbira',
+  },
+  coupleNarrative: 'Nta {a}, w howa/hiya {b}. Fach had t-tabi3tin kitla9aw, kikhrej menhom mazij khass bikom we7dkom.',
 
   bands: [
     {

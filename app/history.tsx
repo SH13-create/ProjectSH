@@ -14,7 +14,7 @@ import { useLocale } from '@/context/LocaleContext';
 import { useTheme } from '@/context/ThemeContext';
 import { spacing } from '@/theme';
 import { clearHistory, loadHistory, type HistoryEntry } from '@/utils/storage';
-import { getZodiacInfo } from '@/utils/zodiac';
+import { ZodiacBadge } from '@/components/ZodiacBadge';
 
 export default function History() {
   const { t, isRTL } = useLocale();
@@ -60,9 +60,9 @@ export default function History() {
               {it.mode === 'couple' ? (
                 <>
                   <View style={styles.signs}>
-                    <AppText style={styles.emoji}>{getZodiacInfo(it.sign1).emoji}</AppText>
+                    <ZodiacBadge sign={it.sign1} size={40} />
                     <AppText style={styles.heart}>💞</AppText>
-                    <AppText style={styles.emoji}>{getZodiacInfo(it.sign2).emoji}</AppText>
+                    <ZodiacBadge sign={it.sign2} size={40} />
                   </View>
                   <View style={styles.info}>
                     <AppText variant="subtitle" weight="800">
@@ -78,7 +78,7 @@ export default function History() {
                 </>
               ) : (
                 <>
-                  <AppText style={styles.emoji}>{getZodiacInfo(it.sign).emoji}</AppText>
+                  <ZodiacBadge sign={it.sign} size={44} />
                   <View style={styles.info}>
                     <AppText variant="subtitle" weight="800">
                       {it.name}

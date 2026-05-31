@@ -24,6 +24,7 @@ export type ZodiacSign =
 export type ZodiacInfo = {
   key: ZodiacSign;
   emoji: string;
+  symbol: string; // glyphe astrologique (♈ …) utilisé dans l'illustration vectorielle
   element: Element;
   // Bornes de la période (mois 1-12, jour). Le signe va de (startMonth/startDay) à la veille du suivant.
   startMonth: number;
@@ -33,20 +34,28 @@ export type ZodiacInfo = {
   nameArabizi: string;
 };
 
+// Couleurs par élément pour les médaillons (lisibles en thème clair ET sombre).
+export const ELEMENT_COLOR: Record<Element, string> = {
+  fire: '#E2603B', // terre cuite / feu
+  earth: '#3FA081', // vert
+  air: '#3E63D6', // bleu Majorelle
+  water: '#2C9CC4', // bleu-cyan / eau
+};
+
 // Ordre = ordre des périodes dans l'année.
 export const ZODIAC: ZodiacInfo[] = [
-  { key: 'capricorn', emoji: '🐐', element: 'earth', startMonth: 12, startDay: 22, nameAr: 'الجدي', nameArabizi: 'Jady' },
-  { key: 'aquarius', emoji: '🏺', element: 'air', startMonth: 1, startDay: 20, nameAr: 'الدلو', nameArabizi: 'Dalw' },
-  { key: 'pisces', emoji: '🐟', element: 'water', startMonth: 2, startDay: 19, nameAr: 'الحوت', nameArabizi: 'Hut' },
-  { key: 'aries', emoji: '🐏', element: 'fire', startMonth: 3, startDay: 21, nameAr: 'الحمل', nameArabizi: 'Hamal' },
-  { key: 'taurus', emoji: '🐂', element: 'earth', startMonth: 4, startDay: 20, nameAr: 'الثور', nameArabizi: 'Thawr' },
-  { key: 'gemini', emoji: '👯', element: 'air', startMonth: 5, startDay: 21, nameAr: 'الجوزاء', nameArabizi: 'Jawza' },
-  { key: 'cancer', emoji: '🦀', element: 'water', startMonth: 6, startDay: 21, nameAr: 'السرطان', nameArabizi: 'Saratan' },
-  { key: 'leo', emoji: '🦁', element: 'fire', startMonth: 7, startDay: 23, nameAr: 'الأسد', nameArabizi: 'Asad' },
-  { key: 'virgo', emoji: '🌾', element: 'earth', startMonth: 8, startDay: 23, nameAr: 'العذراء', nameArabizi: 'Adra' },
-  { key: 'libra', emoji: '⚖️', element: 'air', startMonth: 9, startDay: 23, nameAr: 'الميزان', nameArabizi: 'Mizan' },
-  { key: 'scorpio', emoji: '🦂', element: 'water', startMonth: 10, startDay: 23, nameAr: 'العقرب', nameArabizi: '3aqrab' },
-  { key: 'sagittarius', emoji: '🏹', element: 'fire', startMonth: 11, startDay: 22, nameAr: 'القوس', nameArabizi: 'Qaws' },
+  { key: 'capricorn', emoji: '🐐', symbol: '♑', element: 'earth', startMonth: 12, startDay: 22, nameAr: 'الجدي', nameArabizi: 'Jady' },
+  { key: 'aquarius', emoji: '🏺', symbol: '♒', element: 'air', startMonth: 1, startDay: 20, nameAr: 'الدلو', nameArabizi: 'Dalw' },
+  { key: 'pisces', emoji: '🐟', symbol: '♓', element: 'water', startMonth: 2, startDay: 19, nameAr: 'الحوت', nameArabizi: 'Hut' },
+  { key: 'aries', emoji: '🐏', symbol: '♈', element: 'fire', startMonth: 3, startDay: 21, nameAr: 'الحمل', nameArabizi: 'Hamal' },
+  { key: 'taurus', emoji: '🐂', symbol: '♉', element: 'earth', startMonth: 4, startDay: 20, nameAr: 'الثور', nameArabizi: 'Thawr' },
+  { key: 'gemini', emoji: '👯', symbol: '♊', element: 'air', startMonth: 5, startDay: 21, nameAr: 'الجوزاء', nameArabizi: 'Jawza' },
+  { key: 'cancer', emoji: '🦀', symbol: '♋', element: 'water', startMonth: 6, startDay: 21, nameAr: 'السرطان', nameArabizi: 'Saratan' },
+  { key: 'leo', emoji: '🦁', symbol: '♌', element: 'fire', startMonth: 7, startDay: 23, nameAr: 'الأسد', nameArabizi: 'Asad' },
+  { key: 'virgo', emoji: '🌾', symbol: '♍', element: 'earth', startMonth: 8, startDay: 23, nameAr: 'العذراء', nameArabizi: 'Adra' },
+  { key: 'libra', emoji: '⚖️', symbol: '♎', element: 'air', startMonth: 9, startDay: 23, nameAr: 'الميزان', nameArabizi: 'Mizan' },
+  { key: 'scorpio', emoji: '🦂', symbol: '♏', element: 'water', startMonth: 10, startDay: 23, nameAr: 'العقرب', nameArabizi: '3aqrab' },
+  { key: 'sagittarius', emoji: '🏹', symbol: '♐', element: 'fire', startMonth: 11, startDay: 22, nameAr: 'القوس', nameArabizi: 'Qaws' },
 ];
 
 const BY_KEY: Record<ZodiacSign, ZodiacInfo> = ZODIAC.reduce(
