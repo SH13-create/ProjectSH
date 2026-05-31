@@ -106,6 +106,14 @@ export interface Strings {
     age: string;
   };
 
+  history: {
+    open: string; // bouton sur l'accueil
+    title: string;
+    empty: string;
+    clear: string;
+    scoreShort: string; // ex. "توافق"
+  };
+
   // Noms + petits traits par signe
   signs: Record<ZodiacSign, { name: string; trait: string }>;
   elements: Record<Element, string>;

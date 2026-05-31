@@ -89,6 +89,14 @@ const arabizi: Strings = {
     age: 'L-3omr',
   },
 
+  history: {
+    open: 'Nataij sab9a',
+    title: 'Nataij sab9a',
+    empty: 'Mazal ma kayna 7tta natija. Jarreb chi ta7lil! 🌙',
+    clear: 'Ms7 l-kol',
+    scoreShort: 'Twafo9',
+  },
+
   signs: {
     aries: { name: 'Hamal', trait: 'jari2 w mlian b ta9a' },
     taurus: { name: 'Thawr', trait: 'sabour w kib7eb r-ra7a' },

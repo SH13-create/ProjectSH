@@ -4,7 +4,7 @@
  *  - Mode individuel : lecture de l'avenir (amour / travail / projets).
  * Boutons Partager & Recommencer + disclaimer « divertissement ».
  */
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
@@ -21,6 +21,7 @@ import type { CoupleResult, SoloResult } from '@/utils/compatibility';
 import { getZodiacInfo } from '@/utils/zodiac';
 import { buildShareText } from '@/utils/resultText';
 import { shareResult } from '@/utils/share';
+import { addHistory } from '@/utils/storage';
 
 export default function ResultScreen() {
   const { t } = useLocale();
@@ -33,6 +34,11 @@ export default function ResultScreen() {
 
   // On calcule le résultat une seule fois à l'ouverture de l'écran.
   const result = useMemo(() => getResult(), []);
+
+  // On l'ajoute à l'historique local (une seule fois).
+  useEffect(() => {
+    addHistory(result);
+  }, []);
 
   const onShare = () => {
     shareResult(shotRef, buildShareText(result, t));

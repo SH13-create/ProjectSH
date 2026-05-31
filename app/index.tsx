@@ -72,6 +72,14 @@ export default function Home() {
           onPress={() => start('couple')}
         />
       </Animated.View>
+
+      <Button
+        label={t.history.open}
+        emoji="📜"
+        variant="ghost"
+        onPress={() => router.push('/history')}
+        style={{ marginTop: spacing.sm }}
+      />
     </Screen>
   );
 }

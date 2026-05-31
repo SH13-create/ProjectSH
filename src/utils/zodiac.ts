@@ -67,18 +67,18 @@ export function getZodiacSign(date: Date): ZodiacSign {
   const day = date.getDate();
   const value = month * 100 + day; // ex. 21 mars => 321
 
-  // On parcourt les périodes ; le Capricorne (chevauche déc→jan) est géré à part.
+  // Le Capricorne chevauche la fin d'année (22 déc → 19 jan) : on le traite à part.
+  if (value >= 1222 || value <= 119) return 'capricorn';
+
+  // Pour les autres : la période va de leur début jusqu'à la veille du signe suivant.
   for (const z of ZODIAC) {
     if (z.key === 'capricorn') continue;
     const next = ZODIAC[(ZODIAC.indexOf(z) + 1) % ZODIAC.length];
     const start = z.startMonth * 100 + z.startDay;
-    const end =
-      next.key === 'capricorn'
-        ? 1231 // jusqu'à fin d'année
-        : next.startMonth * 100 + next.startDay - 1;
+    const end = next.startMonth * 100 + next.startDay - 1;
     if (value >= start && value <= end) return z.key;
   }
-  return 'capricorn'; // 22 déc → 19 jan
+  return 'capricorn'; // sécurité
 }
 
 /** Calcule l'âge à partir de la date de naissance (déterministe vis-à-vis de `now`). */

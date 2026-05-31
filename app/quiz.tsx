@@ -82,6 +82,8 @@ export default function Quiz() {
           <TextInput
             value={current}
             onChangeText={(v) => setAnswer(q.key, v)}
+            maxLength={24}
+            autoCapitalize="words"
             placeholder={q.placeholder?.(t)}
             placeholderTextColor={colors.textMuted}
             style={[

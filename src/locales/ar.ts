@@ -89,6 +89,14 @@ const ar: Strings = {
     age: 'العمر',
   },
 
+  history: {
+    open: 'النتائج السابقة',
+    title: 'النتائج السابقة',
+    empty: 'مازال ماكاينة حتى نتيجة. جرب شي تحليل! 🌙',
+    clear: 'مسح الكل',
+    scoreShort: 'توافق',
+  },
+
   signs: {
     aries: { name: 'الحمل', trait: 'جريء و مليان طاقة' },
     taurus: { name: 'الثور', trait: 'صبور و كيحب الراحة' },
