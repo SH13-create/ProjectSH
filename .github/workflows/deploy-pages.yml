@@ -40,6 +40,9 @@ jobs:
       # Empêche Jekyll d'ignorer les dossiers commençant par "_" (ex. _expo).
       - run: touch dist/.nojekyll
       - uses: actions/configure-pages@v5
+        with:
+          # Tente d'activer Pages automatiquement (évite le réglage manuel).
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
