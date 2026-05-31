@@ -1,0 +1,55 @@
+# Déploie l'aperçu web (Expo) sur GitHub Pages — le build tourne sur les
+# serveurs de GitHub, pas en local.
+#
+# ⚠️ À FAIRE UNE SEULE FOIS dans GitHub :
+#   Repo → Settings → Pages → "Build and deployment" → Source = "GitHub Actions".
+#   (Pages sur un repo PRIVÉ nécessite un plan Pro/Team/Enterprise ; sur un repo
+#    public, c'est gratuit.)
+#
+# URL finale :  https://sh13-create.github.io/projectsh/
+name: Deploy web preview (GitHub Pages)
+
+on:
+  push:
+    branches: ['claude/sleepy-cray-TocRu']
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # Le site est servi sous /projectsh/ → on injecte le bon chemin de base.
+      - run: npx expo export --platform web
+        env:
+          EXPO_BASE_URL: /projectsh/
+      # Empêche Jekyll d'ignorer les dossiers commençant par "_" (ex. _expo).
+      - run: touch dist/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
