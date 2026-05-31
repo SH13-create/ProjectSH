@@ -141,6 +141,7 @@ ProjectSH/
 │       ├── questions.ts       # Définition des questions du quiz
 │       ├── compatibility.ts   # 💞 Score déterministe + lecture solo
 │       ├── resultText.ts      # Texte de partage
+│       ├── share.ts           # Partage texte / image (mobile + web)
 │       └── storage.ts         # AsyncStorage (préférences locales)
 │
 ├── assets/                   # Icônes / splash
@@ -201,6 +202,18 @@ Il combine :
 
 Pour ajouter / retirer une question : voir les tableaux en bas de
 [`src/utils/questions.ts`](./src/utils/questions.ts).
+
+---
+
+## 📤 Partage du résultat (texte / image)
+
+Le bouton **« Partager »** ([`src/utils/share.ts`](./src/utils/share.ts)) :
+
+- **Sur mobile** : capture la carte de résultat en **image PNG**
+  (`react-native-view-shot`) et ouvre la feuille de partage native
+  (`expo-sharing`) — idéal pour envoyer le score sur WhatsApp / Instagram.
+- **Sur le web** : utilise la **Web Share API** si disponible, sinon **copie
+  le texte** dans le presse-papiers ; en dernier recours, le partage texte natif.
 
 ---
 

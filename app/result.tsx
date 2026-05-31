@@ -4,8 +4,8 @@
  *  - Mode individuel : lecture de l'avenir (amour / travail / projets).
  * Boutons Partager & Recommencer + disclaimer « divertissement ».
  */
-import React, { useMemo } from 'react';
-import { Share, StyleSheet, View } from 'react-native';
+import React, { useMemo, useRef } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { Screen } from '@/components/Screen';
@@ -16,10 +16,11 @@ import { Gauge } from '@/components/Gauge';
 import { useLocale } from '@/context/LocaleContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useQuiz } from '@/context/QuizContext';
-import { spacing } from '@/theme';
+import { radius, spacing } from '@/theme';
 import type { CoupleResult, SoloResult } from '@/utils/compatibility';
 import { getZodiacInfo } from '@/utils/zodiac';
 import { buildShareText } from '@/utils/resultText';
+import { shareResult } from '@/utils/share';
 
 export default function ResultScreen() {
   const { t } = useLocale();
@@ -27,11 +28,14 @@ export default function ResultScreen() {
   const { getResult, reset } = useQuiz();
   const router = useRouter();
 
+  // Référence sur la carte de résultat, capturée en image lors du partage.
+  const shotRef = useRef<View>(null);
+
   // On calcule le résultat une seule fois à l'ouverture de l'écran.
   const result = useMemo(() => getResult(), []);
 
   const onShare = () => {
-    Share.share({ message: buildShareText(result, t) }).catch(() => {});
+    shareResult(shotRef, buildShareText(result, t));
   };
 
   const onRestart = () => {
@@ -41,11 +45,18 @@ export default function ResultScreen() {
 
   return (
     <Screen scroll>
-      {result.mode === 'couple' ? (
-        <CoupleView result={result} />
-      ) : (
-        <SoloView result={result} />
-      )}
+      {/* Zone capturée pour le partage en image (fond opaque pour un beau rendu). */}
+      <View
+        ref={shotRef}
+        collapsable={false}
+        style={{ backgroundColor: colors.background, borderRadius: radius.lg }}
+      >
+        {result.mode === 'couple' ? (
+          <CoupleView result={result} />
+        ) : (
+          <SoloView result={result} />
+        )}
+      </View>
 
       {/* Actions */}
       <Animated.View entering={FadeInUp.delay(300)} style={styles.actions}>
