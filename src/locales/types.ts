@@ -256,4 +256,75 @@ export interface Strings {
     challengeRead: Record<string, string>; // distance/jealousy/routine/family/money
     projectRead: Record<string, string>; // marriage/travel/career/study
   };
+
+  // 📸 Mode « Analyse par photo » (fictif & local).
+  photo: {
+    // Onboarding / écran
+    mode: string; // libellé sur l'accueil
+    modeDesc: string;
+    title: string; // titre de l'écran
+    pick1: string; // bouton choisir photo 1
+    pick2: string;
+    name1Ph: string;
+    name2Ph: string;
+    analyze: string; // bouton lancer
+    needTwo: string; // message si photos manquantes
+    permission: string; // message si permission refusée
+    defaultName1: string;
+    defaultName2: string;
+
+    // Titres de sections du rapport
+    visualLabel: string;
+    resemblanceLabel: string;
+    loveLabel: string;
+    friendshipLabel: string;
+    marriageLabel: string;
+    storyLabel: string;
+    meetingLabel: string;
+    bondLabel: string;
+    challengeLabel: string;
+    futureLabel: string;
+    familyLabel: string;
+    childrenLookLabel: string;
+    promptLabel: string; // « prompt pour générer l'image »
+    destinyLabel: string;
+    auraLabel: string;
+    luckyNumLabel: string;
+    luckyDateLabel: string;
+    elementLabel: string;
+    romanticLabel: string;
+    verdictLabel: string;
+    // sous-libellés enfant
+    faceLabel: string;
+    eyesLabel: string;
+    hairLabel: string;
+    smileLabel: string;
+    skinLabel: string;
+    resemblesLabel: string;
+    traitLabel: string;
+    genderGirlWord: string;
+    genderBoyWord: string;
+    intro: string; // parole de Moulat Niya, {n1} {n2}
+
+    // Pools de fragments (sélection déterministe)
+    visualPool: string[]; // {name}
+    resemblancePool: string[];
+    meetingPool: string[]; // {n1} {n2}
+    bondPool: string[];
+    challengePool: string[];
+    futurePool: string[];
+    familyIntro: string; // {count}
+    childFace: string[];
+    childEyes: string[];
+    childHair: string[];
+    childSmile: string[];
+    childSkin: string[];
+    childTrait: string[];
+    childGirlNames: string[];
+    childBoyNames: string[];
+    childImagePrompt: string; // {gender}{eyes}{hair}{skin}{smile}
+    auraPool: { label: string; hex: string }[];
+    romanticPool: string[]; // {n1} {n2}
+    verdictPool: string[];
+  };
 }

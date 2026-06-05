@@ -75,6 +75,14 @@ export default function Home() {
       </Animated.View>
 
       <Button
+        label={t.photo.mode}
+        emoji="📸"
+        variant="secondary"
+        onPress={() => router.push('/photo')}
+        style={{ marginTop: spacing.sm }}
+      />
+
+      <Button
         label={t.history.open}
         emoji="📜"
         variant="ghost"

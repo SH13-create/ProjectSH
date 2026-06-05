@@ -56,6 +56,29 @@ La **lecture finale** est composée à partir des réponses
 ([`src/utils/reading.ts`](./src/utils/reading.ts)) : plusieurs « aspects »
 personnalisés, introduits par une parole de Moulat Niya.
 
+### 📸 Mode « Analyse par photo » (fictif & 100% local)
+
+Un 3ᵉ mode depuis l'accueil : on importe **2 photos** + 2 prénoms, et Moulat Niya
+génère un rapport complet et ludique
+([`app/photo.tsx`](./app/photo.tsx) → [`app/photoReport.tsx`](./app/photoReport.tsx),
+moteur : [`src/utils/photoReport.ts`](./src/utils/photoReport.ts)) :
+
+1. **Analyse visuelle** (lecture d'énergie fictive) · ressemblances/différences
+2. **Scores** amour / amitié / mariage (jauges animées)
+3. **Histoire du couple** (rencontre, ce qui les rapproche, défi, avenir rêvé)
+4. **Famille future** : nombre d'enfants, prénoms, traits de caractère
+5. **Apparence de chaque enfant** (visage, yeux, cheveux, sourire, teint, parent
+   ressemblant) + **prompt d'image prêt à coller** dans un générateur
+6. **Destin** : aura, numéro & date porte-bonheur, élément, prédiction romantique
+7. **Verdict final**
+
+> ⚠️ **Important** : **aucune reconnaissance faciale, aucun envoi réseau.** Les
+> photos restent sur l'appareil ; le rapport est un **divertissement
+> déterministe** dérivé d'une empreinte neutre des images (mêmes photos = même
+> rapport). C'est volontairement fictif, fidèle à la promesse « zéro donnée
+> envoyée ». La génération réelle des visages d'enfants n'est pas faite dans
+> l'app : on fournit le **prompt** à copier dans l'outil IA de ton choix.
+
 ---
 
 ## 🛠️ Stack technique

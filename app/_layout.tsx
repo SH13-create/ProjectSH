@@ -11,6 +11,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { LocaleProvider } from '@/context/LocaleContext';
 import { QuizProvider } from '@/context/QuizContext';
+import { PhotoProvider } from '@/context/PhotoContext';
 
 function Navigator() {
   const { isDark, colors } = useTheme();
@@ -35,7 +36,9 @@ export default function RootLayout() {
         <ThemeProvider>
           <LocaleProvider>
             <QuizProvider>
-              <Navigator />
+              <PhotoProvider>
+                <Navigator />
+              </PhotoProvider>
             </QuizProvider>
           </LocaleProvider>
         </ThemeProvider>
