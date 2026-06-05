@@ -194,6 +194,13 @@ function CoupleView({ result, answers }: { result: CoupleResult; answers: Answer
         <AppText variant="title" center weight="800" color={color}>
           {band.title}
         </AppText>
+        {reading.archetypeName ? (
+          <View style={[styles.archetypeChip, { backgroundColor: color }]}>
+            <AppText variant="caption" weight="800" center color={colors.primaryText}>
+              {reading.archetypeName}
+            </AppText>
+          </View>
+        ) : null}
       </Animated.View>
 
       {/* Les deux signes face à face */}
@@ -235,6 +242,13 @@ function CoupleView({ result, answers }: { result: CoupleResult; answers: Answer
           {band.advice}
         </AppText>
       </Card>
+
+      {/* Mot de fin de Moulat Niya */}
+      {reading.outro ? (
+        <Animated.View entering={FadeInUp.delay(250)}>
+          <SeerIntro text={reading.outro} />
+        </Animated.View>
+      ) : null}
     </View>
   );
 }

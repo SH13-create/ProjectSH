@@ -121,35 +121,53 @@ export function buildSoloReading(result: SoloResult, answers: Answers, t: String
 export function buildCoupleReading(result: CoupleResult, answers: Answers, t: Strings): Reading {
   const r = t.readings;
 
-  const aspects: Aspect[] = [
-    {
-      icon: '💪',
-      label: r.strengthsLabel,
-      text: join(
+  // Archétype de couple selon la chimie des éléments.
+  const arch = r.coupleArchetypes[result.chemistry];
+
+  const aspects = [
+    // 1. Forces (chimie + durée + admiration)
+    aspect(
+      '💪',
+      r.strengthsLabel,
+      para(
+        arch ? `${arch.name} — ${arch.text}` : '',
         t.elementChemistry[result.chemistry],
         pick(r.howLongRead, answers.howLong),
         pick(r.admireRead, answers.admire),
       ),
-    },
-    {
-      icon: '🗨️',
-      label: r.commLabel,
-      text: join(pick(r.conflictRead, answers.conflict), pick(r.loveLangRead, answers.loveLang)),
-    },
-    {
-      icon: '⚠️',
-      label: r.watchLabel,
-      text: pick(r.challengeRead, answers.challenge),
-    },
-    {
-      icon: '🔮',
-      label: r.futureTogetherLabel,
-      text: pick(r.projectRead, answers.project),
-    },
-  ].filter((a) => a.text.trim().length > 0);
+    ),
+    // 2. Confiance & sécurité
+    aspect('🔐', r.coupleTrustLabel, pick(r.trustRead, answers.trust)),
+    // 3. Communication (disputes + langage de l'amour + qui fait le 1er pas)
+    aspect(
+      '🗨️',
+      r.commLabel,
+      para(
+        pick(r.conflictRead, answers.conflict),
+        pick(r.loveLangRead, answers.loveLang),
+        pick(r.firstStepRead, answers.firstStep),
+      ),
+    ),
+    // 4. Dynamique (affection + prise de décision)
+    aspect(
+      '🤝',
+      r.coupleDynamicLabel,
+      para(pick(r.affectionRead, answers.affection), pick(r.decideRead, answers.decide)),
+    ),
+    // 5. Point de vigilance (défi)
+    aspect('⚠️', r.watchLabel, pick(r.challengeRead, answers.challenge)),
+    // 6. Projet commun (rêve partagé + projet)
+    aspect(
+      '🔮',
+      r.coupleProjectLabel,
+      para(pick(r.sharedDreamRead, answers.sharedDream), pick(r.projectRead, answers.project)),
+    ),
+  ].filter((a): a is Aspect => a !== null);
 
   return {
     intro: format(r.coupleIntro, { name1: result.name1, name2: result.name2 }),
+    archetypeName: arch?.name,
     aspects,
+    outro: format(r.coupleOutro, { name1: result.name1, name2: result.name2 }),
   };
 }

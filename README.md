@@ -50,9 +50,13 @@ L'app utilisera alors la photo partout (accueil, lecture, résultats).
   ⏰ habitudes & loisirs, 💎 valeurs & objectifs de vie, 🌊 gestion des émotions,
   🎭 préférences sociales, ❤️ amour (style, passé, idéal, peur), 👪 famille,
   ✨ rêves & ambitions, 🔭 vision du futur.
-- **Mode couple** (centré sur la **relation**) : 2 prénoms + dates, **depuis quand
-  ensemble**, langage de l'amour, gestion des disputes, **ce que tu admires**,
-  **votre plus grand défi**, projet commun, + élément / saison / lieu de rêve.
+- **Mode couple** — bilan de relation premium (~19 questions) : depuis quand
+  ensemble, **niveau de confiance**, **démonstration d'affection**, langage de
+  l'amour, gestion des disputes, **qui fait le 1er pas**, **prise de décision**,
+  ce que tu admires, plus grand défi, **rêve commun**, projet. Le rapport couple
+  affiche aussi un **archétype de couple** (selon la chimie des éléments, ex.
+  « 🪞 Âme sœur », « ⚡ Attraction puissante ») + sections détaillées (forces,
+  confiance, communication, dynamique, vigilance, projet) + intro/outro.
 
 La **lecture finale solo** ([`src/utils/reading.ts`](./src/utils/reading.ts)) est
 un **rapport long et immersif** « façon psychologue virtuel » : un **archétype**
@@ -290,8 +294,10 @@ Le bouton **« Partager »** ([`src/utils/share.ts`](./src/utils/share.ts)) :
 - **Sur mobile** : capture la carte de résultat en **image PNG**
   (`react-native-view-shot`) et ouvre la feuille de partage native
   (`expo-sharing`) — idéal pour envoyer le score sur WhatsApp / Instagram.
-- **Sur le web** : utilise la **Web Share API** si disponible, sinon **copie
-  le texte** dans le presse-papiers ; en dernier recours, le partage texte natif.
+- **Sur le web** : capture aussi une **carte image PNG** ; si le navigateur
+  supporte le partage de fichiers (Web Share API niveau 2) l'image est partagée,
+  sinon elle est **téléchargée** (`moulat-niya.png`). Repli ultime : texte /
+  presse-papiers.
 
 ---
 

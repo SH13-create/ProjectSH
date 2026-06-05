@@ -493,6 +493,69 @@ const qChallenge: Question = {
   ],
 };
 
+// 🎯 Le rêve commun du couple.
+const qSharedDream: Question = {
+  key: 'sharedDream',
+  type: 'cards',
+  title: (s) => s.quiz.sharedDream,
+  options: [
+    { value: 'home', label: (s) => s.quiz.sdHome, emoji: '🏡' },
+    { value: 'travel', label: (s) => s.quiz.sdTravel, emoji: '🌍' },
+    { value: 'business', label: (s) => s.quiz.sdBusiness, emoji: '🚀' },
+    { value: 'family', label: (s) => s.quiz.sdFamily, emoji: '👶' },
+  ],
+};
+
+// 🫂 Démonstration d'affection au quotidien.
+const qAffection: Question = {
+  key: 'affection',
+  type: 'single',
+  title: (s) => s.quiz.affection,
+  options: [
+    { value: 'lots', label: (s) => s.quiz.afLots, emoji: '🥰' },
+    { value: 'subtle', label: (s) => s.quiz.afSubtle, emoji: '😌' },
+    { value: 'words', label: (s) => s.quiz.afWords, emoji: '💬' },
+    { value: 'acts', label: (s) => s.quiz.afActs, emoji: '🤝' },
+  ],
+};
+
+// 🔐 Niveau de confiance.
+const qTrust: Question = {
+  key: 'trust',
+  type: 'single',
+  title: (s) => s.quiz.trust,
+  options: [
+    { value: 'total', label: (s) => s.quiz.trTotal, emoji: '💯' },
+    { value: 'growing', label: (s) => s.quiz.trGrowing, emoji: '🌱' },
+    { value: 'careful', label: (s) => s.quiz.trCareful, emoji: '🛡️' },
+  ],
+};
+
+// ⚖️ Qui prend les décisions ?
+const qDecide: Question = {
+  key: 'decide',
+  type: 'single',
+  title: (s) => s.quiz.decide,
+  options: [
+    { value: 'together', label: (s) => s.quiz.dcTogether, emoji: '🤝' },
+    { value: 'me', label: (s) => s.quiz.dcMe, emoji: '🙋' },
+    { value: 'partner', label: (s) => s.quiz.dcPartner, emoji: '💞' },
+    { value: 'flow', label: (s) => s.quiz.dcFlow, emoji: '🌊' },
+  ],
+};
+
+// 🕊️ Qui fait le premier pas après une dispute ?
+const qFirstStep: Question = {
+  key: 'firstStep',
+  type: 'single',
+  title: (s) => s.quiz.firstStep,
+  options: [
+    { value: 'me', label: (s) => s.quiz.fsMe, emoji: '🙋' },
+    { value: 'partner', label: (s) => s.quiz.fsPartner, emoji: '💗' },
+    { value: 'both', label: (s) => s.quiz.fsBoth, emoji: '🤲' },
+  ],
+};
+
 // --- Flux par mode ---------------------------------------------------------
 // Les deux parcours sont VOLONTAIREMENT DIFFÉRENTS :
 //  - SOLO   = centré sur TOI et ton avenir (passé amoureux, peurs, souhait…)
@@ -539,20 +602,29 @@ const SOLO_QUESTIONS: Question[] = [
 ];
 
 const COUPLE_QUESTIONS: Question[] = [
+  // Identité
   qName,
   qPartnerName,
   qBirth,
   qPartnerBirth,
   qBirthTime,
+  // La relation
   qHowLong,
+  qTrust,
+  qAffection,
   qLoveLang,
   qConflict,
+  qFirstStep,
+  qDecide,
   qAdmire,
   qChallenge,
+  // Projets communs
+  qSharedDream,
+  qProject,
+  // Touche « fun »
   qElement,
   qSeason,
   qDreamPlace,
-  qProject,
 ];
 
 export function getQuestions(mode: Mode): Question[] {

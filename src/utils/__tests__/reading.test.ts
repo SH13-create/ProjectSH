@@ -43,10 +43,15 @@ const coupleAnswers: Answers = {
   partnerBirth: new Date(1996, 3, 25).toISOString(),
   birthTime: 'night',
   howLong: 'years',
+  trust: 'total',
+  affection: 'words',
   loveLang: 'words',
   conflict: 'talk',
+  firstStep: 'both',
+  decide: 'together',
   admire: 'heart',
   challenge: 'routine',
+  sharedDream: 'home',
   element: 'fire',
   season: 'spring',
   dreamPlace: 'beach',
@@ -89,16 +94,26 @@ describe('buildSoloReading', () => {
 describe('buildCoupleReading', () => {
   const res = computeCoupleResult(coupleAnswers);
 
-  it('produit une intro avec les 2 prénoms + des aspects', () => {
+  it('produit un rapport couple riche (≥ 5 aspects) + archétype + outro', () => {
     const r = buildCoupleReading(res, coupleAnswers, ar);
     expect(r.intro).toContain('سلمى');
     expect(r.intro).toContain('كريم');
-    expect(r.aspects.length).toBeGreaterThanOrEqual(3);
+    expect(r.aspects.length).toBeGreaterThanOrEqual(5);
+    expect(r.archetypeName).toBeTruthy();
+    expect(r.outro).toContain('كريم');
   });
 
-  it('reflète le défi choisi (routine)', () => {
+  it('reflète les réponses (défi, confiance, rêve commun)', () => {
     const r = buildCoupleReading(res, coupleAnswers, ar);
-    const watch = r.aspects.find((a) => a.label === ar.readings.watchLabel);
-    expect(watch?.text).toBe(ar.readings.challengeRead.routine);
+    const all = r.aspects.map((a) => a.text).join(' ');
+    expect(all).toContain(ar.readings.challengeRead.routine);
+    expect(all).toContain(ar.readings.trustRead.total);
+    expect(all).toContain(ar.readings.sharedDreamRead.home);
+  });
+
+  it('est déterministe', () => {
+    const a = buildCoupleReading(res, coupleAnswers, ar);
+    const b = buildCoupleReading(res, coupleAnswers, ar);
+    expect(JSON.stringify(a)).toBe(JSON.stringify(b));
   });
 });

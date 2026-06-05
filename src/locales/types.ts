@@ -238,6 +238,30 @@ export interface Strings {
     fvPlanner: string;
     fvDreamer: string;
     fvRealist: string;
+    // --- COUPLE premium ---
+    sharedDream: string;
+    sdHome: string;
+    sdTravel: string;
+    sdBusiness: string;
+    sdFamily: string;
+    affection: string;
+    afLots: string;
+    afSubtle: string;
+    afWords: string;
+    afActs: string;
+    trust: string;
+    trTotal: string;
+    trGrowing: string;
+    trCareful: string;
+    decide: string;
+    dcTogether: string;
+    dcMe: string;
+    dcPartner: string;
+    dcFlow: string;
+    firstStep: string;
+    fsMe: string;
+    fsPartner: string;
+    fsBoth: string;
   };
 
   loading: {
@@ -344,6 +368,18 @@ export interface Strings {
     futureVisionRead: Record<string, string>;
     // Archétype : choisi selon élément + énergie sociale
     archetypes: Record<string, { name: string; text: string }>;
+
+    // --- COUPLE premium : labels de sections + dictionnaires ---
+    coupleDynamicLabel: string;
+    coupleTrustLabel: string;
+    coupleProjectLabel: string;
+    coupleOutro: string; // {name1} {name2}
+    coupleArchetypes: Record<string, { name: string; text: string }>; // clé = relation d'éléments
+    trustRead: Record<string, string>;
+    affectionRead: Record<string, string>;
+    decideRead: Record<string, string>;
+    firstStepRead: Record<string, string>;
+    sharedDreamRead: Record<string, string>;
 
     // --- Fragments COUPLE (clés = valeurs de réponse) ---
     howLongRead: Record<string, string>; // new/months/years/long
