@@ -25,6 +25,30 @@ describe('buildPhotoReport', () => {
     expect(r.auraHex).toMatch(/^#[0-9A-Fa-f]{6}$/);
   });
 
+  it('contient les nouvelles sections « vie future »', () => {
+    const r = buildPhotoReport(p1, p2, 'سلمى', 'كريم', t);
+    // Mariage
+    expect(r.marriageWhen.length).toBeGreaterThan(0);
+    expect(r.marriagePlace.length).toBeGreaterThan(0);
+    // Maison + prompt
+    expect(r.houseImagePrompt.toLowerCase()).toContain('réaliste');
+    // Frise : 6 étapes, chacune avec un prompt d'image
+    expect(r.timeline.length).toBe(6);
+    for (const s of r.timeline) expect(s.imagePrompt).toContain('photoréaliste');
+    // Album : chaque photo a une légende + prompt
+    expect(r.album.length).toBeGreaterThanOrEqual(3);
+    for (const a of r.album) expect(a.imagePrompt.length).toBeGreaterThan(0);
+    // Film : 3 actes + titre + affiche
+    expect(r.movieActs.length).toBe(3);
+    expect(r.movieTitle.length).toBeGreaterThan(0);
+    expect(r.moviePoster).toContain('Affiche');
+    // Destin enrichi
+    expect(r.destinyReading).toContain('سلمى');
+    expect(r.songLine.length).toBeGreaterThan(0);
+    // Animaux : 0..2
+    expect(r.pets.length).toBeLessThanOrEqual(2);
+  });
+
   it('est DÉTERMINISTE (mêmes photos => même rapport)', () => {
     const a = buildPhotoReport(p1, p2, 'سلمى', 'كريم', t);
     const b = buildPhotoReport(p1, p2, 'سلمى', 'كريم', t);

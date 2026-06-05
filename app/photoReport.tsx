@@ -112,14 +112,86 @@ export default function PhotoReportScreen() {
             <ChildCard key={i} child={c} index={i + 1} />
           ))}
 
+          {/* 💍 Mariage */}
+          <Section icon="💍" title={t.photo.marriageLabel}>
+            <Line label={t.photo.marriageWhenLabel} text={report.marriageWhen} />
+            <Line label={t.photo.marriagePlaceLabel} text={report.marriagePlace} />
+            <Line label={t.photo.marriageVibeLabel} text={report.marriageVibe} />
+          </Section>
+
+          {/* 🏡 Maison de rêve */}
+          <Section icon="🏡" title={t.photo.houseLabel}>
+            <AppText variant="body" weight="700">
+              {report.houseType}
+            </AppText>
+            <AppText variant="body" color={colors.textMuted}>
+              {report.housePlace} — {report.houseDetail}
+            </AppText>
+            <PromptBox prompt={report.houseImagePrompt} hint={t.photo.imageHint} />
+          </Section>
+
+          {/* 🐶 Animaux */}
+          <Section icon="🐾" title={t.photo.petsLabel}>
+            {report.pets.length === 0 ? (
+              <AppText variant="body">{t.photo.noPets}</AppText>
+            ) : (
+              report.pets.map((p, i) => (
+                <AppText key={i} variant="body" style={{ marginBottom: 2 }}>
+                  {p.emoji} {p.text}
+                </AppText>
+              ))
+            )}
+          </Section>
+
+          {/* 🌍 Frise chronologique */}
+          <Section icon="🌍" title={t.photo.timelineLabel}>
+            {report.timeline.map((s, i) => (
+              <TimelineRow key={i} stage={s} last={i === report.timeline.length - 1} hint={t.photo.imageHint} />
+            ))}
+          </Section>
+
+          {/* 📸 Album famille futur */}
+          <Section icon="📸" title={t.photo.albumLabel}>
+            {report.album.map((a, i) => (
+              <View key={i} style={{ marginBottom: spacing.sm }}>
+                <AppText variant="body" weight="700">
+                  {a.emoji} {a.caption}
+                </AppText>
+                <PromptBox prompt={a.imagePrompt} hint={t.photo.imageHint} />
+              </View>
+            ))}
+          </Section>
+
+          {/* 🎬 Film de vie */}
+          <Section icon="🎬" title={t.photo.movieLabel}>
+            <AppText variant="subtitle" weight="800" center color={colors.primary} style={{ marginBottom: spacing.sm }}>
+              {report.movieTitle}
+            </AppText>
+            {report.movieActs.map((a, i) => (
+              <View key={i} style={{ marginBottom: spacing.sm }}>
+                <AppText variant="caption" weight="800" color={colors.secondary}>
+                  {a.label}
+                </AppText>
+                <AppText variant="body">{a.text}</AppText>
+              </View>
+            ))}
+            <PromptBox prompt={report.moviePoster} hint={t.photo.imageHint} />
+          </Section>
+
           {/* 7. Destin */}
           <Section icon="✨" title={t.photo.destinyLabel}>
             <DestinyRow label={t.photo.auraLabel} value={report.auraColor} swatch={report.auraHex} />
             <DestinyRow label={t.photo.luckyNumLabel} value={String(report.luckyNumber)} />
             <DestinyRow label={t.photo.luckyDateLabel} value={report.luckyDate} />
             <DestinyRow label={t.photo.elementLabel} value={elementLabel} />
+            <AppText variant="body" style={{ marginTop: spacing.sm }} weight="600">
+              🔮 {report.destinyReading}
+            </AppText>
             <AppText variant="body" style={{ marginTop: spacing.sm }} color={colors.secondary} weight="600">
               💫 {report.romanticPrediction}
+            </AppText>
+            <AppText variant="body" style={{ marginTop: spacing.sm }} color={colors.textMuted}>
+              {report.songLine}
             </AppText>
           </Section>
 
@@ -226,10 +298,6 @@ function ChildCard({ child, index }: { child: ChildPrediction; index: number }) 
   const { t } = useLocale();
   const { colors } = useTheme();
 
-  const copyPrompt = () => {
-    Clipboard.setStringAsync(child.imagePrompt).catch(() => {});
-  };
-
   return (
     <Animated.View entering={FadeInUp.duration(400)}>
       <Card alt>
@@ -254,20 +322,64 @@ function ChildCard({ child, index }: { child: ChildPrediction; index: number }) 
           <Mini label={t.photo.resemblesLabel} value={child.resembles} />
         </View>
 
-        {/* 6. Prompt de génération d'image (copiable) */}
-        <View style={[styles.promptBox, { backgroundColor: colors.background, borderColor: colors.border }]}>
-          <AppText variant="caption" weight="800" color={colors.secondary}>
-            🎨 {t.photo.promptLabel}
-          </AppText>
-          <AppText variant="caption" color={colors.textMuted} style={{ marginTop: 2 }}>
-            {child.imagePrompt}
-          </AppText>
-        </View>
-        {Platform.OS !== 'web' && (
-          <Button label="📋" variant="ghost" onPress={copyPrompt} style={{ marginTop: spacing.xs }} />
-        )}
+        <PromptBox prompt={child.imagePrompt} hint={t.photo.imageHint} />
       </Card>
     </Animated.View>
+  );
+}
+
+/** Encadré « prompt d'image » réutilisable, avec copie (mobile). */
+function PromptBox({ prompt, hint }: { prompt: string; hint: string }) {
+  const { colors } = useTheme();
+  const copy = () => {
+    Clipboard.setStringAsync(prompt).catch(() => {});
+  };
+  return (
+    <View style={[styles.promptBox, { backgroundColor: colors.background, borderColor: colors.border }]}>
+      <AppText variant="caption" weight="800" color={colors.secondary}>
+        {hint}
+      </AppText>
+      <AppText variant="caption" color={colors.textMuted} style={{ marginTop: 2 }} selectable>
+        {prompt}
+      </AppText>
+      {Platform.OS !== 'web' && (
+        <Button label="📋" variant="ghost" onPress={copy} style={{ marginTop: spacing.xs }} />
+      )}
+    </View>
+  );
+}
+
+/** Une étape de la frise chronologique, avec puce et trait vertical. */
+function TimelineRow({
+  stage,
+  last,
+  hint,
+}: {
+  stage: { year: string; emoji: string; title: string; text: string; imagePrompt: string };
+  last: boolean;
+  hint: string;
+}) {
+  const { colors } = useTheme();
+  return (
+    <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+      {/* Colonne puce + ligne */}
+      <View style={{ alignItems: 'center', width: 30 }}>
+        <View style={[styles.dot, { backgroundColor: colors.primary }]}>
+          <AppText style={{ fontSize: 14 }}>{stage.emoji}</AppText>
+        </View>
+        {!last && <View style={[styles.tline, { backgroundColor: colors.border }]} />}
+      </View>
+      {/* Contenu */}
+      <View style={{ flex: 1, paddingBottom: spacing.md }}>
+        <AppText variant="caption" weight="800" color={colors.primary}>
+          {stage.year} · {stage.title}
+        </AppText>
+        <AppText variant="body" style={{ marginTop: 2 }}>
+          {stage.text}
+        </AppText>
+        <PromptBox prompt={stage.imagePrompt} hint={hint} />
+      </View>
+    </View>
   );
 }
 
@@ -291,4 +403,6 @@ const styles = StyleSheet.create({
   destinyRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.xs },
   swatch: { width: 18, height: 18, borderRadius: 9 },
   promptBox: { marginTop: spacing.sm, padding: spacing.sm, borderRadius: radius.sm, borderWidth: 1 },
+  dot: { width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
+  tline: { width: 2, flex: 1, marginTop: 2 },
 });

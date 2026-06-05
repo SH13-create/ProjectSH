@@ -307,6 +307,20 @@ export interface Strings {
     genderBoyWord: string;
     intro: string; // parole de Moulat Niya, {n1} {n2}
 
+    // Nouvelles sections « expérience de vie future »
+    marriageWhenLabel: string;
+    marriagePlaceLabel: string;
+    marriageVibeLabel: string;
+    houseLabel: string;
+    petsLabel: string;
+    noPets: string;
+    timelineLabel: string;
+    albumLabel: string;
+    movieLabel: string;
+    destinyReadingLabel: string;
+    songLabel: string;
+    imageHint: string; // note : images à générer via prompt
+
     // Pools de fragments (sélection déterministe)
     visualPool: string[]; // {name}
     resemblancePool: string[];
@@ -327,5 +341,31 @@ export interface Strings {
     auraPool: { label: string; hex: string }[];
     romanticPool: string[]; // {n1} {n2}
     verdictPool: string[];
+
+    // Mariage
+    marriageWhenPool: string[];
+    marriagePlacePool: string[];
+    marriageVibePool: string[];
+    // Maison de rêve
+    houseTypePool: string[];
+    housePlacePool: string[];
+    houseDetailPool: string[];
+    houseImagePrompt: string; // {type}{place}
+    // Animaux
+    petEmojis: string[];
+    petPool: string[];
+    // Frise chronologique : étapes fixes (year/emoji/title/text + scene pour l'image)
+    timelineStages: { year: string; emoji: string; title: string; text: string; scene: string }[];
+    stageImagePrompt: string; // {scene}
+    // Album famille futur
+    albumShots: { emoji: string; caption: string; scene: string }[];
+    albumImagePrompt: string; // {scene}
+    // Film de vie
+    movieTitlePool: string[]; // {n1} {n2}
+    movieActs: { label: string; text: string }[]; // {n1} {n2}
+    moviePosterPrompt: string; // {n1}{n2}{title}
+    // Destin enrichi
+    destinyPool: string[]; // {n1} {n2}
+    songPool: string[];
   };
 }

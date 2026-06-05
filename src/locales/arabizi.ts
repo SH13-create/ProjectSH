@@ -452,6 +452,19 @@ const arabizi: Strings = {
     genderBoyWord: 'weld sghir',
     intro: 'A {n1} w {n2}, 7ettit t-tsawer dyalkom 9oddami w t-ta9a banet liya wad7a... khellini ngoul likom chno kanchouf 🔮',
 
+    marriageWhenLabel: 'Imta z-zwaj',
+    marriagePlaceLabel: 'Fin l-3ers',
+    marriageVibeLabel: 'Jaw l-3ers',
+    houseLabel: 'Dar l-a7lam',
+    petsLabel: 'L-7aywanat l-alifa',
+    noPets: 'Kanchouf billi ghadi tb9aw ntoma b jouj bla 7aywanat daba, w hadchi zwin bezzaf 🌸',
+    timelineLabel: 'Khett z-zman dyal 7yatkom',
+    albumLabel: 'Album l-3a2ila l-mosta9bili',
+    movieLabel: 'Film 7yatkom',
+    destinyReadingLabel: 'Qira2at l-masir',
+    songLabel: 'L-oghniya dyalkom',
+    imageHint: '🎨 Nsekh l-prompt w jenner t-tsawira f ayy adat dakaa istina3i',
+
     visualPool: [
       '{name} 3andou/3andha ta9a dafya w nadra fiha ti9a, kiban 3lih/3liha insan ki3ref chno baghi.',
       'F l-wjeh dyal {name} kayna ibtisama khfifa katgoul billi 3andou/3andha 9alb tayyeb w rou7 mer7a.',
@@ -510,6 +523,64 @@ const arabizi: Strings = {
       'Ntoma men l-couples li kikhelliw n-nas ta2men b l-7ob men jdid 💞',
       'T-ta9a binatkom nadra, 7afdo 3liha w kemlo tri9kom b jouj ✨',
       'Kanchouf 9essat 7ob twila, fiha so3oud w nozoul bsa7 fiha 7ob 7a9i9i 🌟',
+    ],
+
+    marriageWhenPool: ['F modda ma bin 3amin w tlata', '9rib aktar mma katkhemmno', 'men be3d sfer kibeddel kolchi', 'melli tkono wajdin b l-9alb'],
+    marriagePlacePool: ['f ryad maghribi ti9lidi b z-zellij', '7da l-b7ar m3a ghroub ch-chems', 'f dye3a west t-tabi3a', 'f 7afla kbira west l-3a2ila w l-a7bab'],
+    marriageVibePool: ['3ers mlian zgharit w 3emmariya w fer7', '7afla hadya w 7amimiya m3a a9reb n-nas', '3ers 3asri b lemsa maghribiya asila'],
+
+    houseTypePool: ['dar maghribiya b west d-dar w nafoura', 'villa 3asriya b wajha zojaj', 'cha99a dafya f west l-mdina', 'dar sghira b jnan kbir'],
+    housePlacePool: ['f Marrakech 7da n-nakhil', '7da b7ar Essaouira', 'f dawa7i Rrbat l-hadya', 'f makan fih jbal khder'],
+    houseDetailPool: ['fiha kozina kbira katjme3 l-3a2ila', 'fih ster katcherbo fih atay w katchoufo n-njoum', 'fih salon maghribi b alwan dafya', 'fih rokn l l-9raya w l-istirkha2'],
+    houseImagePrompt:
+      'Photo réaliste d\'une {type} {place}, lumière chaude de fin de journée, architecture marocaine élégante, ambiance chaleureuse et accueillante, photographie immobilière professionnelle, très haute qualité.',
+
+    petEmojis: ['🐶', '🐱', '🐰', '🐦'],
+    petPool: [
+      'kelb wafi sghir ghadi ywelli ferd men l-3a2ila',
+      '9otta mdellla katn3es f blayes ch-chems',
+      'arnab sghir kifer7 d-drari',
+      'tir kighenni f s-sba7 w kizid far7a l d-dar',
+    ],
+
+    timelineStages: [
+      { year: '+1 sana', emoji: '💞', title: 'L-3am l-loul', text: 'Kanchouf {n1} w {n2} ki9owwiw l-3ela9a w kibniw ti9a 3ami9a, m3a asfar sghira w dikrayat 7lowa.', scene: 'un jeune couple marocain heureux qui voyage ensemble, riant, ambiance romantique' },
+      { year: '+3 snin', emoji: '💍', title: 'L-khotba w l-3ers', text: 'Daba w l-khwatem kilem3o! {n1} w {n2} ki7taflo west l-3a2ila w l-a7bab.', scene: 'un mariage marocain traditionnel joyeux avec décorations dorées et famille' },
+      { year: '+5 snin', emoji: '🏡', title: 'D-dar l-loula', text: 'Kanchouf mafati7 dar jdida f yed {n1} w {n2}, bidayat fasl jdid.', scene: 'un couple devant leur première maison marocaine, tenant les clés, fiers et heureux' },
+      { year: '+7 snin', emoji: '👶', title: 'L-3a2ila katkber', text: 'De7k d-drari ki3emmer d-dar, w l-7ob kitt9assem 3la l-jami3.', scene: 'une jeune famille marocaine avec enfants, à la maison, scène chaleureuse et lumineuse' },
+      { year: '+15 sana', emoji: '🌍', title: 'L-isti9rar w n-naja7', text: '{n1} w {n2} ki7e99o a7lamhom: khedma, asfar, w 3a2ila motamaska.', scene: 'une famille épanouie voyageant dans le monde, paysages magnifiques, bonheur' },
+      { year: '+40 sana', emoji: '🌅', title: 'Ch-chib w l-7ob d-da2im', text: 'Kanchouf {n1} w {n2} kbar, yed f yed, kitferjo f l-a7fad w kitbessmo l b3diyathom.', scene: 'un couple de personnes âgées marocaines main dans la main au coucher du soleil, amour durable' },
+    ],
+    stageImagePrompt:
+      'Photo cinématographique ultra réaliste : {scene}, lumière naturelle douce, émotion authentique, très haute qualité, photoréaliste.',
+
+    albumShots: [
+      { emoji: '📸', caption: 'Awwel sfer dyal {n1} w {n2}', scene: 'selfie d\'un jeune couple marocain en voyage, paysage magnifique en arrière-plan' },
+      { emoji: '💐', caption: 'Yom l-3ers li ma yetnsach', scene: 'portrait de mariage marocain élégant, mariés rayonnants' },
+      { emoji: '🎂', caption: '3id milad west d-de7k', scene: 'fête d\'anniversaire en famille, gâteau, ballons, rires' },
+      { emoji: '🏖️', caption: '3otla l-3a2ila 7da l-b7ar', scene: 'famille heureuse sur une plage marocaine au coucher du soleil' },
+    ],
+    albumImagePrompt:
+      'Photo de famille réaliste type album souvenir : {scene}, couleurs chaudes, moment spontané et joyeux, très haute qualité, photoréaliste.',
+
+    movieTitlePool: ['« T-tri9 dyal {n1} w {n2} »', '« 7ikaya dyalna »', '« Mektoub: {n1} w {n2} »', '« 9albin, tri9 w7da »'],
+    movieActs: [
+      { label: '🎬 L-fasl l-loul — l-li9a2', text: 'Kolchi bda b sodfa... {n1} w {n2} tla9aw f l-le7da l-monasiba, w ch-charara taret men awwel nadra.' },
+      { label: '🌧️ L-fasl t-tani — t-ta7addi', text: 'L-7ayat jerrbathom: masafat, ikhtiyarat s3iba, bsa7 l-7ob dyalhom kan a9wa men kolchi.' },
+      { label: '🌟 L-fasl t-talet — n-nihaya s-sa3ida', text: 'F l-akhir, {n1} w {n2} bnaw 7ayat mliana 7ob w de7k, w wlaw 9essa ki7kiwha l l-ajyal.' },
+    ],
+    moviePosterPrompt:
+      'Affiche de film romantique cinématographique intitulée "{title}", représentant un couple marocain élégant, lumière dramatique et chaleureuse, style poster de cinéma haut de gamme, très haute qualité.',
+
+    destinyPool: [
+      'L-masir dyal {n1} w {n2} mektoub fih charaka 9wiya: koul wa7ed kikemmel l-akhor w kiref3o b3diyathom l l-a3la.',
+      'N-njoum katgoul billi {n1} w {n2} 3andhom rabet rou7i nader, men n-now3 li kidoum raghm koul l-3awasif.',
+      'Kanchouf billi l-9adar ghadi yjme3 {n1} w {n2} f le7dat katbeddel l-masar, w koul wa7da ghadi t9errebhom aktar.',
+    ],
+    songPool: [
+      '🎵 « Nta w ana, mektoubin f s-sma »',
+      '🎵 « Ya 9albi, l9it li bghit »',
+      '🎵 « M3ak nwsel l ab3ad nejma »',
     ],
   },
 };

@@ -452,6 +452,19 @@ const ar: Strings = {
     genderBoyWord: 'ولد صغير',
     intro: 'آ {n1} و {n2}، حطّيت التصاور ديالكم قدامي و الطاقة بانت ليا واضحة... خليني نقول ليكم شنو كانشوف 🔮',
 
+    marriageWhenLabel: 'إمتى الزواج',
+    marriagePlaceLabel: 'فين العرس',
+    marriageVibeLabel: 'جو العرس',
+    houseLabel: 'دار الأحلام',
+    petsLabel: 'الحيوانات الأليفة',
+    noPets: 'كانشوف بللي غادي تبقاو نتوما بجوج بلا حيوانات دابا، و هادشي زوين بزاف 🌸',
+    timelineLabel: 'خط الزمن ديال حياتكم',
+    albumLabel: 'ألبوم العائلة المستقبلي',
+    movieLabel: 'فيلم حياتكم',
+    destinyReadingLabel: 'قراءة المصير',
+    songLabel: 'الأغنية ديالكم',
+    imageHint: '🎨 نسخ البرومبت و جنّر التصويرة فأي أداة ذكاء اصطناعي',
+
     visualPool: [
       '{name} عندو/عندها طاقة دافية و نظرة فيها ثقة، كيبان عليه/عليها إنسان كيعرف شنو باغي.',
       'فالوجه ديال {name} كاينة ابتسامة خفيفة كتقول بللي عندو/عندها قلب طيب و روح مرحة.',
@@ -510,6 +523,64 @@ const ar: Strings = {
       'نتوما من الكوبلات اللي كيخليو الناس تأمن بالحب من جديد 💞',
       'الطاقة بيناتكم نادرة، حافظو عليها و كملو طريقكم بجوج ✨',
       'كانشوف قصة حب طويلة، فيها صعود و نزول بصح فيها حب حقيقي 🌟',
+    ],
+
+    marriageWhenPool: ['فمدة ما بين عامين و تلاتة', 'قريب أكثر مما تتخيلو', 'من بعد سفر كيبدّل كلشي', 'ملي تكونو واجدين بالقلب'],
+    marriagePlacePool: ['فرياض مغربي تقليدي بالزليج', 'حدا البحر مع غروب الشمس', 'فضيعة وسط الطبيعة', 'فحفلة كبيرة وسط العائلة و الأحباب'],
+    marriageVibePool: ['عرس مليان زغاريد و عمارية و فرح', 'حفلة هادية و حميمية مع أقرب الناس', 'عرس عصري بلمسة مغربية أصيلة'],
+
+    houseTypePool: ['دار مغربية بوسط الدار و نافورة', 'فيلا عصرية بواجهة زجاج', 'شقة دافية فوسط المدينة', 'دار صغيرة بجنان كبير'],
+    housePlacePool: ['فمراكش حدا النخيل', 'حدا بحر الصويرة', 'فضواحي الرباط الهادية', 'فمكان فيه جبال خضر'],
+    houseDetailPool: ['فيها كوزينة كبيرة كتجمع العائلة', 'فيها سطح كتشربو فيه أتاي و كتشوفو النجوم', 'فيها صالون مغربي بألوان دافية', 'فيها ركن للقراية و الاسترخاء'],
+    houseImagePrompt:
+      'Photo réaliste d\'une {type} {place}, lumière chaude de fin de journée, architecture marocaine élégante, ambiance chaleureuse et accueillante, photographie immobilière professionnelle, très haute qualité.',
+
+    petEmojis: ['🐶', '🐱', '🐰', '🐦'],
+    petPool: [
+      'كلب وفي صغير غادي يولي فرد من العائلة',
+      'قطة مدلّلة كتنعس فبلايص الشمس',
+      'أرنب صغير كيفرّح الدراري',
+      'طير كيغني فالصباح و كيزيد فرحة للدار',
+    ],
+
+    timelineStages: [
+      { year: '+1 سنة', emoji: '💞', title: 'العام الأول', text: 'كانشوف {n1} و {n2} كيقوّيو العلاقة و كيبنيو ثقة عميقة، مع أسفار صغيرة و ذكريات حلوة.', scene: 'un jeune couple marocain heureux qui voyage ensemble, riant, ambiance romantique' },
+      { year: '+3 سنين', emoji: '💍', title: 'الخطوبة و العرس', text: 'دابا و الخواتم كيلمعو! {n1} و {n2} كيحتافلو وسط العائلة و الأحباب.', scene: 'un mariage marocain traditionnel joyeux avec décorations dorées et famille' },
+      { year: '+5 سنين', emoji: '🏡', title: 'الدار الأولى', text: 'كانشوف مفاتيح دار جديدة فيد {n1} و {n2}، بداية فصل جديد.', scene: 'un couple devant leur première maison marocaine, tenant les clés, fiers et heureux' },
+      { year: '+7 سنين', emoji: '👶', title: 'العائلة كتكبر', text: 'ضحك الدراري كيعمّر الدار، و الحب كيتقاسم على الجميع.', scene: 'une jeune famille marocaine avec enfants, à la maison, scène chaleureuse et lumineuse' },
+      { year: '+15 سنة', emoji: '🌍', title: 'الاستقرار و النجاح', text: '{n1} و {n2} كيحققو أحلامهم: خدمة، أسفار، و عائلة متماسكة.', scene: 'une famille épanouie voyageant dans le monde, paysages magnifiques, bonheur' },
+      { year: '+40 سنة', emoji: '🌅', title: 'الشيب و الحب الدائم', text: 'كانشوف {n1} و {n2} كبار، يد فيد، كيتفرجو فالأحفاد و كيتبسّمو لبعضياتهم.', scene: 'un couple de personnes âgées marocaines main dans la main au coucher du soleil, amour durable' },
+    ],
+    stageImagePrompt:
+      'Photo cinématographique ultra réaliste : {scene}, lumière naturelle douce, émotion authentique, très haute qualité, photoréaliste.',
+
+    albumShots: [
+      { emoji: '📸', caption: 'أول سفر ديال {n1} و {n2}', scene: 'selfie d\'un jeune couple marocain en voyage, paysage magnifique en arrière-plan' },
+      { emoji: '💐', caption: 'يوم العرس اللي ما يتنساش', scene: 'portrait de mariage marocain élégant, mariés rayonnants' },
+      { emoji: '🎂', caption: 'عيد ميلاد فوسط الضحك', scene: 'fête d\'anniversaire en famille, gâteau, ballons, rires' },
+      { emoji: '🏖️', caption: 'عطلة العائلة حدا البحر', scene: 'famille heureuse sur une plage marocaine au coucher du soleil' },
+    ],
+    albumImagePrompt:
+      'Photo de famille réaliste type album souvenir : {scene}, couleurs chaudes, moment spontané et joyeux, très haute qualité, photoréaliste.',
+
+    movieTitlePool: ['« الطريق ديال {n1} و {n2} »', '« حكاية ديالنا »', '« مكتوب: {n1} و {n2} »', '« قلبين، طريق وحدة »'],
+    movieActs: [
+      { label: '🎬 الفصل الأول — اللقاء', text: 'كل شي بدا بصدفة... {n1} و {n2} تلاقاو فاللحظة المناسبة، و الشرارة طارت من أول نظرة.' },
+      { label: '🌧️ الفصل الثاني — التحدي', text: 'الحياة جرّبتهم: مسافات، اختيارات صعيبة، بصح الحب ديالهم كان أقوى من كلشي.' },
+      { label: '🌟 الفصل الثالث — النهاية السعيدة', text: 'فالأخير، {n1} و {n2} بناو حياة مليانة حب و ضحك، و ولاو قصة كيحكيوها للأجيال.' },
+    ],
+    moviePosterPrompt:
+      'Affiche de film romantique cinématographique intitulée "{title}", représentant un couple marocain élégant, lumière dramatique et chaleureuse, style poster de cinéma haut de gamme, très haute qualité.',
+
+    destinyPool: [
+      'المصير ديال {n1} و {n2} مكتوب فيه شراكة قوية: كل واحد كيكمّل اللاخور و كيرفعو بعضياتهم للأعلى.',
+      'النجوم كتقول بللي {n1} و {n2} عندهم رابط روحي نادر، من النوع اللي كيدوم رغم كل العواصف.',
+      'كانشوف بللي القدر غادي يجمع {n1} و {n2} فلحظات كتبدّل المسار، و كل وحدة غادي تقرّبهم أكثر.',
+    ],
+    songPool: [
+      '🎵 « نتا و أنا، مكتوبين فالسما »',
+      '🎵 « يا قلبي، لقيت اللي بغيت »',
+      '🎵 « معاك نوصل لأبعد نجمة »',
     ],
   },
 };

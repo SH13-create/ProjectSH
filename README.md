@@ -66,11 +66,22 @@ moteur : [`src/utils/photoReport.ts`](./src/utils/photoReport.ts)) :
 1. **Analyse visuelle** (lecture d'énergie fictive) · ressemblances/différences
 2. **Scores** amour / amitié / mariage (jauges animées)
 3. **Histoire du couple** (rencontre, ce qui les rapproche, défi, avenir rêvé)
-4. **Famille future** : nombre d'enfants, prénoms, traits de caractère
-5. **Apparence de chaque enfant** (visage, yeux, cheveux, sourire, teint, parent
-   ressemblant) + **prompt d'image prêt à coller** dans un générateur
-6. **Destin** : aura, numéro & date porte-bonheur, élément, prédiction romantique
-7. **Verdict final**
+4. **Potentiel de mariage** (quand, où, ambiance)
+5. **Famille future** : nombre d'enfants, prénoms, traits + **apparence de chaque
+   enfant** (visage, yeux, cheveux, sourire, teint, parent ressemblant)
+6. **Maison de rêve** (type, lieu, détail) + prompt d'image
+7. **Animaux futurs**
+8. **Frise chronologique de vie** (+1 an → +40 ans), chaque étape avec son prompt
+9. **Album famille futur** (photos légendées + prompts)
+10. **Film de vie** (titre + 3 actes + prompt d'affiche)
+11. **Destin** : aura, numéro & date porte-bonheur, élément, lecture du destin,
+    prédiction romantique, « chanson du couple »
+12. **Verdict final**
+
+> 🎨 **Images** : chaque grande étape (enfants, maison, étapes de vie, album,
+> affiche de film) fournit un **prompt prêt à coller** dans un générateur
+> d'images IA. L'app **ne génère pas** les visuels elle-même (pas d'outil
+> d'images embarqué) — c'est volontaire et indiqué dans l'UI.
 
 > ⚠️ **Important** : **aucune reconnaissance faciale, aucun envoi réseau.** Les
 > photos restent sur l'appareil ; le rapport est un **divertissement

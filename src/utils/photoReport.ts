@@ -33,6 +33,22 @@ export type ChildPrediction = {
   imagePrompt: string; // prompt prêt à coller dans un générateur d'images
 };
 
+// Une étape de la frise chronologique de vie (fictive).
+export type TimelineStage = {
+  year: string; // ex. "+1 an"
+  emoji: string;
+  title: string;
+  text: string;
+  imagePrompt: string; // prompt d'image pour cette étape
+};
+
+// Une photo de l'« album famille futur ».
+export type AlbumPhoto = {
+  emoji: string;
+  caption: string;
+  imagePrompt: string;
+};
+
 export type PhotoReport = {
   intro: string; // parole d'intro de Moulat Niya
   // Scores
@@ -49,10 +65,29 @@ export type PhotoReport = {
   bond: string;
   challenge: string;
   futureDream: string;
+  // Mariage
+  marriageWhen: string;
+  marriagePlace: string;
+  marriageVibe: string;
   // Famille
   childrenCount: number;
   children: ChildPrediction[];
   familyIntro: string;
+  // Maison de rêve
+  houseType: string;
+  housePlace: string;
+  houseDetail: string;
+  houseImagePrompt: string;
+  // Animaux
+  pets: { emoji: string; text: string }[];
+  // Frise chronologique
+  timeline: TimelineStage[];
+  // Album famille futur
+  album: AlbumPhoto[];
+  // Film de vie (3 actes)
+  movieTitle: string;
+  movieActs: { label: string; text: string }[];
+  moviePoster: string; // prompt d'affiche
   // Destin
   auraColor: string; // libellé localisé
   auraHex: string;
@@ -60,6 +95,8 @@ export type PhotoReport = {
   luckyDate: string;
   element: 'fire' | 'water' | 'earth' | 'air';
   romanticPrediction: string;
+  destinyReading: string;
+  songLine: string; // « chanson du couple »
   // Conclusion
   verdict: string;
 };
@@ -156,6 +193,49 @@ export function buildPhotoReport(
     });
   }
 
+  // --- Mariage ---
+  const marriageWhen = at(r.marriageWhenPool, hash(`mw${combo}`));
+  const marriagePlace = at(r.marriagePlacePool, hash(`mp${combo}`));
+  const marriageVibe = at(r.marriageVibePool, hash(`mv${combo}`));
+
+  // --- Maison de rêve ---
+  const houseType = at(r.houseTypePool, hash(`ht${combo}`));
+  const housePlace = at(r.housePlacePool, hash(`hp${combo}`));
+  const houseDetail = at(r.houseDetailPool, hash(`hd${combo}`));
+  const houseImagePrompt = format(r.houseImagePrompt, { type: houseType, place: housePlace });
+
+  // --- Animaux (0 à 2) ---
+  const petCount = hash(`pc${combo}`) % 3; // 0..2
+  const pets: { emoji: string; text: string }[] = [];
+  for (let i = 0; i < petCount; i++) {
+    const ps = hash(`pet${i}${combo}`);
+    pets.push({ emoji: at(r.petEmojis, ps), text: at(r.petPool, ps) });
+  }
+
+  // --- Frise chronologique (étapes de vie) ---
+  const timeline: TimelineStage[] = r.timelineStages.map((stage, i) => ({
+    year: stage.year,
+    emoji: stage.emoji,
+    title: stage.title,
+    text: format(stage.text, { n1: N1, n2: N2 }),
+    imagePrompt: format(r.stageImagePrompt, { scene: stage.scene }),
+  }));
+
+  // --- Album famille futur ---
+  const album: AlbumPhoto[] = r.albumShots.map((shot) => ({
+    emoji: shot.emoji,
+    caption: format(shot.caption, { n1: N1, n2: N2 }),
+    imagePrompt: format(r.albumImagePrompt, { scene: shot.scene }),
+  }));
+
+  // --- Film de vie (3 actes) ---
+  const movieTitle = format(at(r.movieTitlePool, hash(`mt${combo}`)), { n1: N1, n2: N2 });
+  const movieActs = r.movieActs.map((act) => ({
+    label: act.label,
+    text: format(act.text, { n1: N1, n2: N2 }),
+  }));
+  const moviePoster = format(r.moviePosterPrompt, { n1: N1, n2: N2, title: movieTitle });
+
   // --- Destin ---
   const aura = at(r.auraPool, hash(`a${combo}`));
   const luckyNumber = 1 + (combo % 9); // 1..9
@@ -164,6 +244,8 @@ export function buildPhotoReport(
   const elements: PhotoReport['element'][] = ['fire', 'water', 'earth', 'air'];
   const element = elements[combo % 4];
   const romanticPrediction = format(at(r.romanticPool, hash(`rp${combo}`)), { n1: N1, n2: N2 });
+  const destinyReading = format(at(r.destinyPool, hash(`dr${combo}`)), { n1: N1, n2: N2 });
+  const songLine = at(r.songPool, hash(`sg${combo}`));
 
   return {
     intro: format(r.intro, { n1: N1, n2: N2 }),
@@ -178,15 +260,30 @@ export function buildPhotoReport(
     bond,
     challenge,
     futureDream,
+    marriageWhen,
+    marriagePlace,
+    marriageVibe,
     childrenCount,
     children,
     familyIntro: format(r.familyIntro, { count: String(childrenCount) }),
+    houseType,
+    housePlace,
+    houseDetail,
+    houseImagePrompt,
+    pets,
+    timeline,
+    album,
+    movieTitle,
+    movieActs,
+    moviePoster,
     auraColor: aura.label,
     auraHex: aura.hex,
     luckyNumber,
     luckyDate: `${luckyDay}/${luckyMonth}`,
     element,
     romanticPrediction,
+    destinyReading,
+    songLine,
     verdict: at(r.verdictPool, combo),
   };
 }
