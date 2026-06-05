@@ -12,10 +12,23 @@ const soloAnswers: Answers = {
   birthTime: 'morning',
   gender: 'female',
   status: 'single',
+  socialEnergy: 'extrovert',
+  decision: 'heart',
+  strength: 'kind',
+  flaw: 'overthink',
+  rhythm: 'morning',
+  socialPref: 'circle',
+  hobby: 'art',
+  coreValue: 'family',
+  lifeGoal: 'impact',
+  stress: 'talk',
   loveStyle: 'calm',
   lovePast: 'onebig',
   wantPartner: 'loyal',
   fear: 'betrayal',
+  wantKids: 'yes',
+  dream: 'travel',
+  futureVision: 'optimist',
   yearWish: 'theone',
   element: 'fire',
   animal: 'lion',
@@ -43,17 +56,21 @@ const coupleAnswers: Answers = {
 describe('buildSoloReading', () => {
   const res = computeSoloResult(soloAnswers);
 
-  it('produit une intro avec le prénom + plusieurs aspects', () => {
+  it('produit un rapport long, immersif (≥ 9 aspects) + archétype + outro', () => {
     const r = buildSoloReading(res, soloAnswers, ar);
     expect(r.intro).toContain('ياسمين');
-    expect(r.aspects.length).toBeGreaterThanOrEqual(4);
+    expect(r.aspects.length).toBeGreaterThanOrEqual(9); // rapport détaillé
+    expect(r.archetypeName).toBeTruthy();
+    expect(r.outro).toContain('ياسمين');
     for (const a of r.aspects) expect(a.text.trim().length).toBeGreaterThan(0);
   });
 
-  it('reflète les réponses (peur = trahison apparaît dans « watch »)', () => {
+  it('reflète les réponses (la peur choisie apparaît dans le rapport)', () => {
     const r = buildSoloReading(res, soloAnswers, ar);
-    const watch = r.aspects.find((a) => a.label === ar.readings.watchLabel);
-    expect(watch?.text).toBe(ar.readings.fearRead.betrayal);
+    const all = r.aspects.map((a) => a.text).join(' ');
+    expect(all).toContain(ar.readings.fearRead.betrayal);
+    expect(all).toContain(ar.readings.coreValueRead.family);
+    expect(all).toContain(ar.readings.stressRead.talk);
   });
 
   it('est déterministe', () => {

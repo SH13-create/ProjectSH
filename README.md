@@ -45,16 +45,23 @@ L'app utilisera alors la photo partout (accueil, lecture, résultats).
 
 ### ❓ Deux parcours de quiz **volontairement différents**
 
-- **Mode individuel** (centré sur **toi & ton avenir**) : prénom, date + heure de
-  naissance, genre, statut, style amoureux, **passé amoureux**, ce que tu
-  cherches, **ta plus grande peur**, **ton souhait de l'année**, + questions fun.
+- **Mode individuel** — un véritable **bilan de personnalité** (~26 questions)
+  couvrant : 🧠 personnalité (énergie sociale, cœur/tête, qualité, défaut),
+  ⏰ habitudes & loisirs, 💎 valeurs & objectifs de vie, 🌊 gestion des émotions,
+  🎭 préférences sociales, ❤️ amour (style, passé, idéal, peur), 👪 famille,
+  ✨ rêves & ambitions, 🔭 vision du futur.
 - **Mode couple** (centré sur la **relation**) : 2 prénoms + dates, **depuis quand
   ensemble**, langage de l'amour, gestion des disputes, **ce que tu admires**,
   **votre plus grand défi**, projet commun, + élément / saison / lieu de rêve.
 
-La **lecture finale** est composée à partir des réponses
-([`src/utils/reading.ts`](./src/utils/reading.ts)) : plusieurs « aspects »
-personnalisés, introduits par une parole de Moulat Niya.
+La **lecture finale solo** ([`src/utils/reading.ts`](./src/utils/reading.ts)) est
+un **rapport long et immersif** « façon psychologue virtuel » : un **archétype**
+mis en avant (combinaison élément × énergie sociale, ex. « 🌋 Le Guerrier
+Tranquille »), puis ~12 sections personnalisées (portrait, personnalité,
+habitudes, valeurs, émotions, social, amour, famille, rêves, point de croissance,
+travail, futur), chaque paragraphe étant **assemblé à partir des réponses
+réelles** — d'où l'effet « c'est écrit pour moi ». Le tout encadré par une
+parole d'ouverture et de clôture de Moulat Niya. 100% déterministe & local.
 
 ### 📸 Mode « Analyse par photo » (fictif & 100% local)
 

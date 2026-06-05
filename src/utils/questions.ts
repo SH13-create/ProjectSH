@@ -278,6 +278,178 @@ const qYearWish: Question = {
   ],
 };
 
+// ===== Questions « psychologue virtuel » (SOLO) — analyse approfondie =======
+
+// 🧠 Personnalité : énergie sociale (introverti / extraverti / entre les deux).
+const qSocialEnergy: Question = {
+  key: 'socialEnergy',
+  type: 'single',
+  title: (s) => s.quiz.socialEnergy,
+  options: [
+    { value: 'introvert', label: (s) => s.quiz.seIntro, emoji: '🌙' },
+    { value: 'extrovert', label: (s) => s.quiz.seExtro, emoji: '☀️' },
+    { value: 'ambivert', label: (s) => s.quiz.seAmbi, emoji: '🌗' },
+  ],
+};
+
+// 🧠 Personnalité : tu décides avec le cœur ou la tête ?
+const qDecision: Question = {
+  key: 'decision',
+  type: 'single',
+  title: (s) => s.quiz.decision,
+  options: [
+    { value: 'heart', label: (s) => s.quiz.decHeart, emoji: '❤️' },
+    { value: 'head', label: (s) => s.quiz.decHead, emoji: '🧠' },
+    { value: 'both', label: (s) => s.quiz.decBoth, emoji: '⚖️' },
+  ],
+};
+
+// ⏰ Habitudes quotidiennes : rythme.
+const qRhythm: Question = {
+  key: 'rhythm',
+  type: 'single',
+  title: (s) => s.quiz.rhythm,
+  options: [
+    { value: 'morning', label: (s) => s.quiz.rhMorning, emoji: '🌅' },
+    { value: 'night', label: (s) => s.quiz.rhNight, emoji: '🌃' },
+    { value: 'flex', label: (s) => s.quiz.rhFlex, emoji: '🔄' },
+  ],
+};
+
+// 💎 Valeurs : ce qui compte le plus.
+const qCoreValue: Question = {
+  key: 'coreValue',
+  type: 'cards',
+  title: (s) => s.quiz.coreValue,
+  options: [
+    { value: 'family', label: (s) => s.quiz.cvFamily, emoji: '👪' },
+    { value: 'freedom', label: (s) => s.quiz.cvFreedom, emoji: '🕊️' },
+    { value: 'success', label: (s) => s.quiz.cvSuccess, emoji: '🏆' },
+    { value: 'faith', label: (s) => s.quiz.cvFaith, emoji: '🕌' },
+    { value: 'honesty', label: (s) => s.quiz.cvHonesty, emoji: '🤝' },
+  ],
+};
+
+// 🎯 Objectifs de vie.
+const qLifeGoal: Question = {
+  key: 'lifeGoal',
+  type: 'cards',
+  title: (s) => s.quiz.lifeGoal,
+  options: [
+    { value: 'stability', label: (s) => s.quiz.lgStability, emoji: '🏡' },
+    { value: 'impact', label: (s) => s.quiz.lgImpact, emoji: '🌍' },
+    { value: 'wealth', label: (s) => s.quiz.lgWealth, emoji: '💰' },
+    { value: 'knowledge', label: (s) => s.quiz.lgKnowledge, emoji: '📚' },
+    { value: 'peace', label: (s) => s.quiz.lgPeace, emoji: '☮️' },
+  ],
+};
+
+// 👶 Famille : envie d'enfants.
+const qWantKids: Question = {
+  key: 'wantKids',
+  type: 'single',
+  title: (s) => s.quiz.wantKids,
+  options: [
+    { value: 'yes', label: (s) => s.quiz.wkYes, emoji: '👶' },
+    { value: 'someday', label: (s) => s.quiz.wkSomeday, emoji: '🕰️' },
+    { value: 'maybe', label: (s) => s.quiz.wkMaybe, emoji: '🤔' },
+    { value: 'no', label: (s) => s.quiz.wkNo, emoji: '🚫' },
+  ],
+};
+
+// 🎨 Loisirs.
+const qHobby: Question = {
+  key: 'hobby',
+  type: 'cards',
+  title: (s) => s.quiz.hobby,
+  options: [
+    { value: 'sport', label: (s) => s.quiz.hbSport, emoji: '⚽' },
+    { value: 'art', label: (s) => s.quiz.hbArt, emoji: '🎨' },
+    { value: 'travel', label: (s) => s.quiz.hbTravel, emoji: '✈️' },
+    { value: 'gaming', label: (s) => s.quiz.hbGaming, emoji: '🎮' },
+    { value: 'cooking', label: (s) => s.quiz.hbCooking, emoji: '🍳' },
+    { value: 'reading', label: (s) => s.quiz.hbReading, emoji: '📖' },
+  ],
+};
+
+// 🎭 Préférences sociales.
+const qSocialPref: Question = {
+  key: 'socialPref',
+  type: 'single',
+  title: (s) => s.quiz.socialPref,
+  options: [
+    { value: 'circle', label: (s) => s.quiz.spCircle, emoji: '👯' },
+    { value: 'crowd', label: (s) => s.quiz.spCrowd, emoji: '🎉' },
+    { value: 'solo', label: (s) => s.quiz.spSolo, emoji: '🧘' },
+  ],
+};
+
+// 🌊 Gestion des émotions (stress).
+const qStress: Question = {
+  key: 'stress',
+  type: 'cards',
+  title: (s) => s.quiz.stress,
+  options: [
+    { value: 'talk', label: (s) => s.quiz.stTalk, emoji: '🗣️' },
+    { value: 'alone', label: (s) => s.quiz.stAlone, emoji: '🚪' },
+    { value: 'move', label: (s) => s.quiz.stMove, emoji: '🏃' },
+    { value: 'faith', label: (s) => s.quiz.stFaith, emoji: '🤲' },
+  ],
+};
+
+// ✨ Rêves & ambitions.
+const qDream: Question = {
+  key: 'dream',
+  type: 'cards',
+  title: (s) => s.quiz.dream,
+  options: [
+    { value: 'travel', label: (s) => s.quiz.drTravel, emoji: '🌍' },
+    { value: 'business', label: (s) => s.quiz.drBusiness, emoji: '🚀' },
+    { value: 'fame', label: (s) => s.quiz.drFame, emoji: '🌟' },
+    { value: 'family', label: (s) => s.quiz.drFamily, emoji: '🏡' },
+  ],
+};
+
+// 💪 Ta plus grande qualité.
+const qStrength: Question = {
+  key: 'strength',
+  type: 'cards',
+  title: (s) => s.quiz.strength,
+  options: [
+    { value: 'kind', label: (s) => s.quiz.strKind, emoji: '🤍' },
+    { value: 'loyal', label: (s) => s.quiz.strLoyal, emoji: '🔒' },
+    { value: 'funny', label: (s) => s.quiz.strFunny, emoji: '😂' },
+    { value: 'strong', label: (s) => s.quiz.strStrong, emoji: '💪' },
+    { value: 'smart', label: (s) => s.quiz.strSmart, emoji: '🧠' },
+  ],
+};
+
+// 🌱 Le défaut sur lequel tu travailles.
+const qFlaw: Question = {
+  key: 'flaw',
+  type: 'cards',
+  title: (s) => s.quiz.flaw,
+  options: [
+    { value: 'stubborn', label: (s) => s.quiz.flStubborn, emoji: '🐂' },
+    { value: 'impatient', label: (s) => s.quiz.flImpatient, emoji: '⏳' },
+    { value: 'shy', label: (s) => s.quiz.flShy, emoji: '🙈' },
+    { value: 'overthink', label: (s) => s.quiz.flOverthink, emoji: '🌀' },
+  ],
+};
+
+// 🔭 Vision du futur.
+const qFutureVision: Question = {
+  key: 'futureVision',
+  type: 'single',
+  title: (s) => s.quiz.futureVision,
+  options: [
+    { value: 'optimist', label: (s) => s.quiz.fvOptimist, emoji: '🌈' },
+    { value: 'planner', label: (s) => s.quiz.fvPlanner, emoji: '🗺️' },
+    { value: 'dreamer', label: (s) => s.quiz.fvDreamer, emoji: '☁️' },
+    { value: 'realist', label: (s) => s.quiz.fvRealist, emoji: '🎯' },
+  ],
+};
+
 // ===== Questions SPÉCIFIQUES au mode COUPLE (sur la relation) =====
 
 // Depuis combien de temps ensemble.
@@ -328,16 +500,38 @@ const qChallenge: Question = {
 // Quelques questions « fun » restent communes (élément, lieu de rêve…).
 
 const SOLO_QUESTIONS: Question[] = [
+  // Identité
   qName,
   qBirth,
   qBirthTime,
   qGender,
   qStatus,
+  // 🧠 Personnalité
+  qSocialEnergy,
+  qDecision,
+  qStrength,
+  qFlaw,
+  // ⏰ Habitudes + 🎭 social
+  qRhythm,
+  qSocialPref,
+  qHobby,
+  // 💎 Valeurs + 🎯 objectifs
+  qCoreValue,
+  qLifeGoal,
+  // 🌊 Émotions
+  qStress,
+  // ❤️ Amour
   qLoveStyle,
   qLovePast,
   qWantPartner,
   qFear,
+  // 👪 Famille
+  qWantKids,
+  // ✨ Rêves + 🔭 futur
+  qDream,
+  qFutureVision,
   qYearWish,
+  // Touche « fun » finale
   qElement,
   qAnimal,
   qColor,

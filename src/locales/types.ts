@@ -171,6 +171,73 @@ export interface Strings {
     chRoutine: string;
     chFamily: string;
     chMoney: string;
+    // --- SOLO « psychologue virtuel » ---
+    socialEnergy: string;
+    seIntro: string;
+    seExtro: string;
+    seAmbi: string;
+    decision: string;
+    decHeart: string;
+    decHead: string;
+    decBoth: string;
+    rhythm: string;
+    rhMorning: string;
+    rhNight: string;
+    rhFlex: string;
+    coreValue: string;
+    cvFamily: string;
+    cvFreedom: string;
+    cvSuccess: string;
+    cvFaith: string;
+    cvHonesty: string;
+    lifeGoal: string;
+    lgStability: string;
+    lgImpact: string;
+    lgWealth: string;
+    lgKnowledge: string;
+    lgPeace: string;
+    wantKids: string;
+    wkYes: string;
+    wkSomeday: string;
+    wkMaybe: string;
+    wkNo: string;
+    hobby: string;
+    hbSport: string;
+    hbArt: string;
+    hbTravel: string;
+    hbGaming: string;
+    hbCooking: string;
+    hbReading: string;
+    socialPref: string;
+    spCircle: string;
+    spCrowd: string;
+    spSolo: string;
+    stress: string;
+    stTalk: string;
+    stAlone: string;
+    stMove: string;
+    stFaith: string;
+    dream: string;
+    drTravel: string;
+    drBusiness: string;
+    drFame: string;
+    drFamily: string;
+    strength: string;
+    strKind: string;
+    strLoyal: string;
+    strFunny: string;
+    strStrong: string;
+    strSmart: string;
+    flaw: string;
+    flStubborn: string;
+    flImpatient: string;
+    flShy: string;
+    flOverthink: string;
+    futureVision: string;
+    fvOptimist: string;
+    fvPlanner: string;
+    fvDreamer: string;
+    fvRealist: string;
   };
 
   loading: {
@@ -240,6 +307,20 @@ export interface Strings {
     soloIntro: string; // petite intro de Moulat Niya (solo), {name}
     coupleIntro: string; // intro (couple), {name1} {name2}
 
+    // Titres de sections du rapport SOLO enrichi
+    portraitLabel: string;
+    dailyLabel: string;
+    valuesLabel: string;
+    emotionsLabel: string;
+    socialLabel: string;
+    familyLabel: string;
+    dreamsLabel: string;
+    growthLabel: string;
+    futureLabel: string;
+    archetypeLabel: string; // « ton archétype »
+    soloOutro: string; // mot de fin de Moulat Niya, {name}
+    profileMix: string; // gabarit qui mélange plusieurs traits, {energy}{decision}{value}
+
     // --- Fragments SOLO (clés = valeurs de réponse) ---
     elementPersona: Record<Element, string>;
     loveStyleRead: Record<string, string>; // close/free/calm/hotcold
@@ -247,6 +328,22 @@ export interface Strings {
     fearRead: Record<string, string>; // betrayal/boredom/distance/control
     yearWishRead: Record<string, string>; // theone/marriage/fun/heal/reconnect
     wantPartnerRead: Record<string, string>; // loyal/ambition/humor/warm/faith
+    // Nouveaux dictionnaires de lecture (psychologie)
+    socialEnergyRead: Record<string, string>;
+    decisionRead: Record<string, string>;
+    rhythmRead: Record<string, string>;
+    coreValueRead: Record<string, string>;
+    lifeGoalRead: Record<string, string>;
+    wantKidsRead: Record<string, string>;
+    hobbyRead: Record<string, string>;
+    socialPrefRead: Record<string, string>;
+    stressRead: Record<string, string>;
+    dreamRead: Record<string, string>;
+    strengthRead: Record<string, string>;
+    flawRead: Record<string, string>;
+    futureVisionRead: Record<string, string>;
+    // Archétype : choisi selon élément + énergie sociale
+    archetypes: Record<string, { name: string; text: string }>;
 
     // --- Fragments COUPLE (clés = valeurs de réponse) ---
     howLongRead: Record<string, string>; // new/months/years/long

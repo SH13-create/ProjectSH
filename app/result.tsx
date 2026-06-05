@@ -259,6 +259,14 @@ function SoloView({ result, answers }: { result: SoloResult; answers: Answers })
           <AppText variant="caption" center color={colors.textMuted}>
             {t.result.age}: {result.age} • {t.elements[result.element]}
           </AppText>
+          {/* Badge « archétype » mis en avant */}
+          {reading.archetypeName ? (
+            <View style={[styles.archetypeChip, { backgroundColor: colors.primary }]}>
+              <AppText variant="caption" weight="800" center color={colors.primaryText}>
+                {reading.archetypeName}
+              </AppText>
+            </View>
+          ) : null}
         </Card>
       </Animated.View>
 
@@ -275,6 +283,13 @@ function SoloView({ result, answers }: { result: SoloResult; answers: Answers })
       {reading.aspects.map((a, i) => (
         <AspectCard key={a.label} aspect={a} delay={120 + i * 70} />
       ))}
+
+      {/* Mot de fin de Moulat Niya */}
+      {reading.outro ? (
+        <Animated.View entering={FadeInUp.delay(150)}>
+          <SeerIntro text={reading.outro} />
+        </Animated.View>
+      ) : null}
     </View>
   );
 }
@@ -285,5 +300,6 @@ const styles = StyleSheet.create({
   badge: { flex: 1, alignItems: 'center', gap: 2, paddingVertical: spacing.md },
   heart: { fontSize: 30 },
   soloHead: { alignItems: 'center', gap: spacing.xs },
+  archetypeChip: { marginTop: spacing.sm, paddingVertical: spacing.xs, paddingHorizontal: spacing.md, borderRadius: radius.pill },
   actions: { gap: spacing.md, marginTop: spacing.lg },
 });
