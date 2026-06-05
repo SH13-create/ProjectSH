@@ -263,8 +263,9 @@ export interface Strings {
     mode: string; // libellé sur l'accueil
     modeDesc: string;
     title: string; // titre de l'écran
-    pick1: string; // bouton choisir photo 1
-    pick2: string;
+    pick1: string; // bouton choisir photo 1 (toi)
+    pick2: string; // photo du partenaire
+    takePhoto: string; // bouton caméra / selfie
     name1Ph: string;
     name2Ph: string;
     analyze: string; // bouton lancer

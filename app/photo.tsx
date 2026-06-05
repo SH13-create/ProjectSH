@@ -33,21 +33,28 @@ export default function PhotoScreen() {
   const [n2, setN2] = useState('');
   const [err, setErr] = useState('');
 
-  const pick = async (which: 1 | 2) => {
-    // Sur le web la permission n'est pas requise ; sur mobile on la demande.
+  const pick = async (which: 1 | 2, source: 'library' | 'camera') => {
+    // Demande la permission adaptée (galerie ou caméra) sur mobile.
     if (Platform.OS !== 'web') {
-      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const perm =
+        source === 'camera'
+          ? await ImagePicker.requestCameraPermissionsAsync()
+          : await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (!perm.granted) {
         setErr(t.photo.permission);
         return;
       }
     }
-    const res = await ImagePicker.launchImageLibraryAsync({
+    const opts: ImagePicker.ImagePickerOptions = {
       mediaTypes: ['images'],
       quality: 0.7,
       allowsEditing: true,
       aspect: [1, 1],
-    });
+    };
+    const res =
+      source === 'camera'
+        ? await ImagePicker.launchCameraAsync(opts)
+        : await ImagePicker.launchImageLibraryAsync(opts);
     if (res.canceled || !res.assets?.[0]) return;
     const a = res.assets[0];
     const photo: PhotoInput = { uri: a.uri, width: a.width, height: a.height, fileSize: a.fileSize };
@@ -78,8 +85,20 @@ export default function PhotoScreen() {
       </View>
 
       <Animated.View entering={FadeInDown.duration(400)} style={styles.row}>
-        <PhotoSlot uri={p1?.uri} label={t.photo.pick1} onPress={() => pick(1)} />
-        <PhotoSlot uri={p2?.uri} label={t.photo.pick2} onPress={() => pick(2)} />
+        <PhotoSlot
+          uri={p1?.uri}
+          label={t.photo.pick1}
+          cameraLabel={t.photo.takePhoto}
+          onPick={() => pick(1, 'library')}
+          onCamera={() => pick(1, 'camera')}
+        />
+        <PhotoSlot
+          uri={p2?.uri}
+          label={t.photo.pick2}
+          cameraLabel={t.photo.takePhoto}
+          onPick={() => pick(2, 'library')}
+          onCamera={() => pick(2, 'camera')}
+        />
       </Animated.View>
 
       <Card style={{ gap: spacing.sm }}>
@@ -99,28 +118,50 @@ export default function PhotoScreen() {
   );
 }
 
-function PhotoSlot({ uri, label, onPress }: { uri?: string; label: string; onPress: () => void }) {
+function PhotoSlot({
+  uri,
+  label,
+  cameraLabel,
+  onPick,
+  onCamera,
+}: {
+  uri?: string;
+  label: string;
+  cameraLabel: string;
+  onPick: () => void;
+  onCamera: () => void;
+}) {
   const { colors } = useTheme();
   return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        styles.slot,
-        { backgroundColor: colors.surface, borderColor: uri ? colors.primary : colors.border },
-        softShadow(colors.shadow),
-      ]}
-    >
-      {uri ? (
-        <Image source={{ uri }} style={styles.img} resizeMode="cover" />
-      ) : (
-        <View style={styles.placeholder}>
-          <AppText style={{ fontSize: 40 }}>📷</AppText>
-          <AppText variant="caption" center color={colors.textMuted}>
-            {label}
+    <View style={{ flex: 1, gap: spacing.xs }}>
+      <Pressable
+        onPress={onPick}
+        style={[
+          styles.slot,
+          { backgroundColor: colors.surface, borderColor: uri ? colors.primary : colors.border },
+          softShadow(colors.shadow),
+        ]}
+      >
+        {uri ? (
+          <Image source={{ uri }} style={styles.img} resizeMode="cover" />
+        ) : (
+          <View style={styles.placeholder}>
+            <AppText style={{ fontSize: 40 }}>🖼️</AppText>
+            <AppText variant="caption" center color={colors.textMuted}>
+              {label}
+            </AppText>
+          </View>
+        )}
+      </Pressable>
+      {/* Option caméra/selfie (cachée sur le web où la galerie suffit). */}
+      {Platform.OS !== 'web' && (
+        <Pressable onPress={onCamera} style={[styles.camBtn, { borderColor: colors.border }]}>
+          <AppText variant="caption" center weight="700" color={colors.secondary}>
+            📸 {cameraLabel}
           </AppText>
-        </View>
+        </Pressable>
       )}
-    </Pressable>
+    </View>
   );
 }
 
@@ -160,13 +201,18 @@ function Field({
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: spacing.md, justifyContent: 'center' },
   slot: {
-    flex: 1,
     aspectRatio: 1,
     borderRadius: radius.lg,
     borderWidth: 2,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  camBtn: {
+    borderWidth: 1.5,
+    borderRadius: radius.pill,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
   },
   img: { width: '100%', height: '100%' },
   placeholder: { alignItems: 'center', gap: spacing.xs, padding: spacing.sm },
