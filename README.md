@@ -24,24 +24,35 @@ Co–Star, The Pattern, EvaTarot…).
 Pour changer le nom : voir [`app.json`](./app.json) (`name`, `slug`) et les clés
 `common.appName` / `common.seerName` dans les fichiers de langue.
 
-### 👵 L'avatar (vieille femme amazighe)
+### 🔮 L'avatar de Moulat Niya (portrait premium)
 
-Moulat Niya est représentée comme une **vieille femme marocaine amazighe**
-(rides, **tatouages amazighs** : siyala du menton, marque du front, symboles sur
-les joues, foulard traditionnel, boule de cristal). Par défaut c'est une
-**illustration vectorielle** (SVG) : [`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx).
+Moulat Niya est représentée comme une **voyante marocaine moderne et élégante**
+(~40 ans, caftan/foulard violet, bijoux dorés, regard chaleureux et mystérieux),
+sur un **fond mystique** (bleu nuit → violet, lune, étoiles, lueur dorée), dans un
+**cadre circulaire doré** avec halo — un rendu **premium**. Composant :
+[`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx).
 
-**Pour une vraie PHOTO réaliste générée par IA** (cet environnement n'a pas
-d'outil de génération d'images) :
-1. Génère l'image (Midjourney, DALL·E, Firefly…). Prompt suggéré :
-   > *« Portrait photoréaliste d'une vieille femme marocaine amazighe, tatouages
-   > faciaux berbères traditionnels (menton et front), foulard coloré, bijoux en
-   > argent, tenant une boule de cristal lumineuse, éclairage doux et mystique,
-   > fond sombre, haute qualité »*
-2. Enregistre le fichier sous **`assets/seer.png`** (carré, ~512×512).
-3. Dans [`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx), mets `USE_PHOTO = true`.
+Par défaut, c'est une **illustration vectorielle** soignée (l'environnement de
+dev n'a pas d'outil de génération d'images). **Pour un vrai portrait IA
+photoréaliste** (rendu le plus crédible) :
 
-L'app utilisera alors la photo partout (accueil, lecture, résultats).
+1. Génère l'image avec ton outil préféré (Midjourney / DALL·E 3 / Adobe Firefly /
+   Leonardo…). **Prompt optimisé** :
+   > *"Photorealistic studio portrait of a Moroccan female fortune teller, around
+   > 40 years old, warm and reassuring yet mysterious gaze, natural elegant
+   > features, soft genuine smile; wearing an elegant modern Moroccan caftan and a
+   > flowing headscarf, delicate gold jewelry; color palette of deep violet, navy
+   > blue and gold; soft professional cinematic lighting; subtle mystical
+   > background with faint stars, a soft moon and golden glow; premium, trustworthy,
+   > high-end editorial look; ultra detailed, 8k, photorealistic. Square 1:1.
+   > Negative: cartoon, illustration, 3d render, emoji, childish, low quality,
+   > distorted face, extra fingers."*
+2. Enregistre le fichier sous **`assets/seer.png`** (carré, idéalement 768×768 ou +).
+3. Dans [`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx), mets
+   `USE_PHOTO = true`.
+
+La photo s'affichera alors **partout** (accueil, chargement, lectures, photo) dans
+le même cadre doré premium — aucune autre modification nécessaire.
 
 ### ❓ Deux parcours de quiz **volontairement différents**
 
