@@ -30,7 +30,7 @@ import Svg, {
 import { brand } from '@/theme';
 
 // 👉 Passe à true après avoir déposé une vraie photo dans assets/seer.png.
-const USE_PHOTO = false;
+const USE_PHOTO = true;
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const PHOTO = USE_PHOTO ? require('../../assets/seer.png') : null;
 

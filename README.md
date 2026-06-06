@@ -26,18 +26,17 @@ Pour changer le nom : voir [`app.json`](./app.json) (`name`, `slug`) et les clé
 
 ### 🔮 L'avatar de Moulat Niya (portrait premium)
 
-Moulat Niya est représentée comme une **voyante marocaine moderne et élégante**
-(~40 ans, caftan/foulard violet, bijoux dorés, regard chaleureux et mystérieux),
-sur un **fond mystique** (bleu nuit → violet, lune, étoiles, lueur dorée), dans un
-**cadre circulaire doré** avec halo — un rendu **premium**. Composant :
-[`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx).
+Moulat Niya est représentée par un **vrai portrait IA photoréaliste** d'une
+voyante marocaine — fichier [`assets/seer.png`](./assets/seer.png) — affiché dans
+un **cadre circulaire doré** avec halo (rendu **premium**, qualité cover d'app).
+Composant : [`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx) (`USE_PHOTO = true`).
 
-Par défaut, c'est une **illustration vectorielle** soignée (l'environnement de
-dev n'a pas d'outil de génération d'images). **Pour un vrai portrait IA
-photoréaliste** (rendu le plus crédible) :
+**Pour remplacer le portrait** par un autre :
+1. Prépare une image **carrée** (≥ 768×768), visage centré.
+2. Remplace **`assets/seer.png`**.
+3. (Garde `USE_PHOTO = true`.) C'est tout — la photo s'affiche partout.
 
-1. Génère l'image avec ton outil préféré (Midjourney / DALL·E 3 / Adobe Firefly /
-   Leonardo…). **Prompt optimisé** :
+Pour **générer** un nouveau portrait IA, prompt optimisé :
    > *"Photorealistic studio portrait of a Moroccan female fortune teller, around
    > 40 years old, warm and reassuring yet mysterious gaze, natural elegant
    > features, soft genuine smile; wearing an elegant modern Moroccan caftan and a
@@ -47,12 +46,10 @@ photoréaliste** (rendu le plus crédible) :
    > high-end editorial look; ultra detailed, 8k, photorealistic. Square 1:1.
    > Negative: cartoon, illustration, 3d render, emoji, childish, low quality,
    > distorted face, extra fingers."*
-2. Enregistre le fichier sous **`assets/seer.png`** (carré, idéalement 768×768 ou +).
-3. Dans [`SeerAvatar.tsx`](./src/components/SeerAvatar.tsx), mets
-   `USE_PHOTO = true`.
 
-La photo s'affichera alors **partout** (accueil, chargement, lectures, photo) dans
-le même cadre doré premium — aucune autre modification nécessaire.
+La photo s'affiche **partout** (accueil, chargement, lectures, mode photo) dans le
+même cadre doré premium. Si l'image source n'est pas carrée, on peut la recadrer
+proprement (ex. via `sharp`, comme lors de l'intégration initiale).
 
 ### ❓ Deux parcours de quiz **volontairement différents**
 
