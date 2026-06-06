@@ -17,7 +17,9 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "نحتاجو الإذن باش تختار التصاور ديال التحليل. كاع التصاور كيبقاو فالتيليفون ديالك.",
-        "NSCameraUsageDescription": "نحتاجو الإذن باش تصوّر تصويرتك ديال التحليل. كاع التصاور كيبقاو فالتيليفون ديالك."
+        "NSCameraUsageDescription": "نحتاجو الإذن باش تصوّر تصويرتك ديال التحليل. كاع التصاور كيبقاو فالتيليفون ديالك.",
+        "NSMicrophoneUsageDescription": "نحتاجو الإذن باش تهضر مع مولات النية بالصوت.",
+        "NSSpeechRecognitionUsageDescription": "نحتاجو الإذن باش نفهمو السؤال اللي كتقول بالصوت."
       }
     },
     "android": {

@@ -75,6 +75,25 @@ travail, futur), chaque paragraphe étant **assemblé à partir des réponses
 réelles** — d'où l'effet « c'est écrit pour moi ». Le tout encadré par une
 parole d'ouverture et de clôture de Moulat Niya. 100% déterministe & local.
 
+### 🎙️ Mode vocal interactif — « Parler avec Moulat Niya »
+
+Une **conversation** avec la voyante ([`app/voice.tsx`](./app/voice.tsx)) :
+l'utilisateur pose une question **par la voix** ou **en l'écrivant**, et Moulat
+Niya répond par **un texte élégant + une voix chaleureuse** (synthèse vocale), avec
+une **animation d'onde sonore** quand elle parle (impression de conversation
+vivante).
+
+- **Voix de Moulat Niya (TTS)** : [`expo-speech`](https://docs.expo.dev/versions/latest/sdk/speech/),
+  voix arabe — fonctionne **web + mobile**.
+- **Micro / dictée** : [`src/utils/speech.ts`](./src/utils/speech.ts) utilise la
+  **Web Speech API** (Chrome/Edge) — **sans backend**. Si le micro n'est pas
+  supporté (certains navigateurs / mobile natif), l'UI bascule proprement sur la
+  **saisie écrite** (« Écrire au lieu de la voix »).
+- **Réponses** : moteur local [`src/utils/oracle.ts`](./src/utils/oracle.ts) qui
+  détecte le thème de la question (amour / travail / argent / santé / futur /
+  oui-non) par mots-clés (darija + arabizi + fr/en) et renvoie une réponse
+  chaleureuse **déterministe** (même question → même réponse). C'est un
+  **divertissement fictif**, aucune donnée n'est envoyée.
 ### 📸 Mode « Analyse par photo » (fictif & 100% local)
 
 Un 3ᵉ mode depuis l'accueil : on importe **2 photos** + 2 prénoms, et Moulat Niya

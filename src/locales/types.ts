@@ -390,6 +390,36 @@ export interface Strings {
     projectRead: Record<string, string>; // marriage/travel/career/study
   };
 
+  // 🎙️ Mode vocal / conversation avec Moulat Niya.
+  voice: {
+    mode: string; // libellé sur l'accueil
+    modeDesc: string;
+    title: string;
+    askVoice: string; // « Pose ta question par la voix »
+    talk: string; // « Parler avec Moulat Niya »
+    typeInstead: string; // basculer en écrit
+    placeholder: string; // champ de saisie
+    send: string;
+    listening: string; // « كانصنت ليك... »
+    thinking: string; // « كانقلب فالنجوم... »
+    speaking: string; // « Moulat Niya تهضر... »
+    tapToSpeak: string; // sous le micro
+    notSupported: string; // micro indisponible (mobile/navigateur)
+    replay: string; // réécouter
+    stop: string; // arrêter la voix
+    greeting: string; // 1er message de Moulat Niya
+    suggestions: string[]; // questions suggérées (puces)
+    // Réponses par thème (sélection déterministe par mots-clés)
+    answersLove: string[];
+    answersWork: string[];
+    answersMoney: string[];
+    answersHealth: string[];
+    answersFuture: string[];
+    answersYesNo: string[];
+    answersGeneric: string[];
+    closing: string[]; // petite phrase de clôture ajoutée parfois
+  };
+
   // 📸 Mode « Analyse par photo » (fictif & local).
   photo: {
     // Onboarding / écran

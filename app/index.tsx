@@ -75,6 +75,13 @@ export default function Home() {
       </Animated.View>
 
       <Button
+        label={t.voice.talk}
+        emoji="🎙️"
+        onPress={() => router.push('/voice')}
+        style={{ marginTop: spacing.sm }}
+      />
+
+      <Button
         label={t.photo.mode}
         emoji="📸"
         variant="secondary"
