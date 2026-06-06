@@ -83,8 +83,12 @@ Niya répond par **un texte élégant + une voix chaleureuse** (synthèse vocale
 une **animation d'onde sonore** quand elle parle (impression de conversation
 vivante).
 
-- **Voix de Moulat Niya (TTS)** : [`expo-speech`](https://docs.expo.dev/versions/latest/sdk/speech/),
-  voix arabe — fonctionne **web + mobile**.
+- **Voix de Moulat Niya (TTS)** : [`expo-speech`](https://docs.expo.dev/versions/latest/sdk/speech/).
+  Elle parle **toujours en darija marocaine** (`ar-MA`) — même si l'affichage est
+  en arabizi, c'est la **version en lettres arabes** qui est lue (sinon la voix
+  sonnerait faux). Sur le web, on sélectionne automatiquement la meilleure voix
+  arabe disponible. Fonctionne **web + mobile**.
+- **Questions suggérées** : des puces tappables amorcent la conversation.
 - **Micro / dictée** : [`src/utils/speech.ts`](./src/utils/speech.ts) utilise la
   **Web Speech API** (Chrome/Edge) — **sans backend**. Si le micro n'est pas
   supporté (certains navigateurs / mobile natif), l'UI bascule proprement sur la

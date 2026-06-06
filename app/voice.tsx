@@ -19,14 +19,18 @@ import { SeerAvatar } from '@/components/SeerAvatar';
 import { SpeakingWave } from '@/components/SpeakingWave';
 import { useLocale } from '@/context/LocaleContext';
 import { useTheme } from '@/context/ThemeContext';
+import { LOCALES } from '@/locales';
 import { radius, softShadow, spacing } from '@/theme';
 import { askOracle } from '@/utils/oracle';
 import { isListeningSupported, listen, speak, stopSpeaking } from '@/utils/speech';
 
+// La voix lit TOUJOURS la darija en lettres arabes (peu importe l'affichage).
+const AR = LOCALES.ar;
+
 type Msg = { id: string; from: 'user' | 'seer'; text: string };
 
 export default function VoiceScreen() {
-  const { t, script, isRTL } = useLocale();
+  const { t, isRTL } = useLocale();
   const { colors } = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -38,27 +42,32 @@ export default function VoiceScreen() {
   const [listening, setListening] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [seerThinking, setSeerThinking] = useState(false);
-  const [lastSeerText, setLastSeerText] = useState(v.greeting);
+  // On garde la version ARABE du dernier message (pour le bouton « réécouter »).
+  const [lastSeerAr, setLastSeerAr] = useState(AR.voice.greeting);
 
   const scrollRef = useRef<ScrollView>(null);
   const listenHandle = useRef<ReturnType<typeof listen>>(null);
   const micSupported = isListeningSupported();
 
-  // Moulat Niya « dit » son message d'accueil à l'ouverture.
+  // Moulat Niya « dit » son message d'accueil à l'ouverture (texte arabe lu).
   useEffect(() => {
-    sayAsSeer(v.greeting, false);
+    sayAsSeer(v.greeting, AR.voice.greeting, false);
     return () => stopSpeaking();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const scrollDown = () => setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 80);
 
-  /** Ajoute un message de la voyante + le fait parler. */
-  function sayAsSeer(text: string, push = true) {
-    if (push) setMessages((m) => [...m, { id: String(Date.now()) + 's', from: 'seer', text }]);
-    setLastSeerText(text);
+  /**
+   * Ajoute un message de la voyante (affiché dans l'écriture choisie) et le fait
+   * parler EN ARABE (darija). `displayText` = ce qu'on montre, `arText` = ce
+   * qu'on prononce (toujours en lettres arabes).
+   */
+  function sayAsSeer(displayText: string, arText: string, push = true) {
+    if (push) setMessages((m) => [...m, { id: String(Date.now()) + 's', from: 'seer', text: displayText }]);
+    setLastSeerAr(arText);
     scrollDown();
-    speak(text, script, {
+    speak(arText, {
       onStart: () => setSpeaking(true),
       onDone: () => setSpeaking(false),
     });
@@ -77,8 +86,10 @@ export default function VoiceScreen() {
     setSeerThinking(true);
     setTimeout(() => {
       setSeerThinking(false);
-      const reply = askOracle(question, t);
-      sayAsSeer(reply.text);
+      // Réponse affichée dans l'écriture choisie, et version arabe pour la voix.
+      const display = askOracle(question, t).text;
+      const arabic = askOracle(question, AR).text;
+      sayAsSeer(display, arabic);
     }, 1400);
   }
 
@@ -151,6 +162,23 @@ export default function VoiceScreen() {
               <Bubble msg={{ id: 'tk', from: 'seer', text: '…' }} isRTL={isRTL} />
             </Animated.View>
           ) : null}
+
+          {/* Questions suggérées (au tout début, pour amorcer la conversation) */}
+          {messages.length <= 1 && !seerThinking ? (
+            <Animated.View entering={FadeIn.delay(300)} style={styles.suggestions}>
+              {v.suggestions.map((s, i) => (
+                <Pressable
+                  key={i}
+                  onPress={() => submitQuestion(s)}
+                  style={[styles.chip, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                >
+                  <AppText variant="caption" weight="600" color={colors.secondary}>
+                    {s}
+                  </AppText>
+                </Pressable>
+              ))}
+            </Animated.View>
+          ) : null}
         </ScrollView>
 
         {/* Barre d'action */}
@@ -208,7 +236,9 @@ export default function VoiceScreen() {
                 {typing ? `🎙️ ${v.askVoice}` : `⌨️ ${v.typeInstead}`}
               </AppText>
             </Pressable>
-            <Pressable onPress={() => sayAsSeer(lastSeerText, false)}>
+            <Pressable
+              onPress={() => speak(lastSeerAr, { onStart: () => setSpeaking(true), onDone: () => setSpeaking(false) })}
+            >
               <AppText variant="caption" weight="700" color={colors.secondary}>
                 🔁 {v.replay}
               </AppText>
@@ -246,6 +276,8 @@ function Bubble({ msg, isRTL }: { msg: Msg; isRTL: boolean }) {
 
 const styles = StyleSheet.create({
   header: { alignItems: 'center' },
+  suggestions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.sm, justifyContent: 'center' },
+  chip: { borderWidth: 1, borderRadius: radius.pill, paddingVertical: spacing.xs, paddingHorizontal: spacing.md },
   actions: { paddingHorizontal: spacing.lg, paddingTop: spacing.md, borderTopWidth: 1 },
   micBtn: {
     minHeight: 64,

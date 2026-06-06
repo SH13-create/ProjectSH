@@ -2,7 +2,9 @@
  * 🎙️ Utilitaires voix de Moulat Niya.
  *
  *  - speak()  : synthèse vocale (TTS) via expo-speech — fonctionne web + mobile.
- *               On vise une voix arabe (ar) pour coller au personnage.
+ *               ⚠️ La voix lit TOUJOURS en arabe (darija marocaine, ar-MA),
+ *               quel que soit l'affichage. On lui passe donc le texte en LETTRES
+ *               ARABES (jamais l'arabizi latin, qui sonnerait faux).
  *  - listen() : reconnaissance vocale. Disponible sur le WEB (Web Speech API,
  *               Chrome/Edge) sans backend ; renvoie le texte dicté.
  *               Sur mobile natif (non supporté nativement par Expo), on renvoie
@@ -12,25 +14,45 @@
  */
 import { Platform } from 'react-native';
 import * as Speech from 'expo-speech';
-import type { Script } from '@/locales';
 
-const langFor = (script: Script) => (script === 'ar' ? 'ar' : 'ar'); // voix arabe dans les 2 cas
+// On vise la darija marocaine ; si la voix MA n'existe pas, le moteur retombe
+// automatiquement sur une voix arabe standard.
+const SPEAK_LANG = 'ar-MA';
 
-/** Fait parler Moulat Niya. `onDone` est appelé à la fin (ou en cas d'arrêt). */
-export function speak(
-  text: string,
-  script: Script,
-  handlers?: { onStart?: () => void; onDone?: () => void },
-): void {
+/**
+ * Sélectionne (sur le web) la meilleure voix arabe disponible — idéalement
+ * marocaine (ar-MA), sinon n'importe quelle voix « ar-* ». Renvoie l'identifiant
+ * de voix à passer à expo-speech, ou undefined si rien de spécifique.
+ */
+function pickArabicWebVoice(): string | undefined {
+  if (Platform.OS !== 'web') return undefined;
+  const synth: any = typeof window !== 'undefined' ? (window as any).speechSynthesis : null;
+  if (!synth?.getVoices) return undefined;
+  const voices: any[] = synth.getVoices() || [];
+  if (!voices.length) return undefined;
+  const ar = voices.filter((v) => (v.lang || '').toLowerCase().startsWith('ar'));
+  if (!ar.length) return undefined;
+  // Priorité : marocain, puis voix féminine, puis première voix arabe.
+  const ma = ar.find((v) => (v.lang || '').toLowerCase() === 'ar-ma');
+  const female = ar.find((v) => /female|femme|woman|fatima|laila|hala|salma/i.test(v.name || ''));
+  return (ma || female || ar[0]).voiceURI;
+}
+
+/**
+ * Fait parler Moulat Niya, TOUJOURS en darija marocaine (ar-MA).
+ * `text` doit être en lettres arabes. `onDone` est appelé à la fin/à l'arrêt.
+ */
+export function speak(text: string, handlers?: { onStart?: () => void; onDone?: () => void }): void {
   try {
     Speech.stop();
   } catch {
     // ignore
   }
   Speech.speak(text, {
-    language: langFor(script),
+    language: SPEAK_LANG,
+    voice: pickArabicWebVoice(),
     pitch: 1.05, // voix légèrement chaleureuse
-    rate: Platform.OS === 'web' ? 1.0 : 0.96,
+    rate: Platform.OS === 'web' ? 0.95 : 0.92, // un peu posé, ton de voyante
     onStart: handlers?.onStart,
     onDone: handlers?.onDone,
     onStopped: handlers?.onDone,
