@@ -89,6 +89,12 @@ vivante).
   sonnerait faux). Sur le web, on sélectionne automatiquement la meilleure voix
   arabe disponible. Fonctionne **web + mobile**.
 - **Questions suggérées** : des puces tappables amorcent la conversation.
+- **Mascotte vivante** ([`src/components/LiveSeer.tsx`](./src/components/LiveSeer.tsx)) :
+  un personnage **animé en SVG** (pas une image figée) qui donne l'impression de
+  parler — **bouche synchronisée** à l'audio (animation pilotée par les callbacks
+  `onStart`/`onDone` du TTS, avec repli temporisé si aucune voix n'émet),
+  **clignement des yeux** aléatoire (toutes les ~2,4–5 s) et **léger balancement
+  de tête** permanent (reanimated). Aucune API externe.
 - **Micro / dictée** : [`src/utils/speech.ts`](./src/utils/speech.ts) utilise la
   **Web Speech API** (Chrome/Edge) — **sans backend**. Si le micro n'est pas
   supporté (certains navigateurs / mobile natif), l'UI bascule proprement sur la

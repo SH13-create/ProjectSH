@@ -15,7 +15,7 @@ import { ZelligeBackground } from '@/components/ZelligeBackground';
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
-import { SeerAvatar } from '@/components/SeerAvatar';
+import { LiveSeer } from '@/components/LiveSeer';
 import { SpeakingWave } from '@/components/SpeakingWave';
 import { useLocale } from '@/context/LocaleContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -73,10 +73,25 @@ export default function VoiceScreen() {
     if (push) setMessages((m) => [...m, { id: String(Date.now()) + 's', from: 'seer', text: displayText }]);
     setLastSeerAr(arText);
     scrollDown();
+
+    let gotAudio = false;
     speak(arText, {
-      onStart: () => setSpeaking(true),
+      onStart: () => {
+        gotAudio = true;
+        setSpeaking(true);
+      },
       onDone: () => setSpeaking(false),
     });
+
+    // Repli « bouche qui bouge » si aucune voix audio ne démarre (ex. pas de
+    // voix arabe installée) : on anime quand même la mascotte le temps d'une
+    // lecture estimée d'après la longueur du texte, pour garder l'illusion.
+    setTimeout(() => {
+      if (gotAudio) return;
+      setSpeaking(true);
+      const durationMs = Math.min(9000, Math.max(2200, arText.length * 80));
+      setTimeout(() => setSpeaking(false), durationMs);
+    }, 350);
   }
 
   /** Traite une question (texte ou voix) et déclenche la réponse. */
@@ -138,7 +153,7 @@ export default function VoiceScreen() {
       <View style={{ flex: 1, paddingTop: insets.top + spacing.sm }}>
         {/* En-tête : avatar + onde quand elle parle */}
         <View style={styles.header}>
-          <SeerAvatar size={84} />
+          <LiveSeer size={104} speaking={speaking} />
           <AppText variant="subtitle" weight="800" color={colors.primary} style={{ marginTop: spacing.xs }}>
             {t.common.seerName}
           </AppText>
