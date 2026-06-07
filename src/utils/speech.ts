@@ -20,27 +20,57 @@ import * as Speech from 'expo-speech';
 const SPEAK_LANG = 'ar-MA';
 
 /**
- * Sélectionne (sur le web) la meilleure voix arabe disponible — idéalement
- * marocaine (ar-MA), sinon n'importe quelle voix « ar-* ». Renvoie l'identifiant
- * de voix à passer à expo-speech, ou undefined si rien de spécifique.
+ * Précharge la liste des voix du navigateur (web). Elle est parfois remplie de
+ * façon asynchrone : on l'amorce au démarrage pour que la voix arabe soit prête.
  */
-function pickArabicWebVoice(): string | undefined {
-  if (Platform.OS !== 'web') return undefined;
+export function warmUpVoices(): void {
+  if (Platform.OS !== 'web') return;
   const synth: any = typeof window !== 'undefined' ? (window as any).speechSynthesis : null;
-  if (!synth?.getVoices) return undefined;
+  if (!synth?.getVoices) return;
+  try {
+    synth.getVoices();
+    synth.onvoiceschanged = () => synth.getVoices();
+  } catch {
+    // ignore
+  }
+}
+
+/** Renvoie la liste des voix arabes disponibles (web), triées par préférence. */
+function arabicWebVoices(): any[] {
+  if (Platform.OS !== 'web') return [];
+  const synth: any = typeof window !== 'undefined' ? (window as any).speechSynthesis : null;
+  if (!synth?.getVoices) return [];
   const voices: any[] = synth.getVoices() || [];
-  if (!voices.length) return undefined;
   const ar = voices.filter((v) => (v.lang || '').toLowerCase().startsWith('ar'));
-  if (!ar.length) return undefined;
-  // Priorité : marocain, puis voix féminine, puis première voix arabe.
-  const ma = ar.find((v) => (v.lang || '').toLowerCase() === 'ar-ma');
-  const female = ar.find((v) => /female|femme|woman|fatima|laila|hala|salma/i.test(v.name || ''));
-  return (ma || female || ar[0]).voiceURI;
+  // Priorité : marocain, puis voix féminine, puis le reste.
+  ar.sort((a, b) => score(b) - score(a));
+  return ar;
+}
+function score(v: any): number {
+  const lang = (v.lang || '').toLowerCase();
+  const name = v.name || '';
+  let s = 0;
+  if (lang === 'ar-ma') s += 10;
+  if (/female|femme|woman|fatima|laila|layla|hala|salma|maryam/i.test(name)) s += 3;
+  return s;
+}
+
+/**
+ * Indique si une voix arabe est réellement disponible.
+ * - mobile (expo-speech natif) : on suppose une voix arabe système → true.
+ * - web : true seulement si le navigateur a une voix « ar-* » installée.
+ * Permet à l'UI de NE PARLER QU'EN ARABE (jamais une voix latine sur du texte AR).
+ */
+export function hasArabicVoice(): boolean {
+  if (Platform.OS !== 'web') return true;
+  return arabicWebVoices().length > 0;
 }
 
 /**
  * Fait parler Moulat Niya, TOUJOURS en darija marocaine (ar-MA).
- * `text` doit être en lettres arabes. `onDone` est appelé à la fin/à l'arrêt.
+ * `text` doit être en lettres arabes. Sur le web, si AUCUNE voix arabe n'est
+ * disponible, on n'émet PAS de voix latine (on déclenche onDone directement) —
+ * conformément à l'exigence « voix en arabe uniquement ».
  */
 export function speak(text: string, handlers?: { onStart?: () => void; onDone?: () => void }): void {
   try {
@@ -48,11 +78,32 @@ export function speak(text: string, handlers?: { onStart?: () => void; onDone?: 
   } catch {
     // ignore
   }
+
+  if (Platform.OS === 'web') {
+    const voices = arabicWebVoices();
+    if (!voices.length) {
+      // Pas de voix arabe → on s'abstient (jamais d'anglais/français).
+      handlers?.onDone?.();
+      return;
+    }
+    Speech.speak(text, {
+      language: SPEAK_LANG,
+      voice: voices[0].voiceURI,
+      pitch: 1.05,
+      rate: 0.95,
+      onStart: handlers?.onStart,
+      onDone: handlers?.onDone,
+      onStopped: handlers?.onDone,
+      onError: handlers?.onDone,
+    });
+    return;
+  }
+
+  // Mobile : voix arabe système.
   Speech.speak(text, {
     language: SPEAK_LANG,
-    voice: pickArabicWebVoice(),
-    pitch: 1.05, // voix légèrement chaleureuse
-    rate: Platform.OS === 'web' ? 0.95 : 0.92, // un peu posé, ton de voyante
+    pitch: 1.05,
+    rate: 0.92, // posé, ton de voyante
     onStart: handlers?.onStart,
     onDone: handlers?.onDone,
     onStopped: handlers?.onDone,

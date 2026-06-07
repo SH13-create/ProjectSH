@@ -405,6 +405,7 @@ export interface Strings {
     speaking: string; // « Moulat Niya تهضر... »
     tapToSpeak: string; // sous le micro
     notSupported: string; // micro indisponible (mobile/navigateur)
+    noArabicVoice: string; // pas de voix arabe installée (web)
     replay: string; // réécouter
     stop: string; // arrêter la voix
     greeting: string; // 1er message de Moulat Niya

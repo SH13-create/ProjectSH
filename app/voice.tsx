@@ -22,7 +22,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { LOCALES } from '@/locales';
 import { radius, softShadow, spacing } from '@/theme';
 import { askOracle } from '@/utils/oracle';
-import { isListeningSupported, listen, speak, stopSpeaking } from '@/utils/speech';
+import { hasArabicVoice, isListeningSupported, listen, speak, stopSpeaking } from '@/utils/speech';
 
 // La voix lit TOUJOURS la darija en lettres arabes (peu importe l'affichage).
 const AR = LOCALES.ar;
@@ -48,6 +48,12 @@ export default function VoiceScreen() {
   const scrollRef = useRef<ScrollView>(null);
   const listenHandle = useRef<ReturnType<typeof listen>>(null);
   const micSupported = isListeningSupported();
+  // Voix arabe dispo ? (recheck après le 1er rendu, la liste se remplit async).
+  const [arVoiceOk, setArVoiceOk] = useState(true);
+  useEffect(() => {
+    const id = setTimeout(() => setArVoiceOk(hasArabicVoice()), 600);
+    return () => clearTimeout(id);
+  }, []);
 
   // Moulat Niya « dit » son message d'accueil à l'ouverture (texte arabe lu).
   useEffect(() => {
@@ -180,6 +186,15 @@ export default function VoiceScreen() {
             </Animated.View>
           ) : null}
         </ScrollView>
+
+        {/* Avertissement si aucune voix arabe n'est installée (web) */}
+        {!arVoiceOk ? (
+          <View style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.xs }}>
+            <AppText variant="caption" center color={colors.textMuted}>
+              🔇 {v.noArabicVoice}
+            </AppText>
+          </View>
+        ) : null}
 
         {/* Barre d'action */}
         <View style={[styles.actions, { paddingBottom: insets.bottom + spacing.md, borderTopColor: colors.border }]}>

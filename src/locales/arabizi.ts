@@ -649,6 +649,7 @@ const arabizi: Strings = {
     speaking: 'Moulat Niya kathder...',
     tapToSpeak: 'Kbes w hder',
     notSupported: 'L-micro makhddamch hna, kteb so2alek w ana njawbek b sawti 🌙',
+    noArabicVoice: 'Bach tsme3 sawti b l-3arbiya, khassek tthebbet sawt 3arbi f l-jihaz dyalek. Mazal ghadi te9ra l-jawab mektoub 🌙',
     replay: '3awd sme3',
     stop: 'W9ef',
     greeting: 'Ahlan bik a weldi/benti. Ana Moulat Niya. Sewwel 9albek w ana ne9ra lik f n-njoum... chno baghi t3ref? 🌙',
