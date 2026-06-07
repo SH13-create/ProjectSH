@@ -22,7 +22,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { LOCALES } from '@/locales';
 import { radius, softShadow, spacing } from '@/theme';
 import { askOracle } from '@/utils/oracle';
-import { hasArabicVoice, isListeningSupported, listen, speak, stopSpeaking } from '@/utils/speech';
+import { isListeningSupported, listen, speak, stopSpeaking, unlockAudio, warmUpVoices } from '@/utils/speech';
 
 // La voix lit TOUJOURS la darija en lettres arabes (peu importe l'affichage).
 const AR = LOCALES.ar;
@@ -48,19 +48,27 @@ export default function VoiceScreen() {
   const scrollRef = useRef<ScrollView>(null);
   const listenHandle = useRef<ReturnType<typeof listen>>(null);
   const micSupported = isListeningSupported();
-  // Voix arabe dispo ? (recheck après le 1er rendu, la liste se remplit async).
-  const [arVoiceOk, setArVoiceOk] = useState(true);
-  useEffect(() => {
-    const id = setTimeout(() => setArVoiceOk(hasArabicVoice()), 600);
-    return () => clearTimeout(id);
-  }, []);
+  // Sur le web, la voix d'accueil ne peut démarrer qu'APRÈS un geste utilisateur
+  // (politique autoplay). On affiche alors un petit bouton « ابدأ » pour l'amorcer.
+  const [needTapToStart, setNeedTapToStart] = useState(Platform.OS === 'web');
 
-  // Moulat Niya « dit » son message d'accueil à l'ouverture (texte arabe lu).
+  // Au démarrage : on précharge les voix. Sur mobile, on parle tout de suite ;
+  // sur le web on attend le 1er tap (greetNow).
   useEffect(() => {
-    sayAsSeer(v.greeting, AR.voice.greeting, false);
+    warmUpVoices();
+    if (Platform.OS !== 'web') {
+      sayAsSeer(v.greeting, AR.voice.greeting, false);
+    }
     return () => stopSpeaking();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /** Débloque l'audio (1er geste) puis fait dire le message d'accueil. */
+  function greetNow() {
+    unlockAudio();
+    setNeedTapToStart(false);
+    sayAsSeer(v.greeting, AR.voice.greeting, false);
+  }
 
   const scrollDown = () => setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 80);
 
@@ -98,6 +106,8 @@ export default function VoiceScreen() {
   function submitQuestion(q: string) {
     const question = q.trim();
     if (!question) return;
+    unlockAudio(); // 1er geste éventuel → autorise la voix sur le web
+    setNeedTapToStart(false);
     stopSpeaking();
     setMessages((m) => [...m, { id: String(Date.now()) + 'u', from: 'user', text: question }]);
     setDraft('');
@@ -116,6 +126,8 @@ export default function VoiceScreen() {
 
   // --- Micro (web) ---
   function toggleMic() {
+    unlockAudio(); // geste utilisateur → autorise la voix sur le web
+    setNeedTapToStart(false);
     if (listening) {
       listenHandle.current?.stop();
       setListening(false);
@@ -202,12 +214,10 @@ export default function VoiceScreen() {
           ) : null}
         </ScrollView>
 
-        {/* Avertissement si aucune voix arabe n'est installée (web) */}
-        {!arVoiceOk ? (
+        {/* Web : 1er tap requis pour autoriser la voix (politique autoplay) */}
+        {needTapToStart ? (
           <View style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.xs }}>
-            <AppText variant="caption" center color={colors.textMuted}>
-              🔇 {v.noArabicVoice}
-            </AppText>
+            <Button label={v.tapToStart} emoji="🔊" onPress={greetNow} />
           </View>
         ) : null}
 

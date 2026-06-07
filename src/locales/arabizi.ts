@@ -650,9 +650,10 @@ const arabizi: Strings = {
     tapToSpeak: 'Kbes w hder',
     notSupported: 'L-micro makhddamch hna, kteb so2alek w ana njawbek b sawti 🌙',
     noArabicVoice: 'Bach tsme3 sawti b l-3arbiya, khassek tthebbet sawt 3arbi f l-jihaz dyalek. Mazal ghadi te9ra l-jawab mektoub 🌙',
+    tapToStart: 'Kbes bach tsme3 Moulat Niya',
     replay: '3awd sme3',
     stop: 'W9ef',
-    greeting: 'Ahlan bik a weldi/benti. Ana Moulat Niya. Sewwel 9albek w ana ne9ra lik f n-njoum... chno baghi t3ref? 🌙',
+    greeting: 'Marhba b wlidati! Ana Moulat Niya. Sewwel 9albek w ana ne9ra lik f n-njoum... chno baghi t3ref? 🌙',
     suggestions: ['Wach ghadi nl9a l-7ob?', 'Kifach ghadi tkoun l-khedma dyali?', 'Chno kikhebbi liya l-mosta9bal?', 'Wach had l-3am zin 3liya?'],
     answersLove: [
       'F l-7ob, kanchouf 9albek mfetto7 w safi... chi 7ed 9rib mennek ki7ess bik aktar mma katdenn. 3ti l-we9t we9to, w la tkhebbi mcha3rek.',

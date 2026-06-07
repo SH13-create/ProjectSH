@@ -83,11 +83,17 @@ Niya répond par **un texte élégant + une voix chaleureuse** (synthèse vocale
 une **animation d'onde sonore** quand elle parle (impression de conversation
 vivante).
 
-- **Voix de Moulat Niya (TTS)** : [`expo-speech`](https://docs.expo.dev/versions/latest/sdk/speech/).
-  Elle parle **toujours en darija marocaine** (`ar-MA`) — même si l'affichage est
-  en arabizi, c'est la **version en lettres arabes** qui est lue (sinon la voix
-  sonnerait faux). Sur le web, on sélectionne automatiquement la meilleure voix
-  arabe disponible. Fonctionne **web + mobile**.
+- **Voix de Moulat Niya (TTS)** : sur le **web**, on utilise l'**API native**
+  `window.speechSynthesis` (la plus fiable sur Chrome/Edge/Safari) ; sur **mobile**
+  `expo-speech`. Elle parle **toujours en darija marocaine** (`ar-MA`) — c'est la
+  version en lettres arabes qui est lue. Voix arabe choisie automatiquement si le
+  navigateur en propose une (ex. « Google العربية »), **sans installation
+  manuelle** ; sinon on force quand même `lang = ar-MA`.
+  - ⚠️ **Autoplay** : les navigateurs bloquent l'audio tant que l'utilisateur n'a
+    pas interagi. Au 1ᵉʳ lancement web, un bouton **« كبس باش تسمع مولات النية »**
+    débloque l'audio (`unlockAudio()`) puis déclenche l'accueil
+    **« مرحبا بوليداتي »**. Toute interaction (mic, question) débloque aussi la voix.
+  - Anti-coupure Chrome : `resume()` périodique pendant les longues phrases.
 - **Questions suggérées** : des puces tappables amorcent la conversation.
 - **Mascotte vivante** ([`src/components/LiveSeer.tsx`](./src/components/LiveSeer.tsx)) :
   un personnage **animé en SVG** (pas une image figée) qui donne l'impression de
