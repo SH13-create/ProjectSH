@@ -105,11 +105,17 @@ vivante).
   **Web Speech API** (Chrome/Edge) — **sans backend**. Si le micro n'est pas
   supporté (certains navigateurs / mobile natif), l'UI bascule proprement sur la
   **saisie écrite** (« Écrire au lieu de la voix »).
-- **Réponses** : moteur local [`src/utils/oracle.ts`](./src/utils/oracle.ts) qui
-  détecte le thème de la question (amour / travail / argent / santé / futur /
-  oui-non) par mots-clés (darija + arabizi + fr/en) et renvoie une réponse
-  chaleureuse **déterministe** (même question → même réponse). C'est un
-  **divertissement fictif**, aucune donnée n'est envoyée.
+- **Réponses (vraie IA)** : [`src/utils/ai.ts`](./src/utils/ai.ts) envoie la
+  question à un modèle de langage (API compatible OpenAI : OpenAI, Groq,
+  OpenRouter…) avec une consigne « réponds en **darija marocaine**, chaleureuse,
+  ton de voyante, divertissement ». **Configuration** : copie `.env.example` en
+  `.env` et mets ta clé `EXPO_PUBLIC_AI_API_KEY` (+ éventuellement `_BASE_URL` et
+  `_MODEL`). **Sans clé**, l'app reste fonctionnelle : repli automatique sur le
+  moteur **local** [`src/utils/oracle.ts`](./src/utils/oracle.ts) (réponses darija
+  déterministes par thème).
+- **Voix féminine, sans emoji** : la synthèse choisit en priorité une voix
+  **féminine** arabe, et `cleanForSpeech()` **retire les emojis/symboles** avant
+  lecture (plus de « 🌙 » prononcé « croissant de lune »).
 ### 📸 Mode « Analyse par photo » (fictif & 100% local)
 
 Un 3ᵉ mode depuis l'accueil : on importe **2 photos** + 2 prénoms, et Moulat Niya

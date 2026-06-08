@@ -22,6 +22,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { LOCALES } from '@/locales';
 import { radius, softShadow, spacing } from '@/theme';
 import { askOracle } from '@/utils/oracle';
+import { askAI } from '@/utils/ai';
 import { isListeningSupported, listen, speak, stopSpeaking, unlockAudio, warmUpVoices } from '@/utils/speech';
 
 // La voix lit TOUJOURS la darija en lettres arabes (peu importe l'affichage).
@@ -112,16 +113,21 @@ export default function VoiceScreen() {
     setMessages((m) => [...m, { id: String(Date.now()) + 'u', from: 'user', text: question }]);
     setDraft('');
     scrollDown();
-    // Petit suspense « كانقلب فالنجوم... » avant la réponse.
+    // Petit suspense « كانقلب فالنجوم... » pendant qu'on interroge l'IA.
     setTyping(false);
     setSeerThinking(true);
-    setTimeout(() => {
-      setSeerThinking(false);
-      // Réponse affichée dans l'écriture choisie, et version arabe pour la voix.
-      const display = askOracle(question, t).text;
-      const arabic = askOracle(question, AR).text;
-      sayAsSeer(display, arabic);
-    }, 1400);
+    askAI(question, AR)
+      .then((answer) => {
+        setSeerThinking(false);
+        // La réponse de l'IA est en darija (lettres arabes) : on l'affiche et on
+        // la lit à voix haute (la même chaîne, sans emoji côté voix).
+        sayAsSeer(answer, answer);
+      })
+      .catch(() => {
+        setSeerThinking(false);
+        const fallback = askOracle(question, AR).text;
+        sayAsSeer(fallback, fallback);
+      });
   }
 
   // --- Micro (web) ---

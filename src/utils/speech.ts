@@ -55,9 +55,28 @@ function voiceScore(v: any): number {
   let s = 0;
   if (lang === 'ar-ma') s += 12;
   else if (lang.startsWith('ar')) s += 6;
-  if (/female|femme|woman|fatima|laila|layla|hala|salma|maryam|amira/.test(name)) s += 3;
-  if (/google/.test(name)) s += 2; // voix Google (en ligne) = bonne qualité
+  // On privilégie FORTEMENT une voix FÉMININE (Moulat Niya est une femme).
+  if (/female|femme|woman|fatima|laila|layla|hala|salma|maryam|amira|hoda|hala|sara|nora|laura|female/.test(name)) s += 8;
+  if (/male|homme|man|\bahmed\b|\bkhalid\b|\bnaayf\b/.test(name)) s -= 6; // évite les voix masculines
+  if (/google/.test(name)) s += 3; // voix Google (en ligne) = bonne qualité
   return s;
+}
+
+/**
+ * Nettoie le texte AVANT lecture vocale : retire emojis et symboles décoratifs
+ * (sinon le moteur prononce « 🌙 » → « croissant de lune »/« هلال »), ainsi que
+ * les '*' et autres marques. Garde lettres arabes, chiffres et ponctuation utile.
+ */
+export function cleanForSpeech(text: string): string {
+  return text
+    // Emojis & pictogrammes (plages Unicode usuelles).
+    .replace(
+      /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}\u{FE00}-\u{FE0F}\u{1F1E6}-\u{1F1FF}\u{200D}]/gu,
+      '',
+    )
+    .replace(/[*_#`~|<>]/g, ' ') // marques markdown/techniques
+    .replace(/\s{2,}/g, ' ')
+    .trim();
 }
 
 /**
@@ -109,6 +128,12 @@ function stopKeepAlive() {
  * Parle TOUJOURS (aucune installation manuelle de voix requise).
  */
 export function speak(text: string, handlers?: { onStart?: () => void; onDone?: () => void }): void {
+  // On ne prononce JAMAIS les emojis/symboles (ex. 🌙 -> « croissant de lune »).
+  const spoken = cleanForSpeech(text);
+  if (!spoken) {
+    handlers?.onDone?.();
+    return;
+  }
   if (isWeb) {
     const s = synth();
     if (!s || typeof (window as any).SpeechSynthesisUtterance === 'undefined') {
@@ -120,11 +145,11 @@ export function speak(text: string, handlers?: { onStart?: () => void; onDone?: 
     } catch {
       // ignore
     }
-    const u = new (window as any).SpeechSynthesisUtterance(text);
+    const u = new (window as any).SpeechSynthesisUtterance(spoken);
     u.lang = SPEAK_LANG; // darija marocaine ; le moteur fait au mieux
     const v = bestArabicVoice();
-    if (v) u.voice = v; // voix arabe si dispo (sinon le navigateur gère via lang)
-    u.pitch = 1.05;
+    if (v) u.voice = v; // voix féminine arabe si dispo
+    u.pitch = 1.1; // un peu plus haut = voix féminine plus naturelle
     u.rate = 0.95;
     u.onstart = () => {
       startKeepAlive();
@@ -150,9 +175,9 @@ export function speak(text: string, handlers?: { onStart?: () => void; onDone?: 
   } catch {
     // ignore
   }
-  Speech.speak(text, {
+  Speech.speak(spoken, {
     language: SPEAK_LANG,
-    pitch: 1.05,
+    pitch: 1.1,
     rate: 0.92,
     onStart: handlers?.onStart,
     onDone: handlers?.onDone,

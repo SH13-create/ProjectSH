@@ -42,3 +42,4 @@ yarn-error.*
 
 # Captures d'écran de prévisualisation (non versionnées)
 shots/
+/.env

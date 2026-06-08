@@ -695,7 +695,7 @@ const arabizi: Strings = {
       'N-njoum kathmes billi 3andek nour khass. Li zra3ti ghadi t7sdo, sber w iman.',
       'Kanchouf billi s-so2al dyalek jay men 9alb 7ayer... heddi balek, l-jawab ghadi yban f we9to.',
     ],
-    closing: ['🌙', 'Ti9 f rasek.', 'Allah ysehhel lik.', 'N-njoum m3ak ✨'],
+    closing: ['Ti9 f rasek.', 'Allah ysehhel lik.', 'N-njoum m3ak.'],
   },
 
   photo: {
