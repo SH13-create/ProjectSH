@@ -15,7 +15,7 @@ import { ZelligeBackground } from '@/components/ZelligeBackground';
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
-import { LiveSeer } from '@/components/LiveSeer';
+import { SeerAvatar } from '@/components/SeerAvatar';
 import { SpeakingWave } from '@/components/SpeakingWave';
 import { useLocale } from '@/context/LocaleContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -163,9 +163,9 @@ export default function VoiceScreen() {
   return (
     <ZelligeBackground>
       <View style={{ flex: 1, paddingTop: insets.top + spacing.sm }}>
-        {/* En-tête : avatar + onde quand elle parle */}
+        {/* En-tête : portrait de la voyante + onde quand elle parle */}
         <View style={styles.header}>
-          <LiveSeer size={104} speaking={speaking} />
+          <SeerAvatar size={104} />
           <AppText variant="subtitle" weight="800" color={colors.primary} style={{ marginTop: spacing.xs }}>
             {t.common.seerName}
           </AppText>
