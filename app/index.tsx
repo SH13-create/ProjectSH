@@ -15,14 +15,19 @@ import { SeerAvatar } from '@/components/SeerAvatar';
 import { useLocale } from '@/context/LocaleContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useQuiz } from '@/context/QuizContext';
-import { spacing } from '@/theme';
+import { radius, softShadow, spacing } from '@/theme';
 import type { Mode } from '@/utils/questions';
+import { dailyPick } from '@/utils/oracle';
 
 export default function Home() {
   const { t } = useLocale();
   const { colors } = useTheme();
   const { setMode } = useQuiz();
   const router = useRouter();
+
+  // Contenu quotidien : stable toute la journée, change chaque jour.
+  const advice = dailyPick(t.daily.advicePool, new Date(), 'advice');
+  const word = dailyPick(t.daily.wordPool, new Date(), 'word');
 
   const start = (mode: Mode) => {
     setMode(mode);
@@ -51,6 +56,14 @@ export default function Home() {
             {t.onboarding.welcome}
           </AppText>
         </Card>
+      </Animated.View>
+
+      {/* 🌅 Sections quotidiennes : donnent envie de revenir chaque jour */}
+      <Animated.View entering={FadeInUp.delay(220).duration(500)}>
+        <DailyCard icon="🌟" label={t.daily.adviceLabel} text={advice} accent={colors.accent} />
+      </Animated.View>
+      <Animated.View entering={FadeInUp.delay(280).duration(500)}>
+        <DailyCard icon="🌙" label={t.daily.wordLabel} text={word} accent={colors.secondary} muted />
       </Animated.View>
 
       <AppText variant="subtitle" weight="800" center style={{ marginTop: spacing.md }}>
@@ -100,6 +113,48 @@ export default function Home() {
   );
 }
 
+/** Carte « du jour » (conseil / mot de Moulat Niya). */
+function DailyCard({
+  icon,
+  label,
+  text,
+  accent,
+  muted,
+}: {
+  icon: string;
+  label: string;
+  text: string;
+  accent: string;
+  muted?: boolean;
+}) {
+  const { colors } = useTheme();
+  return (
+    <View
+      style={[
+        styles.daily,
+        {
+          backgroundColor: colors.surface,
+          borderColor: colors.border,
+          borderLeftColor: accent,
+        },
+        softShadow(colors.shadow),
+      ]}
+    >
+      <AppText variant="caption" weight="800" color={accent}>
+        {icon} {label}
+      </AppText>
+      <AppText
+        variant={muted ? 'body' : 'subtitle'}
+        weight={muted ? '600' : '700'}
+        color={colors.text}
+        style={{ marginTop: spacing.xs }}
+      >
+        {text}
+      </AppText>
+    </View>
+  );
+}
+
 function ModeCard({
   emoji,
   title,
@@ -139,4 +194,11 @@ const styles = StyleSheet.create({
   modeCard: { gap: spacing.md },
   modeRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   modeEmoji: { fontSize: 44 },
+  daily: {
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderLeftWidth: 4,
+    padding: spacing.md,
+    marginTop: spacing.sm,
+  },
 });

@@ -45,6 +45,14 @@ export interface Strings {
     scriptSwitch: string;
   };
 
+  // 🌅 Sections quotidiennes sur l'accueil (changent chaque jour).
+  daily: {
+    adviceLabel: string; // « نصيحة اليوم »
+    wordLabel: string; // « كلمة مولات النية »
+    advicePool: string[]; // conseils du jour
+    wordPool: string[]; // mots courts inspirants
+  };
+
   quiz: {
     progress: string; // "{current} / {total}"
     yourName: string;

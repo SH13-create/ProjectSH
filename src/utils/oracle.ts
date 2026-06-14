@@ -18,6 +18,18 @@ function hash(str: string): number {
   return Math.abs(h);
 }
 
+/**
+ * Sélection DÉTERMINISTE-PAR-JOUR : renvoie le même élément du tableau pour
+ * toute la journée (change automatiquement chaque jour). Aucun stockage requis.
+ * `salt` permet d'avoir des sélections différentes le même jour (ex. conseil vs
+ * mot du jour).
+ */
+export function dailyPick<T>(pool: T[], date: Date = new Date(), salt = ''): T {
+  if (!pool.length) return undefined as unknown as T;
+  const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${salt}`;
+  return pool[hash(key) % pool.length];
+}
+
 // Mots-clés par thème : darija (arabe), arabizi/latin et français/anglais.
 const KEYWORDS: Record<Exclude<Topic, 'generic'>, string[]> = {
   love: ['حب', 'حبيب', 'عشق', 'زواج', 'خطوبة', 'قلب', 'علاقة', '7ob', '7bib', 'zwaj', 'galb', 'love', 'amour', 'mariage', 'couple', 'crush'],
@@ -61,8 +73,9 @@ export function askOracle(question: string, t: Strings): OracleReply {
   const seed = hash(q || 'salam');
   let text = pool[seed % pool.length];
 
-  // On ajoute parfois une petite phrase de clôture chaleureuse (déterministe).
-  if (v.closing.length && seed % 3 === 0) {
+  // On ajoute RAREMENT une petite phrase de clôture (1 sur 5), pour éviter la
+  // répétition : les réponses sont désormais auto-suffisantes.
+  if (v.closing.length && seed % 5 === 0) {
     text = `${text} ${v.closing[seed % v.closing.length]}`;
   }
   return { topic, text };
