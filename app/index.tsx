@@ -29,6 +29,17 @@ export default function Home() {
   const advice = dailyPick(t.daily.advicePool, new Date(), 'advice');
   const word = dailyPick(t.daily.wordPool, new Date(), 'word');
 
+  // Accueil chaleureux selon l'heure (rend l'app vivante).
+  const hour = new Date().getHours();
+  const greeting =
+    hour < 12
+      ? t.daily.greetMorning
+      : hour < 17
+        ? t.daily.greetAfternoon
+        : hour < 21
+          ? t.daily.greetEvening
+          : t.daily.greetNight;
+
   const start = (mode: Mode) => {
     setMode(mode);
     router.push('/quiz');
@@ -47,6 +58,12 @@ export default function Home() {
         </AppText>
         <AppText variant="subtitle" center color={colors.textMuted} style={{ marginTop: spacing.xs }}>
           {t.common.tagline}
+        </AppText>
+      </Animated.View>
+
+      <Animated.View entering={FadeInUp.delay(120).duration(500)}>
+        <AppText variant="body" center weight="700" color={colors.secondary} style={{ marginBottom: spacing.sm }}>
+          {greeting}
         </AppText>
       </Animated.View>
 

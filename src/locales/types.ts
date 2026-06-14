@@ -51,6 +51,10 @@ export interface Strings {
     wordLabel: string; // « كلمة مولات النية »
     advicePool: string[]; // conseils du jour
     wordPool: string[]; // mots courts inspirants
+    greetMorning: string; // accueil selon l'heure
+    greetAfternoon: string;
+    greetEvening: string;
+    greetNight: string;
   };
 
   quiz: {

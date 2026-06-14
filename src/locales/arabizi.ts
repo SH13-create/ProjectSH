@@ -44,6 +44,10 @@ const arabizi: Strings = {
       '7afed 3la n-nas li kikhelliwk t7ess b l-aman, hadouk kanz.',
       'N-naja7 machi siba9; howa bli tkoun a7san men rasek dyalbar7.',
     ],
+    greetMorning: 'Sba7 l-khir a weldi ☀️ bda nharek b ta9a zina.',
+    greetAfternoon: 'Mer7ba bik! Wach nharek machi mzyan?',
+    greetEvening: 'Msa l-khir 🌆 jiti f l-we9t, kont kantsennak.',
+    greetNight: 'Lila s3ida 🌙 n-njoum banet, yallah ne9raw.',
     wordPool: [
       'L-yom ma khassekch tste3jel n-nataij, koul 7aja katji f we9tha.',
       '9albek y3ref t-tri9, ghir sme3 lih b houdou2.',
