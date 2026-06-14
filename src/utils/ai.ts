@@ -19,12 +19,21 @@
 import type { Strings } from '@/locales';
 import { askOracle } from './oracle';
 
-const API_KEY = process.env.EXPO_PUBLIC_AI_API_KEY || '';
-const BASE_URL = process.env.EXPO_PUBLIC_AI_BASE_URL || 'https://api.openai.com/v1';
-const MODEL = process.env.EXPO_PUBLIC_AI_MODEL || 'gpt-4o-mini';
+const API_KEY = (process.env.EXPO_PUBLIC_AI_API_KEY || '').trim();
+
+// Auto-détection du fournisseur d'après le format de la clé, pour que la CLÉ
+// SEULE suffise (sans devoir aussi renseigner BASE_URL / MODEL) :
+//  - clé Groq    : commence par "gsk_"  → API Groq + modèle Llama 3.x
+//  - clé OpenAI  : commence par "sk-"   → API OpenAI + gpt-4o-mini
+const isGroqKey = API_KEY.startsWith('gsk_');
+const DEFAULT_BASE = isGroqKey ? 'https://api.groq.com/openai/v1' : 'https://api.openai.com/v1';
+const DEFAULT_MODEL = isGroqKey ? 'llama-3.3-70b-versatile' : 'gpt-4o-mini';
+
+const BASE_URL = (process.env.EXPO_PUBLIC_AI_BASE_URL || DEFAULT_BASE).replace(/\/+$/, '');
+const MODEL = process.env.EXPO_PUBLIC_AI_MODEL || DEFAULT_MODEL;
 
 export function isAiConfigured(): boolean {
-  return API_KEY.trim().length > 0;
+  return API_KEY.length > 0;
 }
 
 // Personnage + consignes : darija marocaine, chaleureux, fictif/divertissement.
