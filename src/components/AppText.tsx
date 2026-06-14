@@ -20,12 +20,13 @@ type Props = TextProps & {
   dir?: 'ltr' | 'rtl';
 };
 
+// Hauteurs de ligne généreuses : l'arabe se lit mieux avec plus d'interligne.
 const VARIANT_STYLE: Record<Variant, TextStyle> = {
-  display: { fontSize: fontSize.display, fontWeight: '800' },
-  title: { fontSize: fontSize.xl, fontWeight: '800' },
-  subtitle: { fontSize: fontSize.lg, fontWeight: '700' },
-  body: { fontSize: fontSize.md, fontWeight: '500' },
-  caption: { fontSize: fontSize.sm, fontWeight: '500' },
+  display: { fontSize: fontSize.display, fontWeight: '800', lineHeight: fontSize.display * 1.2 },
+  title: { fontSize: fontSize.xl, fontWeight: '800', lineHeight: fontSize.xl * 1.3 },
+  subtitle: { fontSize: fontSize.lg, fontWeight: '700', lineHeight: fontSize.lg * 1.35 },
+  body: { fontSize: fontSize.md, fontWeight: '500', lineHeight: fontSize.md * 1.6 },
+  caption: { fontSize: fontSize.sm, fontWeight: '500', lineHeight: fontSize.sm * 1.5 },
 };
 
 export function AppText({ variant = 'body', color, center, weight, dir, style, ...rest }: Props) {

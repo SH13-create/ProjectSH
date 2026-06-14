@@ -127,16 +127,24 @@ function bandColor(bandIndex: number, colors: ReturnType<typeof useTheme>['color
   return colors.primary;
 }
 
-/** Carte d'un « aspect » de la lecture (titre + icône + paragraphe). */
-function AspectCard({ aspect, delay = 0 }: { aspect: Aspect; delay?: number }) {
+/** Carte d'un « aspect » de la lecture : pastille icône + titre + paragraphe. */
+function AspectCard({ aspect, delay = 0, index = 0 }: { aspect: Aspect; delay?: number; index?: number }) {
   const { colors } = useTheme();
+  // Petite rotation de couleurs d'accent pour rythmer la lecture.
+  const accents = [colors.primary, colors.secondary, colors.success, colors.accent];
+  const accent = accents[index % accents.length];
   return (
     <Animated.View entering={FadeInUp.delay(delay)}>
-      <Card>
-        <AppText variant="subtitle" weight="800" color={colors.secondary}>
-          {aspect.icon} {aspect.label}
-        </AppText>
-        <AppText variant="body" style={{ marginTop: spacing.xs }}>
+      <Card style={{ borderLeftWidth: 4, borderLeftColor: accent }}>
+        <View style={styles.aspectHead}>
+          <View style={[styles.aspectChip, { backgroundColor: accent + '22' }]}>
+            <AppText style={{ fontSize: 18 }}>{aspect.icon}</AppText>
+          </View>
+          <AppText variant="subtitle" weight="800" color={accent} style={{ flex: 1 }}>
+            {aspect.label}
+          </AppText>
+        </View>
+        <AppText variant="body" style={{ marginTop: spacing.sm }}>
           {aspect.text}
         </AppText>
       </Card>
@@ -230,7 +238,7 @@ function CoupleView({ result, answers }: { result: CoupleResult; answers: Answer
 
       {/* Aspects détaillés et personnalisés (forces, communication, défi, futur) */}
       {reading.aspects.map((a, i) => (
-        <AspectCard key={a.label} aspect={a} delay={200 + i * 70} />
+        <AspectCard key={a.label} aspect={a} index={i} delay={200 + i * 70} />
       ))}
 
       {/* Conseil de Moulat Niya */}
@@ -295,7 +303,7 @@ function SoloView({ result, answers }: { result: SoloResult; answers: Answers })
 
       {/* Aspects détaillés et personnalisés */}
       {reading.aspects.map((a, i) => (
-        <AspectCard key={a.label} aspect={a} delay={120 + i * 70} />
+        <AspectCard key={a.label} aspect={a} index={i} delay={120 + i * 70} />
       ))}
 
       {/* Mot de fin de Moulat Niya */}
@@ -315,5 +323,7 @@ const styles = StyleSheet.create({
   heart: { fontSize: 30 },
   soloHead: { alignItems: 'center', gap: spacing.xs },
   archetypeChip: { marginTop: spacing.sm, paddingVertical: spacing.xs, paddingHorizontal: spacing.md, borderRadius: radius.pill },
+  aspectHead: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  aspectChip: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   actions: { gap: spacing.md, marginTop: spacing.lg },
 });
