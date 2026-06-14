@@ -9,12 +9,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
+import Animated, {
+  FadeInUp,
+  FadeIn,
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ZelligeBackground } from '@/components/ZelligeBackground';
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
-import { Card } from '@/components/Card';
 import { SeerAvatar } from '@/components/SeerAvatar';
 import { SpeakingWave } from '@/components/SpeakingWave';
 import { useLocale } from '@/context/LocaleContext';
@@ -249,20 +256,15 @@ export default function VoiceScreen() {
             </View>
           ) : (
             <>
-              {/* Gros bouton micro/parole */}
-              <Pressable
+              {/* Gros bouton micro/parole (anneau qui pulse pendant l'écoute) */}
+              <MicButton
+                listening={listening}
+                label={listening ? v.stop : micSupported ? v.askVoice : v.talk}
+                color={listening ? colors.secondary : colors.primary}
+                textColor={colors.primaryText}
+                shadow={colors.shadow}
                 onPress={micSupported ? toggleMic : () => setTyping(true)}
-                style={[
-                  styles.micBtn,
-                  { backgroundColor: listening ? colors.secondary : colors.primary },
-                  softShadow(colors.shadow),
-                ]}
-              >
-                <AppText style={{ fontSize: 28 }}>{listening ? '⏹️' : '🎙️'}</AppText>
-                <AppText variant="subtitle" weight="800" color={colors.primaryText}>
-                  {listening ? v.stop : micSupported ? v.askVoice : v.talk}
-                </AppText>
-              </Pressable>
+              />
               {!micSupported ? (
                 <AppText variant="caption" center color={colors.textMuted} style={{ marginTop: spacing.xs }}>
                   {v.notSupported}
@@ -301,27 +303,100 @@ export default function VoiceScreen() {
   );
 }
 
+/** Bouton micro avec anneau qui pulse pendant l'écoute (effet « vivant »). */
+function MicButton({
+  listening,
+  label,
+  color,
+  textColor,
+  shadow,
+  onPress,
+}: {
+  listening: boolean;
+  label: string;
+  color: string;
+  textColor: string;
+  shadow: string;
+  onPress: () => void;
+}) {
+  const pulse = useSharedValue(0);
+  useEffect(() => {
+    if (listening) {
+      pulse.value = withRepeat(withTiming(1, { duration: 1100, easing: Easing.out(Easing.ease) }), -1, false);
+    } else {
+      pulse.value = 0;
+    }
+  }, [listening]);
+
+  const ringStyle = useAnimatedStyle(() => ({
+    opacity: listening ? 0.35 * (1 - pulse.value) : 0,
+    transform: [{ scale: 1 + pulse.value * 0.25 }],
+  }));
+
+  return (
+    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: radius.pill, backgroundColor: color },
+          ringStyle,
+        ]}
+      />
+      <Pressable
+        onPress={onPress}
+        style={[styles.micBtn, { backgroundColor: color, alignSelf: 'stretch' }, softShadow(shadow)]}
+      >
+        <AppText style={{ fontSize: 28 }}>{listening ? '⏹️' : '🎙️'}</AppText>
+        <AppText variant="subtitle" weight="800" color={textColor}>
+          {label}
+        </AppText>
+      </Pressable>
+    </View>
+  );
+}
+
 function Bubble({ msg, isRTL }: { msg: Msg; isRTL: boolean }) {
   const { colors } = useTheme();
   const seer = msg.from === 'seer';
   // La voyante à l'opposé de l'utilisateur selon le sens de lecture.
   const alignEnd = seer ? false : true;
+  // Coin « rabattu » côté locuteur (style bulle de chat).
+  const tail = seer
+    ? isRTL
+      ? { borderTopRightRadius: radius.sm }
+      : { borderTopLeftRadius: radius.sm }
+    : isRTL
+      ? { borderTopLeftRadius: radius.sm }
+      : { borderTopRightRadius: radius.sm };
   return (
     <Animated.View
       entering={FadeInUp.duration(250)}
-      style={{ alignSelf: alignEnd ? (isRTL ? 'flex-start' : 'flex-end') : isRTL ? 'flex-end' : 'flex-start', maxWidth: '85%' }}
+      style={{ alignSelf: alignEnd ? (isRTL ? 'flex-start' : 'flex-end') : isRTL ? 'flex-end' : 'flex-start', maxWidth: '86%' }}
     >
-      <Card alt={seer} style={{ paddingVertical: spacing.sm, paddingHorizontal: spacing.md, backgroundColor: seer ? undefined : colors.primary }}>
+      <View
+        style={[
+          styles.bubble,
+          tail,
+          { backgroundColor: seer ? colors.surfaceAlt : colors.primary, borderColor: colors.border },
+          softShadow(colors.shadow),
+        ]}
+      >
         <AppText variant="body" color={seer ? colors.text : colors.primaryText}>
           {seer ? `🔮 ${msg.text}` : msg.text}
         </AppText>
-      </Card>
+      </View>
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   header: { alignItems: 'center' },
+  bubble: {
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+  },
   suggestions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.sm, justifyContent: 'center' },
   chip: { borderWidth: 1, borderRadius: radius.pill, paddingVertical: spacing.xs, paddingHorizontal: spacing.md },
   actions: { paddingHorizontal: spacing.lg, paddingTop: spacing.md, borderTopWidth: 1 },
