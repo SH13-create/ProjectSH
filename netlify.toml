@@ -1,0 +1,24 @@
+# Configuration Netlify — Moulat Niya
+#
+# Build : export web statique d'Expo (dossier dist/).
+# Functions : proxy IA sécurisé dans netlify/functions (la clé reste serveur).
+#
+# 🔑 Définir dans Netlify → Site settings → Environment variables :
+#    AI_API_KEY = ta clé (Groq "gsk_..." recommandée, ou OpenAI "sk-...")
+#    (optionnel) AI_BASE_URL, AI_MODEL — sinon auto-détectés.
+# AUCUNE clé n'est exposée côté frontend.
+
+[build]
+  command = "npx expo export --platform web"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Le routage /api/ask est défini par export const config dans la fonction ;
+# fallback SPA pour les rafraîchissements d'URL profondes.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
