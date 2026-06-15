@@ -91,3 +91,31 @@ export async function shareResult(viewRef: RefObject<View | null>, message: stri
     // annulé / indisponible
   }
 }
+
+/**
+ * Partage TEXTE simple (ex. « partager l'app avec tes amis »).
+ * Web : Web Share API si dispo, sinon copie dans le presse-papiers.
+ * Mobile : feuille de partage native.
+ */
+export async function shareText(message: string): Promise<void> {
+  if (Platform.OS === 'web') {
+    const nav: any = typeof navigator !== 'undefined' ? navigator : null;
+    try {
+      if (nav?.share) {
+        await nav.share({ text: message });
+        return;
+      }
+      if (nav?.clipboard?.writeText) {
+        await nav.clipboard.writeText(message);
+      }
+    } catch {
+      // annulé
+    }
+    return;
+  }
+  try {
+    await Share.share({ message });
+  } catch {
+    // annulé / indisponible
+  }
+}

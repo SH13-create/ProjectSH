@@ -18,6 +18,7 @@ import { useQuiz } from '@/context/QuizContext';
 import { radius, softShadow, spacing } from '@/theme';
 import type { Mode } from '@/utils/questions';
 import { dailyPick } from '@/utils/oracle';
+import { shareText } from '@/utils/share';
 
 export default function Home() {
   const { t } = useLocale();
@@ -26,8 +27,11 @@ export default function Home() {
   const router = useRouter();
 
   // Contenu quotidien : stable toute la journée, change chaque jour.
-  const advice = dailyPick(t.daily.advicePool, new Date(), 'advice');
-  const word = dailyPick(t.daily.wordPool, new Date(), 'word');
+  const now = new Date();
+  const advice = dailyPick(t.daily.advicePool, now, 'advice');
+  const word = dailyPick(t.daily.wordPool, now, 'word');
+  const quote = dailyPick(t.daily.quotePool, now, 'quote');
+  const joke = dailyPick(t.daily.jokePool, now, 'joke');
 
   // Accueil chaleureux selon l'heure (rend l'app vivante).
   const hour = new Date().getHours();
@@ -75,15 +79,29 @@ export default function Home() {
         </Card>
       </Animated.View>
 
-      {/* 🌅 Sections quotidiennes : donnent envie de revenir chaque jour */}
-      <Animated.View entering={FadeInUp.delay(220).duration(500)}>
+      {/* 🌅 Contenu du jour : donne envie de revenir chaque jour */}
+      <AppText variant="subtitle" weight="800" center color={colors.primary} style={{ marginTop: spacing.md }}>
+        ✨ {t.daily.sectionTitle}
+      </AppText>
+      <Animated.View entering={FadeInUp.delay(200).duration(500)}>
+        <DailyCard icon="🌙" label={t.daily.wordLabel} text={word} accent={colors.secondary} />
+      </Animated.View>
+      <Animated.View entering={FadeInUp.delay(240).duration(500)}>
         <DailyCard icon="🌟" label={t.daily.adviceLabel} text={advice} accent={colors.accent} />
       </Animated.View>
       <Animated.View entering={FadeInUp.delay(280).duration(500)}>
-        <DailyCard icon="🌙" label={t.daily.wordLabel} text={word} accent={colors.secondary} muted />
+        <DailyCard icon="💬" label={t.daily.quoteLabel} text={quote} accent={colors.success} muted />
+      </Animated.View>
+      <Animated.View entering={FadeInUp.delay(320).duration(500)}>
+        <DailyCard icon="😄" label={t.daily.jokeLabel} text={joke} accent={colors.primary} muted />
+      </Animated.View>
+      <Animated.View entering={FadeInUp.delay(360).duration(500)}>
+        <AppText variant="caption" center color={colors.textMuted} style={{ marginTop: spacing.xs }}>
+          {t.daily.comeback}
+        </AppText>
       </Animated.View>
 
-      <AppText variant="subtitle" weight="800" center style={{ marginTop: spacing.md }}>
+      <AppText variant="subtitle" weight="800" center style={{ marginTop: spacing.lg }}>
         {t.onboarding.chooseMode}
       </AppText>
 
@@ -124,6 +142,22 @@ export default function Home() {
         emoji="📜"
         variant="ghost"
         onPress={() => router.push('/history')}
+        style={{ marginTop: spacing.sm }}
+      />
+
+      <Button
+        label={t.share.button}
+        emoji="🔗"
+        variant="ghost"
+        onPress={() => shareText(t.share.message)}
+        style={{ marginTop: spacing.sm }}
+      />
+
+      <Button
+        label={t.about.open}
+        emoji="ℹ️"
+        variant="ghost"
+        onPress={() => router.push('/about')}
         style={{ marginTop: spacing.sm }}
       />
     </Screen>

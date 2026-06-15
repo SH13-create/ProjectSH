@@ -47,14 +47,33 @@ export interface Strings {
 
   // 🌅 Sections quotidiennes sur l'accueil (changent chaque jour).
   daily: {
+    sectionTitle: string; // titre « Contenu du jour »
     adviceLabel: string; // « نصيحة اليوم »
     wordLabel: string; // « كلمة مولات النية »
+    quoteLabel: string; // « citation du jour »
+    jokeLabel: string; // « blague du jour »
     advicePool: string[]; // conseils du jour
     wordPool: string[]; // mots courts inspirants
+    quotePool: string[]; // citations
+    jokePool: string[]; // blagues courtes et propres
+    comeback: string; // « reviens demain pour une surprise »
     greetMorning: string; // accueil selon l'heure
     greetAfternoon: string;
     greetEvening: string;
     greetNight: string;
+  };
+
+  // 🔗 Partage + page À propos.
+  share: {
+    button: string; // « Partager l'app avec tes amis »
+    message: string; // texte partagé
+  };
+  about: {
+    open: string; // bouton accueil
+    title: string;
+    body: string; // description (darija)
+    bodyFr: string; // description (français)
+    disclaimer: string;
   };
 
   quiz: {

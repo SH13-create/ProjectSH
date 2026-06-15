@@ -28,8 +28,29 @@ const arabizi: Strings = {
   },
 
   daily: {
+    sectionTitle: 'Mou7tawa l-yom',
     adviceLabel: 'Nasi7at l-yom',
     wordLabel: 'Kelmat Moulat Niya',
+    quoteLabel: 'M9oulat l-yom',
+    jokeLabel: 'Nokta l-yom',
+    comeback: 'Rje3 ghedda bach tchouf mfaja2a jdida 🎁',
+    quotePool: [
+      '« N-niya s-safya katwsel 9bel l-klam. »',
+      '« Li sber, nal; w li tserre3, ndem. »',
+      '« L-btisama sada9a, w l-kelma z-zina dwa. »',
+      '« Ma kayn tri9 twil m3a sa7eb mzyan. »',
+      '« Kber b houdou2, l-achjar l-kbar bdaw 7ebba sghira. »',
+      '« Ra7at l-bal aghla men d-dheb. »',
+      '« Koul yom jdid forsa jdida, ma tdeyy3hach. »',
+      '« 9imat l-insan f akhla9o, machi f jibo. »',
+    ],
+    jokePool: [
+      'Wa7ed gal l mrato: cheft f l-mnam bli 3titini 3a9d dyal d-dheb! Galt lih: ti9, f l-lila j-jaya ghadi t3ref chno m3nah 😄',
+      'Sewlo t-tbib: 3lach katde7k fach kat3alej? Gal: 7it l-mrid kikhemmem f l-fatura, ma ki7essch b l-7o9na 😂',
+      'Gal lih sa7bo: malek 7zin? Gal: da3 liya t-tilifoun. Gal: 3ayyet lih! Gal: wakha, bsa7 ma 3andi bwach 🙃',
+      'L-ostad: 3tini jomla fiha "bsa7". T-tilmid: l-m3da dyali khawya, bsa7 rasi 3amer b l-afkar 😅',
+      'Wa7ed mcha l l-7ellaq gal lih: 9ess liya ch-ch3er 9sir. L-7ellaq: ch7al? Gal: 7tta yb9a 3andi we9t nfekker f l-machakil 😄',
+    ],
     advicePool: [
       'Besma f s-sba7 katbeddel n-nhar kamel. Jarreb w ghadi tchouf.',
       'Ma t9arench 7yatek b 7yat n-nas; koul wa7ed 3andou i9a3o.',
@@ -58,6 +79,18 @@ const arabizi: Strings = {
       'Btsem, n-niya z-zina katjleb z-zin.',
       'Rak a9wa mma katdenn, dekker rasek b hadchi l-yom.',
     ],
+  },
+
+  share: {
+    button: 'Charek l-app m3a s7abek',
+    message: 'Jarreb Moulat Niya 🔮 cheffara maghribiya b d-daka2 listina3i kat9ra lik t-tale3 w t-twafo9 b darija! Dir chi tajriba w gol liya 😄',
+  },
+  about: {
+    open: '3la l-app',
+    title: '3la Moulat Niya',
+    body: 'Moulat Niya hiya cheffara maghribiya iftiradiya kathder m3ak b darija. Kat9ra lik t-tale3, t-twafo9 f l-7ob, w kat3tik nasi7a w kelma koul yom. Kolchi b tari9a fiha de7k w khfet dem — ghir l t-tasliya!',
+    bodyFr: 'Moulat Niya est une voyante marocaine virtuelle qui te parle en darija : lecture du destin, compatibilité amoureuse, conseil et mot du jour. Le tout avec humour et légèreté — uniquement pour le divertissement !',
+    disclaimer: 'Tanbih: had l-app howa ghir l t-tasliya. Moulat Niya chakhsiya khayaliya, w l-qira2at machi taw9i3at 7a9i9iya. Kaml l-mou3tayat kaybqaw f l-jihaz dyalek.',
   },
 
   quiz: {
