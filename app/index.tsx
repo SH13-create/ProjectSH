@@ -26,12 +26,8 @@ export default function Home() {
   const { setMode } = useQuiz();
   const router = useRouter();
 
-  // Contenu quotidien : stable toute la journée, change chaque jour.
-  const now = new Date();
-  const advice = dailyPick(t.daily.advicePool, now, 'advice');
-  const word = dailyPick(t.daily.wordPool, now, 'word');
-  const quote = dailyPick(t.daily.quotePool, now, 'quote');
-  const joke = dailyPick(t.daily.jokePool, now, 'joke');
+  // Aperçu du jour (teaser) : stable toute la journée, change chaque jour.
+  const word = dailyPick(t.daily.wordPool, new Date(), 'word');
 
   // Accueil chaleureux selon l'heure (rend l'app vivante).
   const hour = new Date().getHours();
@@ -82,31 +78,14 @@ export default function Home() {
         </Card>
       </Animated.View>
 
-      {/* 🌅 Contenu du jour : donne envie de revenir chaque jour */}
-      <AppText variant="subtitle" weight="800" center color={colors.primary} style={{ marginTop: spacing.md }}>
-        ✨ {t.daily.sectionTitle}
-      </AppText>
-      <Animated.View entering={FadeInUp.delay(200).duration(500)}>
+      {/* 🌅 Aperçu du jour : un seul teaser (le détail est dans le mode quotidien) */}
+      <Animated.View entering={FadeInUp.delay(220).duration(500)}>
         <DailyCard icon="🌙" label={t.daily.wordLabel} text={word} accent={colors.secondary} />
       </Animated.View>
-      <Animated.View entering={FadeInUp.delay(240).duration(500)}>
-        <DailyCard icon="🌟" label={t.daily.adviceLabel} text={advice} accent={colors.accent} />
-      </Animated.View>
-      <Animated.View entering={FadeInUp.delay(280).duration(500)}>
-        <DailyCard icon="💬" label={t.daily.quoteLabel} text={quote} accent={colors.success} muted />
-      </Animated.View>
-      <Animated.View entering={FadeInUp.delay(320).duration(500)}>
-        <DailyCard icon="😄" label={t.daily.jokeLabel} text={joke} accent={colors.primary} muted />
-      </Animated.View>
-      <Animated.View entering={FadeInUp.delay(360).duration(500)}>
-        <AppText variant="caption" center color={colors.textMuted} style={{ marginTop: spacing.xs }}>
-          {t.daily.comeback}
-        </AppText>
-      </Animated.View>
 
-      {/* 🚀 Action principale : un seul gros bouton clair */}
+      {/* 🚀 Action principale : un seul gros bouton vers le mode quotidien guidé */}
       <Animated.View entering={FadeInUp.delay(400).duration(500)} style={{ marginTop: spacing.lg }}>
-        <Button label={t.onboarding.startBig} emoji="🔮" onPress={() => start('solo')} />
+        <Button label={t.daily.dailyCta} emoji="🔮" onPress={() => router.push('/daily')} />
       </Animated.View>
 
       {/* Divulgation progressive : le reste est caché derrière un lien */}
@@ -120,6 +99,7 @@ export default function Home() {
         />
       ) : (
         <Animated.View entering={FadeInUp.duration(400)} style={{ gap: spacing.sm, marginTop: spacing.sm }}>
+          <Button label={t.onboarding.soloTitle} emoji="🌟" variant="secondary" onPress={() => start('solo')} />
           <Button label={t.onboarding.coupleTitle} emoji="💑" variant="secondary" onPress={() => start('couple')} />
           <Button label={t.voice.talk} emoji="🎙️" variant="secondary" onPress={() => router.push('/voice')} />
           <Button label={t.photo.mode} emoji="📸" variant="secondary" onPress={() => router.push('/photo')} />

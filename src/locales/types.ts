@@ -59,6 +59,13 @@ export interface Strings {
     quotePool: string[]; // citations
     jokePool: string[]; // blagues courtes et propres
     comeback: string; // « reviens demain pour une surprise »
+    // Mode quotidien guidé (écran /daily)
+    dailyCta: string; // gros bouton « Bda m3a Moulat Niya »
+    revealCta: string; // « Découvre le message du jour »
+    discovered: string; // « Tu as découvert le message d'aujourd'hui »
+    shareToday: string; // « Partage le message du jour »
+    intro1: string; // bulle d'accueil de la voyante (étape 1)
+    intro2: string; // petite question (étape 2)
     greetMorning: string; // accueil selon l'heure
     greetAfternoon: string;
     greetEvening: string;
