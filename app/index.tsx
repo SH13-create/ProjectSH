@@ -2,7 +2,7 @@
  * Écran d'accueil (Onboarding) : logo/nom, message de bienvenue,
  * choix de l'écriture, et choix du mode (individuel / couple).
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
@@ -43,6 +43,9 @@ export default function Home() {
         : hour < 21
           ? t.daily.greetEvening
           : t.daily.greetNight;
+
+  // Divulgation progressive : on cache les autres modes derrière un bouton.
+  const [showMore, setShowMore] = useState(false);
 
   const start = (mode: Mode) => {
     setMode(mode);
@@ -101,65 +104,34 @@ export default function Home() {
         </AppText>
       </Animated.View>
 
-      <AppText variant="subtitle" weight="800" center style={{ marginTop: spacing.lg }}>
-        {t.onboarding.chooseMode}
-      </AppText>
-
-      <Animated.View entering={FadeInUp.delay(300).duration(500)} style={styles.modes}>
-        <ModeCard
-          emoji="🌟"
-          title={t.onboarding.soloTitle}
-          desc={t.onboarding.soloDesc}
-          cta={t.common.start}
-          onPress={() => start('solo')}
-        />
-        <ModeCard
-          emoji="💑"
-          title={t.onboarding.coupleTitle}
-          desc={t.onboarding.coupleDesc}
-          cta={t.common.start}
-          onPress={() => start('couple')}
-        />
+      {/* 🚀 Action principale : un seul gros bouton clair */}
+      <Animated.View entering={FadeInUp.delay(400).duration(500)} style={{ marginTop: spacing.lg }}>
+        <Button label={t.onboarding.startBig} emoji="🔮" onPress={() => start('solo')} />
       </Animated.View>
 
-      <Button
-        label={t.voice.talk}
-        emoji="🎙️"
-        onPress={() => router.push('/voice')}
-        style={{ marginTop: spacing.sm }}
-      />
+      {/* Divulgation progressive : le reste est caché derrière un lien */}
+      {!showMore ? (
+        <Button
+          label={t.onboarding.moreOptions}
+          emoji="✨"
+          variant="ghost"
+          onPress={() => setShowMore(true)}
+          style={{ marginTop: spacing.sm }}
+        />
+      ) : (
+        <Animated.View entering={FadeInUp.duration(400)} style={{ gap: spacing.sm, marginTop: spacing.sm }}>
+          <Button label={t.onboarding.coupleTitle} emoji="💑" variant="secondary" onPress={() => start('couple')} />
+          <Button label={t.voice.talk} emoji="🎙️" variant="secondary" onPress={() => router.push('/voice')} />
+          <Button label={t.photo.mode} emoji="📸" variant="secondary" onPress={() => router.push('/photo')} />
+          <Button label={t.history.open} emoji="📜" variant="ghost" onPress={() => router.push('/history')} />
+        </Animated.View>
+      )}
 
-      <Button
-        label={t.photo.mode}
-        emoji="📸"
-        variant="secondary"
-        onPress={() => router.push('/photo')}
-        style={{ marginTop: spacing.sm }}
-      />
-
-      <Button
-        label={t.history.open}
-        emoji="📜"
-        variant="ghost"
-        onPress={() => router.push('/history')}
-        style={{ marginTop: spacing.sm }}
-      />
-
-      <Button
-        label={t.share.button}
-        emoji="🔗"
-        variant="ghost"
-        onPress={() => shareText(t.share.message)}
-        style={{ marginTop: spacing.sm }}
-      />
-
-      <Button
-        label={t.about.open}
-        emoji="ℹ️"
-        variant="ghost"
-        onPress={() => router.push('/about')}
-        style={{ marginTop: spacing.sm }}
-      />
+      {/* Liens légers toujours visibles : partager + à propos */}
+      <View style={styles.footerLinks}>
+        <Button label={t.share.button} emoji="🔗" variant="ghost" onPress={() => shareText(t.share.message)} style={{ flex: 1 }} />
+      </View>
+      <Button label={t.about.open} emoji="ℹ️" variant="ghost" onPress={() => router.push('/about')} style={{ marginTop: spacing.xs }} />
     </Screen>
   );
 }
@@ -206,45 +178,10 @@ function DailyCard({
   );
 }
 
-function ModeCard({
-  emoji,
-  title,
-  desc,
-  cta,
-  onPress,
-}: {
-  emoji: string;
-  title: string;
-  desc: string;
-  cta: string;
-  onPress: () => void;
-}) {
-  const { colors } = useTheme();
-  return (
-    <Card style={styles.modeCard}>
-      <View style={styles.modeRow}>
-        <AppText style={styles.modeEmoji}>{emoji}</AppText>
-        <View style={{ flex: 1, gap: 4 }}>
-          <AppText variant="subtitle" weight="800" color={colors.secondary}>
-            {title}
-          </AppText>
-          <AppText variant="caption" color={colors.textMuted}>
-            {desc}
-          </AppText>
-        </View>
-      </View>
-      <Button label={cta} emoji="✨" onPress={onPress} />
-    </Card>
-  );
-}
-
 const styles = StyleSheet.create({
   hero: { marginTop: spacing.lg, marginBottom: spacing.sm },
   avatar: { alignItems: 'center', marginBottom: spacing.sm },
-  modes: { gap: spacing.md, marginTop: spacing.sm },
-  modeCard: { gap: spacing.md },
-  modeRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  modeEmoji: { fontSize: 44 },
+  footerLinks: { flexDirection: 'row', marginTop: spacing.md },
   daily: {
     borderRadius: radius.md,
     borderWidth: 1,

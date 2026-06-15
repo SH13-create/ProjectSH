@@ -25,6 +25,8 @@ const arabizi: Strings = {
     coupleTitle: 'Ana w chariki',
     coupleDesc: 'Ghadi n7seb likom nisbat t-twafo9 w n3tikom nasa2i7',
     scriptSwitch: 'Beddel l-kitaba',
+    startBig: 'Yallah nbdaw m3a Moulat Niya',
+    moreOptions: 'Toro9 okhra l l-qira2a',
   },
 
   daily: {

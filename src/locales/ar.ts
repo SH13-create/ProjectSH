@@ -25,6 +25,8 @@ const ar: Strings = {
     coupleTitle: 'أنا و شريكي',
     coupleDesc: 'غادي نحسب ليكم نسبة التوافق و نعطيكم نصائح',
     scriptSwitch: 'بدّل الكتابة',
+    startBig: 'يالاه نبداو مع مولات النية',
+    moreOptions: 'طرق أخرى للقراءة',
   },
 
   daily: {

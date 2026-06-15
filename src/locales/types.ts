@@ -43,6 +43,8 @@ export interface Strings {
     coupleTitle: string;
     coupleDesc: string;
     scriptSwitch: string;
+    startBig: string; // gros bouton « Commence avec Moulat Niya »
+    moreOptions: string; // « Plus de modes »
   };
 
   // 🌅 Sections quotidiennes sur l'accueil (changent chaque jour).
