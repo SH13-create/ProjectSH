@@ -28,7 +28,19 @@ export default async function handler(req) {
     return json({ error: 'method' }, 405);
   }
 
-  const key = (process.env.AI_API_KEY || '').trim();
+  // Détecte si une valeur ressemble à une CLÉ (et non à un nom de fournisseur).
+  const looksLikeKey = (v) =>
+    /^(AIza|AQ\.|gsk_|sk-)/.test(v) || (v.length > 24 && !/^(gemini|groq|openai)$/i.test(v));
+
+  const rawProvider = (process.env.AI_PROVIDER || '').trim();
+  // Tolérance : la clé peut être dans AI_API_KEY, GEMINI_API_KEY, ou (par erreur)
+  // directement dans AI_PROVIDER.
+  const key = (
+    (process.env.AI_API_KEY || '').trim() ||
+    (process.env.GEMINI_API_KEY || '').trim() ||
+    (looksLikeKey(rawProvider) ? rawProvider : '')
+  ).trim();
+
   if (!key) {
     // Pas de clé configurée → le frontend basculera sur son moteur local.
     return json({ error: 'not_configured' }, 503);
@@ -43,11 +55,10 @@ export default async function handler(req) {
   }
   if (!question) return json({ error: 'empty_question' }, 400);
 
-  // Choix du fournisseur : AI_PROVIDER explicite, sinon auto-détection.
-  //  - "gemini"  → Google Gemini (clés AIza... ou jeton ; ou AI_PROVIDER=gemini)
-  //  - "groq"    → clé "gsk_..."
-  //  - sinon     → OpenAI
-  const provider = (process.env.AI_PROVIDER || '').toLowerCase().trim()
+  // Choix du fournisseur : AI_PROVIDER (s'il nomme un fournisseur), sinon
+  // auto-détection d'après le format de la clé.
+  const namedProvider = /^(gemini|groq|openai)$/i.test(rawProvider) ? rawProvider.toLowerCase() : '';
+  const provider = namedProvider
     || (key.startsWith('gsk_') ? 'groq' : key.startsWith('AIza') || key.startsWith('AQ.') ? 'gemini' : 'openai');
 
   try {
@@ -87,10 +98,10 @@ async function callOpenAICompatible(provider, key, question) {
   return (data?.choices?.[0]?.message?.content || '').trim();
 }
 
-/** Appel de l'API Google Gemini (forme generateContent). */
+/** Appel de l'API Google Gemini (forme generateContent, non-stream). */
 async function callGemini(key, question) {
-  // Modèle configurable ; défaut sur un modèle valide et rapide.
-  const model = process.env.AI_MODEL || 'gemini-2.0-flash';
+  // Modèle configurable ; défaut sur le modèle demandé.
+  const model = process.env.AI_MODEL || 'gemini-3.5-flash';
   const base = (process.env.AI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta').replace(/\/+$/, '');
   const url = `${base}/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
   const r = await fetch(url, {
@@ -99,7 +110,11 @@ async function callGemini(key, question) {
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
       contents: [{ role: 'user', parts: [{ text: question }] }],
-      generationConfig: { temperature: 0.9, maxOutputTokens: 200 },
+      generationConfig: {
+        temperature: 0.9,
+        maxOutputTokens: 400,
+        thinkingConfig: { thinkingLevel: 'LOW' }, // réponses courtes & rapides
+      },
     }),
   });
   if (!r.ok) throw new Error(`gemini ${r.status}`);
