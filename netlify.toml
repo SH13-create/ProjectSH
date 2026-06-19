@@ -4,9 +4,11 @@
 # Functions : proxy IA sécurisé dans netlify/functions (la clé reste serveur).
 #
 # 🔑 Définir dans Netlify → Site settings → Environment variables :
-#    AI_API_KEY = ta clé (Groq "gsk_..." recommandée, ou OpenAI "sk-...")
-#    (optionnel) AI_BASE_URL, AI_MODEL — sinon auto-détectés.
-# AUCUNE clé n'est exposée côté frontend.
+#    AI_API_KEY  = ta clé (jamais committée).
+#    AI_PROVIDER = "gemini" | "groq" | "openai"  (sinon auto-détecté).
+#    (optionnel) AI_MODEL  — ex. gemini-2.0-flash / llama-3.3-70b-versatile
+#    (optionnel) AI_BASE_URL
+# AUCUNE clé n'est exposée côté frontend (elle reste dans la fonction).
 
 [build]
   command = "npx expo export --platform web"

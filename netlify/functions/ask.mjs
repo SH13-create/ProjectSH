@@ -43,33 +43,69 @@ export default async function handler(req) {
   }
   if (!question) return json({ error: 'empty_question' }, 400);
 
-  // Auto-détection du fournisseur d'après le format de la clé.
-  const isGroq = key.startsWith('gsk_');
-  const baseUrl = (process.env.AI_BASE_URL || (isGroq ? 'https://api.groq.com/openai/v1' : 'https://api.openai.com/v1')).replace(/\/+$/, '');
-  const model = process.env.AI_MODEL || (isGroq ? 'llama-3.3-70b-versatile' : 'gpt-4o-mini');
+  // Choix du fournisseur : AI_PROVIDER explicite, sinon auto-détection.
+  //  - "gemini"  → Google Gemini (clés AIza... ou jeton ; ou AI_PROVIDER=gemini)
+  //  - "groq"    → clé "gsk_..."
+  //  - sinon     → OpenAI
+  const provider = (process.env.AI_PROVIDER || '').toLowerCase().trim()
+    || (key.startsWith('gsk_') ? 'groq' : key.startsWith('AIza') || key.startsWith('AQ.') ? 'gemini' : 'openai');
 
   try {
-    const r = await fetch(`${baseUrl}/chat/completions`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-      body: JSON.stringify({
-        model,
-        temperature: 0.9,
-        max_tokens: 160,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: question },
-        ],
-      }),
-    });
-    if (!r.ok) return json({ error: 'upstream', status: r.status }, 502);
-    const data = await r.json();
-    const text = (data?.choices?.[0]?.message?.content || '').trim();
+    let text = '';
+    if (provider === 'gemini') {
+      text = await callGemini(key, question);
+    } else {
+      text = await callOpenAICompatible(provider, key, question);
+    }
     if (!text) return json({ error: 'empty' }, 502);
     return json({ text }, 200);
-  } catch {
+  } catch (e) {
     return json({ error: 'upstream_unreachable' }, 502);
   }
+}
+
+/** Appel des API compatibles OpenAI (Groq / OpenAI / OpenRouter…). */
+async function callOpenAICompatible(provider, key, question) {
+  const isGroq = provider === 'groq';
+  const baseUrl = (process.env.AI_BASE_URL || (isGroq ? 'https://api.groq.com/openai/v1' : 'https://api.openai.com/v1')).replace(/\/+$/, '');
+  const model = process.env.AI_MODEL || (isGroq ? 'llama-3.3-70b-versatile' : 'gpt-4o-mini');
+  const r = await fetch(`${baseUrl}/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+    body: JSON.stringify({
+      model,
+      temperature: 0.9,
+      max_tokens: 160,
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: question },
+      ],
+    }),
+  });
+  if (!r.ok) throw new Error(`upstream ${r.status}`);
+  const data = await r.json();
+  return (data?.choices?.[0]?.message?.content || '').trim();
+}
+
+/** Appel de l'API Google Gemini (forme generateContent). */
+async function callGemini(key, question) {
+  // Modèle configurable ; défaut sur un modèle valide et rapide.
+  const model = process.env.AI_MODEL || 'gemini-2.0-flash';
+  const base = (process.env.AI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta').replace(/\/+$/, '');
+  const url = `${base}/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      contents: [{ role: 'user', parts: [{ text: question }] }],
+      generationConfig: { temperature: 0.9, maxOutputTokens: 200 },
+    }),
+  });
+  if (!r.ok) throw new Error(`gemini ${r.status}`);
+  const data = await r.json();
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  return parts.map((p) => p?.text || '').join('').trim();
 }
 
 function cors() {
