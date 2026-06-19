@@ -46,10 +46,29 @@ export default async function handler(req) {
     return json({ error: 'not_configured' }, 503);
   }
 
+  // Lecture tolérante du corps : JSON { question } en priorité, sinon texte brut
+  // ou paramètre ?q= (utile pour tests rapides / clients qui n'envoient pas du JSON propre).
   let question = '';
   try {
-    const body = await req.json();
-    question = String(body?.question || '').slice(0, 500).trim();
+    const raw = await req.text();
+    if (raw) {
+      try {
+        const body = JSON.parse(raw);
+        question = String(body?.question ?? body?.q ?? '').trim();
+      } catch {
+        // Pas du JSON valide → on prend le texte brut tel quel.
+        question = raw.trim();
+      }
+    }
+    if (!question) {
+      try {
+        const u = new URL(req.url);
+        question = String(u.searchParams.get('q') || '').trim();
+      } catch {
+        /* ignore */
+      }
+    }
+    question = question.slice(0, 500);
   } catch {
     return json({ error: 'bad_request' }, 400);
   }
